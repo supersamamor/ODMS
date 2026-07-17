@@ -16,8 +16,11 @@ public record DataSourceViewModel : BaseViewModel
 	[Required]
 	[StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string SystemType { get; init; } = "";
-	[Display(Name = "LiveConnection or UploadedDataset")]
+	[Display(Name = "ExternalDatabase (live connection) or UploadedFile (CSV/XLSX)")]
 	[Required]
+	[StringLength(30, ErrorMessage = "{0} length can't be more than {1}.")]
+	public string ConnectionKind { get; init; } = "";
+	[Display(Name = "ConnectionString or ServerCredentials — how to reach the server (ExternalDatabase only)")]
 	[StringLength(30, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string ConnectionMode { get; init; } = "";
 	[Display(Name = "MS SQL Server Host Or Instance")]

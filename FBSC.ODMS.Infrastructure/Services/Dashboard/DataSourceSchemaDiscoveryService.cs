@@ -28,6 +28,16 @@ public class DataSourceSchemaDiscoveryService(ApplicationContext context, DataSo
     {
         var dataSource = await context.DataSource.SingleAsync(d => d.Id == dataSourceId, cancellationToken);
 
+        // An UploadedFile DataSource's schema is managed entirely by UploadedFileIngestionService
+        // (one DataSourceSchemaCacheState row set per uploaded sheet). Running the generic
+        // INFORMATION_SCHEMA scan against it would connect to this app's own database (where
+        // staging tables live - see DataSourceConnectionFactory) and pick up every other table
+        // in the app, not just this DataSource's staging tables.
+        if (dataSource.ConnectionKind == Core.Constants.DataSourceConnectionKind.UploadedFile)
+        {
+            throw new InvalidOperationException("Schema discovery doesn't apply to an UploadedFile data source - upload or re-upload a file instead.");
+        }
+
         var discovered = new List<DataSourceSchemaCacheState>();
         await using (var connection = await connectionFactory.OpenAsync(dataSource, cancellationToken))
         await using (var command = new SqlCommand(InformationSchemaQuery, connection) { CommandTimeout = 30 })

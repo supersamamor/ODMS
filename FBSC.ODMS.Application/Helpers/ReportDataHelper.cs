@@ -308,7 +308,11 @@ namespace FBSC.ODMS.Application.Helpers
             public string? HTMLTemplate { get; set; }
             public string? HTMLFooterTemplate { get; init; } = "";
         }
-        private class Dataset
+        // internal (not private) so DashboardWidgetRenderHelper can emit the exact same JSON
+        // shape for DashboardWidget-sourced charts as this class emits for Report-sourced
+        // ones - _ChartBuilderScripts.cshtml's BuildChart() JS is shared by both and expects
+        // one contract, not two near-identical ones.
+        internal class Dataset
         {
             [JsonProperty("label")]
             public string? Label { get; set; }
@@ -319,7 +323,7 @@ namespace FBSC.ODMS.Application.Helpers
             [JsonProperty("borderWidth")]
             public int BorderWidth { get; set; } = 1;
         }
-        private class MultipleDataset
+        internal class MultipleDataset
         {
             [JsonProperty("label")]
             public string? Label { get; set; }

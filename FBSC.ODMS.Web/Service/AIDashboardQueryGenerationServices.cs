@@ -87,7 +87,17 @@ namespace FBSC.ODMS.Web.Service
             var hasCachedSchema = await context.DataSourceSchemaCache.AnyAsync(s => s.DataSourceId == dataSourceId, cancellationToken);
             if (!hasCachedSchema)
             {
-                await schemaDiscoveryService.DiscoverAsync(dataSourceId, cancellationToken);
+                // UploadedFile data sources are cataloged entirely by UploadedFileIngestionService
+                // at upload time - DiscoverAsync only applies to ExternalDatabase connections.
+                // An UploadedFile source with nothing uploaded yet just has no schema to offer.
+                var connectionKind = await context.DataSource
+                    .Where(d => d.Id == dataSourceId)
+                    .Select(d => d.ConnectionKind)
+                    .SingleAsync(cancellationToken);
+                if (connectionKind == Core.Constants.DataSourceConnectionKind.ExternalDatabase)
+                {
+                    await schemaDiscoveryService.DiscoverAsync(dataSourceId, cancellationToken);
+                }
             }
 
             var columns = await context.DataSourceSchemaCache

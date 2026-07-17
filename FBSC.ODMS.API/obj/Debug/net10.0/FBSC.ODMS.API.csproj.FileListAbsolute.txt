@@ -233,4 +233,7 @@ C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.API\obj\Debug\ne
 C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.API\obj\Debug\net10.0\FBSC.ODMS.API.pdb
 C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.API\obj\Debug\net10.0\FBSC.ODMS.API.genruntimeconfig.cache
 C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.API\obj\Debug\net10.0\ref\FBSC.ODMS.API.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.API\bin\Debug\net10.0\CsvHelper.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.API\bin\Debug\net10.0\EPPlusFree.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.API\bin\Debug\net10.0\System.Xml.XPath.XmlDocument.dll
 C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.API\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

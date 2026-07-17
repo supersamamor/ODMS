@@ -23,6 +23,7 @@ public class GetDataUploadBatchQueryHandler(ApplicationContext context) : BaseQu
 				LastModifiedDate = e.LastModifiedDate,
 				DataSourceId = e.DataSource == null ? "" : e.DataSource!.Name,
 				FileName = e.FileName,
+				SheetName = e.SheetName,
 				FileType = e.FileType,
 				UploadedBy = e.UploadedBy,
 				StagingTableName = e.StagingTableName,

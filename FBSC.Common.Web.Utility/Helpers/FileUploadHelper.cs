@@ -146,6 +146,28 @@ public class FileUploadHelper
             new List<byte[]> { new byte[] { 0x50, 0x4B, 0x03, 0x04 } }
         )},
 
+        // Legacy binary Excel (OLE Compound File header) - accepted at upload time so the
+        // extension is validated/signature-checked consistently with every other type, even
+        // though the ingestion parser currently returns a "please re-save as .xlsx/.csv" error
+        // for this format rather than reading it (no BIFF8 parser is referenced in this
+        // solution and EPPlusFree/OfficeOpenXml only reads OOXML).
+        { ".xls", (
+            new[] { "application/vnd.ms-excel" },
+            new List<byte[]> { new byte[] { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 } }
+        )},
+
+        // --- Data ---
+        { ".csv", (
+            new[] { "text/csv", "application/vnd.ms-excel", "text/plain", "application/csv" },
+            new List<byte[]>
+            {
+                Array.Empty<byte>(),                       // plain CSV (no BOM) - no magic number to check
+                new byte[] { 0xEF, 0xBB, 0xBF },           // UTF-8 BOM
+                new byte[] { 0xFF, 0xFE },                 // UTF-16 LE BOM
+                new byte[] { 0xFE, 0xFF },                 // UTF-16 BE BOM
+            }
+        )},
+
         { ".pptx", (
             new[] { "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
             new List<byte[]> { new byte[] { 0x50, 0x4B, 0x03, 0x04 } }

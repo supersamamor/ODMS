@@ -87,7 +87,12 @@ public class ChartConfigurationService
         return new { type = ChartRendererToChartJsType(reportType.ChartRenderer), data = new { labels = plainLabels, datasets = plainDatasets } };
     }
 
-    private static double AggregateFor(IEnumerable<Dictionary<string, object?>> rows, string column, string? aggregation)
+    /// <summary>
+    /// Public so DashboardWidgetRenderHelper (Application layer, feeding the legacy
+    /// _ChartBuilderScripts.cshtml rendering pipeline) can apply the exact same aggregation
+    /// rule when pivoting a series-grouped result set - one aggregation implementation, not two.
+    /// </summary>
+    public static double AggregateFor(IEnumerable<Dictionary<string, object?>> rows, string column, string? aggregation)
     {
         var values = rows.Select(r => ToDouble(r.GetValueOrDefault(column))).ToList();
         return (aggregation ?? AggregationType.Sum) switch
@@ -101,7 +106,7 @@ public class ChartConfigurationService
         };
     }
 
-    private static double ToDouble(object? value) => value switch
+    public static double ToDouble(object? value) => value switch
     {
         null => 0,
         double d => d,

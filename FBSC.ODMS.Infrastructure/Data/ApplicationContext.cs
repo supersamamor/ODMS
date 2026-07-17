@@ -89,6 +89,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
 		
         modelBuilder.Entity<DataSourceState>().Property(e => e.Name).HasMaxLength(150);
 		modelBuilder.Entity<DataSourceState>().Property(e => e.SystemType).HasMaxLength(50);
+		modelBuilder.Entity<DataSourceState>().Property(e => e.ConnectionKind).HasMaxLength(30);
 		modelBuilder.Entity<DataSourceState>().Property(e => e.ConnectionMode).HasMaxLength(30);
 		modelBuilder.Entity<DataSourceState>().Property(e => e.ServerAddress).HasMaxLength(200);
 		modelBuilder.Entity<DataSourceState>().Property(e => e.DatabaseName).HasMaxLength(150);
@@ -105,11 +106,13 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
 		modelBuilder.Entity<DataSourceSchemaCacheState>().Property(e => e.InferredSemanticType).HasMaxLength(20);
 		modelBuilder.Entity<DataSourceSchemaCacheState>().HasIndex(e => new { e.DataSourceId, e.SchemaName, e.TableName, e.ColumnName }).IsUnique();
 		modelBuilder.Entity<DataUploadBatchState>().Property(e => e.FileName).HasMaxLength(260);
+		modelBuilder.Entity<DataUploadBatchState>().Property(e => e.SheetName).HasMaxLength(128);
 		modelBuilder.Entity<DataUploadBatchState>().Property(e => e.FileType).HasMaxLength(20);
 		modelBuilder.Entity<DataUploadBatchState>().Property(e => e.UploadedBy).HasMaxLength(100);
 		modelBuilder.Entity<DataUploadBatchState>().Property(e => e.StagingTableName).HasMaxLength(150);
 		modelBuilder.Entity<DataUploadBatchState>().Property(e => e.ImportStatus).HasMaxLength(50);
 		modelBuilder.Entity<DataUploadBatchState>().Property(e => e.ErrorRemarks).HasMaxLength(450);
+		modelBuilder.Entity<DataUploadBatchState>().HasIndex(e => new { e.DataSourceId, e.SheetName }).IsUnique();
 		modelBuilder.Entity<DataUploadColumnState>().Property(e => e.ColumnName).HasMaxLength(150);
 		modelBuilder.Entity<DataUploadColumnState>().Property(e => e.DetectedDataType).HasMaxLength(50);
 		modelBuilder.Entity<DataUploadColumnState>().Property(e => e.MappedSqlDataType).HasMaxLength(50);

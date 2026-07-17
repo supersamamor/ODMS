@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ChartConfigurationService>();
         services.AddScoped<DashboardCacheService>();
         services.AddScoped<DashboardAccessAuthorizationService>();
+        services.AddScoped<UploadedFileIngestionService>();
         return services;
     }
 }

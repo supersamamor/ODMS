@@ -7,6 +7,8 @@ public record DataSourceState : BaseEntity
 {
 	public string Name { get; init; } = "";
 	public string SystemType { get; init; } = "";
+	/// <summary>ExternalDatabase or UploadedFile - see Constants.DataSourceConnectionKind.</summary>
+	public string ConnectionKind { get; init; } = "";
 	public string ConnectionMode { get; init; } = "";
 	public string? ServerAddress { get; init; }
 	public string? DatabaseName { get; init; }

@@ -1,11 +1,15 @@
 using FBSC.Common.Identity.Abstractions;
 using FBSC.ODMS.Application.DTOs;
+using FBSC.ODMS.Application.Helpers;
+using FBSC.ODMS.Core.Constants;
 using FBSC.ODMS.Infrastructure.Data;
+using FBSC.ODMS.Infrastructure.Services.Dashboard;
 using LanguageExt;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using static LanguageExt.Prelude;
 
 namespace FBSC.ODMS.Application.Features.ODMS.ReportBuilder.Queries;
 
@@ -14,7 +18,13 @@ public record GetReportSetupAndResultByIdQuery(string Id) : IRequest<Option<Repo
     public IList<ReportQueryFilterModel> Filters { get; set; } = [];
 }
 
-public class GetReportBuilderByIdQueryHandler(ApplicationContext context, IConfiguration configuration, IdentityContext identityContext, IAuthenticatedUser authenticatedUser) : IRequestHandler<GetReportSetupAndResultByIdQuery, Option<ReportResultModel>>
+public class GetReportBuilderByIdQueryHandler(
+    ApplicationContext context,
+    IConfiguration configuration,
+    IdentityContext identityContext,
+    IAuthenticatedUser authenticatedUser,
+    DashboardQueryExecutionService dashboardQueryExecutionService,
+    ChartConfigurationService chartConfigurationService) : IRequestHandler<GetReportSetupAndResultByIdQuery, Option<ReportResultModel>>
 {
     public async Task<Option<ReportResultModel>> Handle(GetReportSetupAndResultByIdQuery request, CancellationToken cancellationToken = default)
 	{
@@ -27,6 +37,12 @@ public class GetReportBuilderByIdQueryHandler(ApplicationContext context, IConfi
 			.Where(e => e.Id == request.Id)
 			.Where(l => l.ReportRoleAssignmentList!.Any(ra => roleList.Contains(ra.RoleName)))
 			.AsNoTracking().FirstOrDefaultAsync(cancellationToken);
+
+		if (report is null)
+		{
+			return await TryGetDashboardWidgetResultAsync(request, roleList, cancellationToken);
+		}
+
 		if (request.Filters == null || request.Filters.Count == 0)
 		{
 			request.Filters = [];
@@ -72,4 +88,47 @@ public class GetReportBuilderByIdQueryHandler(ApplicationContext context, IConfi
 			MarginRight = report.MarginRight,
 		};
 	}
+
+    /// <summary>
+    /// Same by-id lookup, but for a Phase 2/4 DashboardWidget instead of a legacy Report -
+    /// used both by Report/Index's standalone view and DashboardRenderer's AJAX
+    /// RefreshDashboardWidget handler. Returns the exact same ReportResultModel shape either
+    /// way (see DashboardWidgetRenderHelper), so neither caller needs to know which engine
+    /// actually produced the result.
+    /// </summary>
+    private async Task<Option<ReportResultModel>> TryGetDashboardWidgetResultAsync(GetReportSetupAndResultByIdQuery request, IReadOnlyList<string> roleList, CancellationToken cancellationToken)
+    {
+        var userId = authenticatedUser.UserId;
+        var widget = await context.DashboardWidget
+            .Include(w => w.Dashboard)
+            .Include(w => w.ReportType)
+            .Include(w => w.DashboardQuery!).ThenInclude(q => q!.DashboardQueryParameterList)
+            .Include(w => w.DashboardQuery!).ThenInclude(q => q!.DashboardQueryResultColumnList)
+            .Include(w => w.DashboardQuery!).ThenInclude(q => q!.DataSource)
+            .AsNoTracking()
+            .Where(w => w.Id == request.Id && w.Dashboard != null && w.DashboardQuery != null && w.ReportType != null)
+            .Where(w => w.Dashboard!.IsPublic
+                || w.Dashboard!.OwnerUserId == userId
+                || w.Dashboard!.DashboardAccessList!.Any(a =>
+                    (a.GranteeType == DashboardGranteeType.User && a.GranteeId == userId)
+                    || (a.GranteeType == DashboardGranteeType.Role && roleList.Contains(a.GranteeId))))
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (widget is null)
+        {
+            return None;
+        }
+
+        var declaredParameters = widget.DashboardQuery!.DashboardQueryParameterList ?? [];
+        var suppliedByFieldName = (request.Filters ?? []).ToDictionary(f => f.FieldName, f => f.FieldValue, StringComparer.OrdinalIgnoreCase);
+        var parameterValues = declaredParameters.ToDictionary(
+            p => p.ParameterName,
+            p => suppliedByFieldName.TryGetValue(p.ParameterName, out var supplied) && !string.IsNullOrEmpty(supplied) ? supplied : p.DefaultValue);
+
+        var result = await DashboardWidgetRenderHelper.RenderAsync(
+            widget, dashboardQueryExecutionService, chartConfigurationService,
+            parameterValues, userId, authenticatedUser.TraceId, cancellationToken);
+        result.Filters = request.Filters ?? [];
+        return result;
+    }
 }

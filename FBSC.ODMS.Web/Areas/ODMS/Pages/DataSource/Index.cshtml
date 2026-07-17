@@ -95,7 +95,8 @@
                 columns: [
                     { data: "name", name: "Name", responsivePriority: 1, title: '@Localizer["Friendly Label For This Connection"]', searchable: true, className: "text-start" },
 				{ data: "systemType", name: "SystemType", responsivePriority: 1, title: '@Localizer["HRIS, Accounting, CRM, or Custom — free-text category for grouping/filtering"]', searchable: true, className: "text-start" },
-				{ data: "connectionMode", name: "ConnectionMode", responsivePriority: 1, title: '@Localizer["LiveConnection or UploadedDataset"]', searchable: true, className: "text-start" },
+				{ data: "connectionKind", name: "ConnectionKind", responsivePriority: 1, title: '@Localizer["Connection Kind"]', searchable: true, className: "text-start" },
+				{ data: "connectionMode", name: "ConnectionMode", responsivePriority: 2, title: '@Localizer["ConnectionString or ServerCredentials"]', searchable: true, className: "text-start" },
 				{ data: "serverAddress", name: "ServerAddress", responsivePriority: 2, title: '@Localizer["MS SQL Server Host Or Instance"]', searchable: false, className: "text-start" },
 				{ data: "databaseName", name: "DatabaseName", responsivePriority: 2, title: '@Localizer["Target Database Name"]', searchable: false, className: "text-start" },
 				{ data: "authenticationType", name: "AuthenticationType", responsivePriority: 2, title: '@Localizer["SQL, WindowsIntegrated, or AzureAD"]', searchable: false, className: "text-start" },

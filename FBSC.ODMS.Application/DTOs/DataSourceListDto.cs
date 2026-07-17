@@ -7,6 +7,7 @@ public record DataSourceListDto : BaseDto
 {
 	public string Name { get; init; } = "";
 	public string SystemType { get; init; } = "";
+	public string ConnectionKind { get; init; } = "";
 	public string ConnectionMode { get; init; } = "";
 	public string? ServerAddress { get; init; }
 	public string? DatabaseName { get; init; }

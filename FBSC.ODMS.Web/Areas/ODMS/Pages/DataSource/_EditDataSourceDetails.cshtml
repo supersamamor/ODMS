@@ -20,10 +20,22 @@
 </div>
 <div class="col">
 	<div class="mb-3">
-		<label asp-for="@Model.ConnectionMode" class="form-label"><strong>@Localizer["LiveConnection or UploadedDataset"] :</strong></label>
+		<label asp-for="@Model.ConnectionKind" class="form-label"><strong>@Localizer["Connection Kind"] :</strong></label>
+			<select asp-for="@Model.ConnectionKind" id="ConnectionKind" class="form-control">
+				<option value="@FBSC.ODMS.Core.Constants.DataSourceConnectionKind.ExternalDatabase">@Localizer["External Database (live SQL Server connection)"]</option>
+				<option value="@FBSC.ODMS.Core.Constants.DataSourceConnectionKind.UploadedFile">@Localizer["Uploaded File (CSV / XLSX)"]</option>
+			</select>
+			<span asp-validation-for="@Model.ConnectionKind" class="text-danger d-block mt-1"></span>
+			<small class="form-text text-muted">@Localizer["Uploaded-file data sources have no server/credentials below - use the Upload File action from the Details page instead."]</small>
+	</div>
+</div>
+<div id="externalDatabaseFields">
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ConnectionMode" class="form-label"><strong>@Localizer["ConnectionString or ServerCredentials"] :</strong></label>
 			<input asp-for="@Model.ConnectionMode" class="form-control" maxlength="30" />
 			<span asp-validation-for="@Model.ConnectionMode" class="text-danger d-block mt-1"></span>
-			
+
 	</div>
 </div>
 <div class="col">
@@ -31,7 +43,7 @@
 		<label asp-for="@Model.ServerAddress" class="form-label"><strong>@Localizer["MS SQL Server Host Or Instance"] :</strong></label>
 			<input asp-for="@Model.ServerAddress" class="form-control" maxlength="200" />
 			<span asp-validation-for="@Model.ServerAddress" class="text-danger d-block mt-1"></span>
-			
+
 	</div>
 </div>
 <div class="col">
@@ -39,7 +51,7 @@
 		<label asp-for="@Model.DatabaseName" class="form-label"><strong>@Localizer["Target Database Name"] :</strong></label>
 			<input asp-for="@Model.DatabaseName" class="form-control" maxlength="150" />
 			<span asp-validation-for="@Model.DatabaseName" class="text-danger d-block mt-1"></span>
-			
+
 	</div>
 </div>
 <div class="col">
@@ -47,7 +59,7 @@
 		<label asp-for="@Model.AuthenticationType" class="form-label"><strong>@Localizer["SQL, WindowsIntegrated, or AzureAD"] :</strong></label>
 			<input asp-for="@Model.AuthenticationType" class="form-control" maxlength="50" />
 			<span asp-validation-for="@Model.AuthenticationType" class="text-danger d-block mt-1"></span>
-			
+
 	</div>
 </div>
 <div class="col">
@@ -73,6 +85,7 @@
 			<span asp-validation-for="@Model.ConnectionStringEncrypted" class="text-danger d-block mt-1"></span>
 			<small class="form-text text-muted">@Localizer["Stored encrypted at rest - never displayed once saved."]</small>
 	</div>
+</div>
 </div>
 <div class="col">
 	<div class="mb-3">
@@ -103,8 +116,23 @@
 		<label asp-for="@Model.LastTestStatus" class="form-label"><strong>@Localizer["Last Connection Test Result"] :</strong></label>
 			<input asp-for="@Model.LastTestStatus" class="form-control" maxlength="50"  readonly/>
 			<span asp-validation-for="@Model.LastTestStatus" class="text-danger d-block mt-1"></span>
-			
+
 	</div>
 </div>
 
 </div>
+<script asp-add-nonce>
+	// Re-runs every time this partial is (re)inserted, including via the AJAX
+	// ChangeFormValue swap used elsewhere on this form - so the toggle stays correct
+	// across Add/Edit/Details and after adding/removing schema-cache rows.
+	(function () {
+		var $kind = $('#ConnectionKind');
+		var $externalFields = $('#externalDatabaseFields');
+		function toggleByConnectionKind() {
+			var isUploadedFile = $kind.val() === '@FBSC.ODMS.Core.Constants.DataSourceConnectionKind.UploadedFile';
+			$externalFields.toggleClass('d-none', isUploadedFile);
+		}
+		$kind.off('change.connectionKind').on('change.connectionKind', toggleByConnectionKind);
+		toggleByConnectionKind();
+	})();
+</script>

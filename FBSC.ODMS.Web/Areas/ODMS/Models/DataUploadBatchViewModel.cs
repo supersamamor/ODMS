@@ -17,7 +17,11 @@ public record DataUploadBatchViewModel : BaseViewModel
 	[Required]
 	[StringLength(260, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string FileName { get; init; } = "";
-	[Display(Name = "CSV, XLSX, or JSON")]
+	[Display(Name = "Sheet Name (CSV uploads get one implicit sheet)")]
+	[Required]
+	[StringLength(128, ErrorMessage = "{0} length can't be more than {1}.")]
+	public string SheetName { get; init; } = "";
+	[Display(Name = "Csv, Xlsx, or Xls")]
 	[Required]
 	[StringLength(20, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string FileType { get; init; } = "";

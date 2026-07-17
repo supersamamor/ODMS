@@ -100,6 +100,12 @@
                                                             case FBSC.ODMS.Core.Constants.DataTypes.Date:
                                                                 <input class="form-control" type="date" name="Filters[@(filterSequence - 1)].FieldValue" />
                                                                 break;
+                                                            default:
+                                                                <!-- Any DataType not special-cased above (e.g. a DashboardQueryParameter's
+                                                                     "string"/"int"/"bool" DataType) still gets a usable input instead of
+                                                                     silently rendering nothing. -->
+                                                                <input class="form-control" type="text" name="Filters[@(filterSequence - 1)].FieldValue" />
+                                                                break;
                                                         }
                                                     </div>
                                                 </div>

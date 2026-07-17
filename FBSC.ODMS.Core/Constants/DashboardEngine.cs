@@ -27,6 +27,17 @@ namespace FBSC.ODMS.Core.Constants
         public const string Color = "Color";
     }
 
+    /// <summary>
+    /// Whether a DataSourceState is a live remote SQL Server connection or a locally-staged
+    /// uploaded file. Server/credential fields only apply to ExternalDatabase; UploadedFile
+    /// data instead lives in staging tables tracked by DataUploadBatchState.
+    /// </summary>
+    public static class DataSourceConnectionKind
+    {
+        public const string ExternalDatabase = "ExternalDatabase";
+        public const string UploadedFile = "UploadedFile";
+    }
+
     public static class DataSourceConnectionMode
     {
         public const string ConnectionString = "ConnectionString";
@@ -36,6 +47,21 @@ namespace FBSC.ODMS.Core.Constants
     public static class DataSourceSystemType
     {
         public const string SqlServer = "SqlServer";
+        public const string UploadedFile = "UploadedFile";
+    }
+
+    public static class UploadedFileFormat
+    {
+        public const string Csv = "Csv";
+        public const string Xlsx = "Xlsx";
+        public const string Xls = "Xls";
+    }
+
+    public static class UploadedFileImportStatus
+    {
+        public const string Parsing = "Parsing";
+        public const string Ready = "Ready";
+        public const string Failed = "Failed";
     }
 
     public static class DataSourceAuthenticationType

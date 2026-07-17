@@ -7,6 +7,7 @@ public record DataUploadBatchListDto : BaseDto
 {
 	public string DataSourceId { get; init; } = "";
 	public string FileName { get; init; } = "";
+	public string SheetName { get; init; } = "";
 	public string FileType { get; init; } = "";
 	public string? UploadedBy { get; init; }
 	public string? StagingTableName { get; init; }

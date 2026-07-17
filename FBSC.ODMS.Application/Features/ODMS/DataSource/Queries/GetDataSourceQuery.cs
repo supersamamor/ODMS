@@ -23,6 +23,7 @@ public class GetDataSourceQueryHandler(ApplicationContext context) : BaseQueryHa
 				LastModifiedDate = e.LastModifiedDate,
 				Name = e.Name,
 				SystemType = e.SystemType,
+				ConnectionKind = e.ConnectionKind,
 				ConnectionMode = e.ConnectionMode,
 				ServerAddress = e.ServerAddress,
 				DatabaseName = e.DatabaseName,

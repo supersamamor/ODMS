@@ -1,0 +1,157 @@
+@page
+@model UploadFileModel
+@{
+    ViewData["Title"] = Localizer["Upload File"];
+    ViewData["ActiveMainPage"] = "DataSource";
+    ViewData["Level1"] = "ODMS";
+    var breadcrumbs = new[] {
+        new { Title = "Data Source List", Url = "/ODMS/DataSource/Index", IsActive = false },
+        new { Title = Model.DataSourceName, Url = $"/ODMS/DataSource/Details/{Model.DataSourceId}", IsActive = false },
+        new { Title = "Upload File", Url = "", IsActive = true },
+    };
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+
+<div class="card">
+    <h5 class="card-header"><span class="card-header-custom">@Localizer["Upload File"] - @Model.DataSourceName</span></h5>
+    <div class="card-body">
+        <form method="post" asp-page-handler="Preview" enctype="multipart/form-data">
+            <input type="hidden" asp-for="DataSourceId" value="@Model.DataSourceId" />
+            <div class="row row-cols-1 row-cols-md-2">
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>@Localizer["File (.csv, .xlsx)"] :</strong></label>
+                        <input type="file" name="UploadFormFile" class="form-control" accept=".csv,.xlsx,.xls" required />
+                        <small class="form-text text-muted">@Localizer["Macro-enabled workbooks (.xlsm) and legacy binary .xls are not accepted for parsing."]</small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label asp-for="CsvDelimiterOverride" class="form-label"><strong>@Localizer["CSV Delimiter Override (optional - auto-detected otherwise)"] :</strong></label>
+                        <select asp-for="CsvDelimiterOverride" class="form-control">
+                            <option value="">@Localizer["Auto-detect"]</option>
+                            <option value=",">@Localizer["Comma (,)"]</option>
+                            <option value=";">@Localizer["Semicolon (;)"]</option>
+                            <option value="&#9;">@Localizer["Tab"]</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btnFills btn-outline-primary">
+                <i class="fas fa-eye"></i> @Localizer["Preview"]
+            </button>
+            <a asp-page="Details" asp-route-id="@Model.DataSourceId" class="btn btnFills btn-outline-secondary">@Localizer["Cancel"]</a>
+        </form>
+    </div>
+</div>
+
+@if (Model.Preview is not null)
+{
+    <form method="post" asp-page-handler="Confirm" class="mt-3">
+        <input type="hidden" asp-for="DataSourceId" value="@Model.DataSourceId" />
+        <input type="hidden" asp-for="TempFilePath" value="@Model.TempFilePath" />
+        <input type="hidden" asp-for="OriginalFileName" value="@Model.OriginalFileName" />
+        <input type="hidden" asp-for="CsvDelimiterOverride" value="@Model.CsvDelimiterOverride" />
+
+        @foreach (var sheet in Model.Preview.Sheets)
+        {
+            <div class="card mb-3">
+                <h5 class="card-header d-flex justify-content-between align-items-center">
+                    <span>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="IncludedSheetNames" value="@sheet.SheetName" id="sheet_@sheet.SheetName" checked />
+                            <label class="form-check-label" for="sheet_@sheet.SheetName"><strong>@sheet.SheetName</strong></label>
+                        </div>
+                        <span class="text-muted">(@sheet.RowCount.ToString("N0") @Localizer["rows"], @sheet.Columns.Count @Localizer["columns"])</span>
+                    </span>
+                    <span>
+                        @if (sheet.AlreadyExists)
+                        {
+                            <span class="badge bg-warning text-dark">@Localizer["Will replace existing sheet data"]</span>
+                        }
+                        @if (sheet.IsTruncated)
+                        {
+                            <span class="badge bg-danger">@Localizer["Row cap reached - extra rows will be skipped"]</span>
+                        }
+                    </span>
+                </h5>
+                @if (sheet.RemovedColumns.Count > 0 || sheet.AddedColumns.Count > 0)
+                {
+                    <div class="card-body border-bottom pb-2 pt-2">
+                        @if (sheet.RemovedColumns.Count > 0)
+                        {
+                            <div class="text-danger">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                @Localizer["Columns removed since the last upload of this sheet - any widget mapped to these will break: "]
+                                <strong>@string.Join(", ", sheet.RemovedColumns)</strong>
+                            </div>
+                        }
+                        @if (sheet.AddedColumns.Count > 0)
+                        {
+                            <div class="text-muted">
+                                @Localizer["New columns since the last upload: "]
+                                <strong>@string.Join(", ", sheet.AddedColumns)</strong>
+                            </div>
+                        }
+                    </div>
+                }
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>@Localizer["Original Header"]</th>
+                                    <th>@Localizer["Sanitized Column Name"]</th>
+                                    <th>@Localizer["Inferred SQL Type"]</th>
+                                    <th>@Localizer["Sample Value"]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var column in sheet.Columns)
+                                {
+                                    <tr>
+                                        <td>@column.OriginalHeader</td>
+                                        <td><code>@column.SanitizedName</code></td>
+                                        <td>@column.InferredSqlType</td>
+                                        <td>@column.SampleValue</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    @if (sheet.SampleRows.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <span class="text-muted">@Localizer["Sample rows"]:</span>
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                        @foreach (var column in sheet.Columns)
+                                        {
+                                            <th>@column.SanitizedName</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var row in sheet.SampleRows)
+                                    {
+                                        <tr>
+                                            @foreach (var column in sheet.Columns)
+                                            {
+                                                <td>@row.GetValueOrDefault(column.SanitizedName)</td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <button type="submit" class="btn btnFills btn-outline-success">
+            <i class="fas fa-check-circle"></i> @Localizer["Confirm Import"]
+        </button>
+    </form>
+}
