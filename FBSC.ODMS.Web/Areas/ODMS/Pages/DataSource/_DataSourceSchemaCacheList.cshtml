@@ -1,0 +1,99 @@
+@using Models
+@model DataSourceViewModel
+<input type="hidden" id="DataSourceSchemaCacheCount" value="@Model?.DataSourceSchemaCacheList?.Count" />
+<div class="card">
+    <h5 class="card-header">
+        <span  class="card-header-custom">@Localizer["Data Source Schema Cache"]</span>
+        <a id="btnAddDataSourceSchemaCache" class="btn btnMaterial btn-flat primary semicircle cancel btnAddRemoveSubDetailList text-light" title="@Localizer["Add"]"><i class="fas fa-plus"></i></a>
+        <button class="cancel d-none" type="button" id="btnRemoveDataSourceSchemaCache" value="RemoveDataSourceSchemaCache"></button>
+    </h5>
+    <div class="card-body overflow-auto">
+        <table id="subDetailList" class="table table-hover table-striped responsive nowrap fills-table" width="100%">
+            <thead>
+                <tr>
+                    <th class="d-none"></th>
+                    <th class="text-center">
+								@Localizer["Sql Schema Name"]
+							</th>
+							<th class="text-center">
+								@Localizer["Sql Table Name"]
+							</th>
+							<th class="text-center">
+								@Localizer["Sql Column Name"]
+							</th>
+							<th class="text-center">
+								@Localizer["Native Sql Data Type"]
+							</th>
+							<th class="text-center">
+								@Localizer["Column Order In Source Table"]
+							</th>
+							<th class="text-center">
+								@Localizer["Is Nullable"]
+							</th>
+							<th class="text-center">
+								@Localizer["Last Discovered At"]
+							</th>
+							
+                    <th class="text-center">
+                        @Localizer["Action"]
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.DataSourceSchemaCacheList != null)
+                {
+                    int counter = 0;
+                    foreach (var item in Model.DataSourceSchemaCacheList)
+                    {
+                        <tr>
+                            <td class="d-none">
+                                <input type="hidden" name="DataSourceSchemaCacheList[@counter].Id" value="@item.Id" />
+                                <input type="hidden" name="DataSourceSchemaCacheList[@counter].DataSourceId" value="@item.DataSourceId" />
+                            </td>
+                            <td>
+										<input  asp-for="@item.SchemaName" name="DataSourceSchemaCacheList[@counter].SchemaName" class="form-control" maxlength="100" readonly/>
+										<span data-valmsg-for="DataSourceSchemaCacheList[@counter].SchemaName" asp-validation-for="@item.SchemaName" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.SchemaName"  name="DataSourceSchemaCacheList[@counter].SchemaName"/>
+									</td>
+									<td>
+										<input  asp-for="@item.TableName" name="DataSourceSchemaCacheList[@counter].TableName" class="form-control" maxlength="150" readonly/>
+										<span data-valmsg-for="DataSourceSchemaCacheList[@counter].TableName" asp-validation-for="@item.TableName" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.TableName"  name="DataSourceSchemaCacheList[@counter].TableName"/>
+									</td>
+									<td>
+										<input  asp-for="@item.ColumnName" name="DataSourceSchemaCacheList[@counter].ColumnName" class="form-control" maxlength="150" readonly/>
+										<span data-valmsg-for="DataSourceSchemaCacheList[@counter].ColumnName" asp-validation-for="@item.ColumnName" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.ColumnName"  name="DataSourceSchemaCacheList[@counter].ColumnName"/>
+									</td>
+									<td>
+										<input  asp-for="@item.SqlDataType" name="DataSourceSchemaCacheList[@counter].SqlDataType" class="form-control" maxlength="50" readonly/>
+										<span data-valmsg-for="DataSourceSchemaCacheList[@counter].SqlDataType" asp-validation-for="@item.SqlDataType" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.SqlDataType"  name="DataSourceSchemaCacheList[@counter].SqlDataType"/>
+									</td>
+									<td>
+										<input  asp-for="@item.OrdinalPosition" name="DataSourceSchemaCacheList[@counter].OrdinalPosition" class="form-control"  readonly/>
+										<span data-valmsg-for="DataSourceSchemaCacheList[@counter].OrdinalPosition" asp-validation-for="@item.OrdinalPosition" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.OrdinalPosition"  name="DataSourceSchemaCacheList[@counter].OrdinalPosition"/>
+									</td>
+									<td>
+										<input asp-for="@item.IsNullable" name="DataSourceSchemaCacheList[@counter].IsNullable" class="custom-checkbox-label"  disabled/>
+										<span data-valmsg-for="DataSourceSchemaCacheList[@counter].IsNullable" asp-validation-for="@item.IsNullable" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.IsNullable"  name="DataSourceSchemaCacheList[@counter].IsNullable"/>
+									</td>
+									<td>
+										<input  asp-for="@item.RefreshedAt" name="DataSourceSchemaCacheList[@counter].RefreshedAt" class="form-control"  readonly/>
+										<span data-valmsg-for="DataSourceSchemaCacheList[@counter].RefreshedAt" asp-validation-for="@item.RefreshedAt" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.RefreshedAt"  name="DataSourceSchemaCacheList[@counter].RefreshedAt"/>
+									</td>
+									
+                            <td class="text-center">
+                                <a class="btn btnFills btn-outline-danger btnDeleteIcon cancel RemoveDataSourceSchemaCacheButton btnAddRemoveSubDetailList" title="@Localizer["Remove DataSourceSchemaCache"]" removeId="@(item.Id)"></a>
+                            </td>
+                        </tr>
+                        counter++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

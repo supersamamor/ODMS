@@ -1,0 +1,173 @@
+@page
+@model EditModel
+@{
+    ViewData["Title"] = Localizer["Edit Dashboard Query"];
+    ViewData["ActiveMainPage"] = "DashboardQuery";
+    ViewData["Level1"] = "ODMS";
+	var breadcrumbs = new[] {
+		new { Title = "Dashboard Query List", Url = "/ODMS/DashboardQuery/Index", IsActive = false },
+		new { Title = "Edit Dashboard Query", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<form id="dashboardQuery-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+    <div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.DashboardQuery" />
+    </div>
+	<div id="toolbar-container" class="btn-group" role="group">
+		<a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
+		<button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" title="@Localizer["Save changes"]"></button>
+		@if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQuery.History)).Succeeded)
+		{
+			<a asp-page="History" id="btnHistoryConfirmationModal" asp-route-id="@Model.DashboardQuery.Id" class="btn btnFills btn-outline-primary btnHistoryIcon" title="@Localizer["History"]"></a>
+		}
+    </div>
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<partial name="_DashboardQueryParameterListValidationPartial" model="@Model.DashboardQuery" />
+<partial name="_DashboardQueryResultColumnListValidationPartial" model="@Model.DashboardQuery" />
+<partial name="_DashboardQueryResultCacheListValidationPartial" model="@Model.DashboardQuery" />
+<partial name="_DashboardWidgetListValidationPartial" model="@Model.DashboardQuery" />
+<partial name="_DashboardRefreshJobListValidationPartial" model="@Model.DashboardQuery" />
+
+<script asp-add-nonce>
+    $(document).ready(function () {
+		$.bindSaveConfirmationModal('Update', '#btnConfirmationModal','#dashboardQuery-form');
+		$.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal','#dashboardQuery-form', 'Do you want to cancel the changes?');
+		$.bindCancelConfirmationModal('History', '#btnHistoryConfirmationModal', '#dashboardQuery-form', 'Do you want to cancel the changes?');
+        function InitializeForm()
+        {
+            $('.DisableSelectDropdown').on('mousedown', function(e) {
+                e.preventDefault();
+                this.blur();
+                window.focus();
+            });
+            
+			$.InitializeDashboardQueryParameterFieldValidations($('#DashboardQueryParameterCount').val());
+			$('.RemoveDashboardQueryParameterButton ').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveDashboardQueryParameter');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboardQuery-form', InitializeForm, true);
+			});
+
+			$('#btnAddDashboardQueryParameter').on( 'click', function () {
+				$('#AsyncAction').val('AddDashboardQueryParameter');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboardQuery-form', InitializeForm, true);
+			});
+
+			$.InitializeDashboardQueryResultColumnFieldValidations($('#DashboardQueryResultColumnCount').val());
+			$('.RemoveDashboardQueryResultColumnButton ').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveDashboardQueryResultColumn');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboardQuery-form', InitializeForm, true);
+			});
+
+			$('#btnAddDashboardQueryResultColumn').on( 'click', function () {
+				$('#AsyncAction').val('AddDashboardQueryResultColumn');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboardQuery-form', InitializeForm, true);
+			});
+
+			$.InitializeDashboardQueryResultCacheFieldValidations($('#DashboardQueryResultCacheCount').val());
+			$('.RemoveDashboardQueryResultCacheButton ').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveDashboardQueryResultCache');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboardQuery-form', InitializeForm, true);
+			});
+
+			$('#btnAddDashboardQueryResultCache').on( 'click', function () {
+				$('#AsyncAction').val('AddDashboardQueryResultCache');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboardQuery-form', InitializeForm, true);
+			});
+
+			$.InitializeDashboardWidgetFieldValidations($('#DashboardWidgetCount').val());
+			$('.RemoveDashboardWidgetButton ').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveDashboardWidget');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboardQuery-form', InitializeForm, true);
+			});
+
+			$('#btnAddDashboardWidget').on( 'click', function () {
+				$('#AsyncAction').val('AddDashboardWidget');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboardQuery-form', InitializeForm, true);
+			});
+
+			$.fn.dashboardSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2DashboardData" })',
+						}
+					});
+				});
+				return this;
+			};
+			var dashboardlistdropdowns = document.getElementsByClassName('SelectDashboard');
+			for ( var i=0; i< dashboardlistdropdowns.length; i++) {
+				$("#DashboardWidgetList_"+i+"_DrillDownDashboardId").dashboardSelect();
+			}
+
+			$.fn.reporttypeSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2ReportTypeData" })',
+						}
+					});
+				});
+				return this;
+			};
+			var reporttypelistdropdowns = document.getElementsByClassName('SelectReportType');
+			for ( var i=0; i< reporttypelistdropdowns.length; i++) {
+				$("#DashboardWidgetList_"+i+"_ReportTypeId").reporttypeSelect();
+			}
+
+			$.fn.dashboardSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2DashboardData" })',
+						}
+					});
+				});
+				return this;
+			};
+			var dashboardlistdropdowns = document.getElementsByClassName('SelectDashboard');
+			for ( var i=0; i< dashboardlistdropdowns.length; i++) {
+				$("#DashboardWidgetList_"+i+"_DashboardId").dashboardSelect();
+			}
+
+			$.InitializeDashboardRefreshJobFieldValidations($('#DashboardRefreshJobCount').val());
+			$('.RemoveDashboardRefreshJobButton ').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveDashboardRefreshJob');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboardQuery-form', InitializeForm, true);
+			});
+
+			$('#btnAddDashboardRefreshJob').on( 'click', function () {
+				$('#AsyncAction').val('AddDashboardRefreshJob');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboardQuery-form', InitializeForm, true);
+			});
+
+			$.fn.datasourceSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2DataSourceData" })',
+						}
+					});
+				});
+				return this;
+			};
+			$("#DataSourceId").datasourceSelect();
+
+
+        }
+        InitializeForm();
+    });
+</script>
+}

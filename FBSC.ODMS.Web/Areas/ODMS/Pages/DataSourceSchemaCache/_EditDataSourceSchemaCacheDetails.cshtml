@@ -1,0 +1,70 @@
+@using Models
+@model DataSourceSchemaCacheViewModel
+
+<div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
+    <div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.DataSourceId" class="form-label"><strong>@Localizer["Data Source"] :</strong></label>
+			<select asp-for="@Model.DataSourceId" class="form-control" asp-items="@(dropdownService.GetDataSourceList(Model.DataSourceId))"><option value="">- Select Data Source -</option></select>
+			<span asp-validation-for="@Model.DataSourceId" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.SchemaName" class="form-label"><strong>@Localizer["Sql Schema Name"] :</strong></label>
+			<input asp-for="@Model.SchemaName" class="form-control" maxlength="100"  readonly/>
+			<span asp-validation-for="@Model.SchemaName" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.TableName" class="form-label"><strong>@Localizer["Sql Table Name"] :</strong></label>
+			<input asp-for="@Model.TableName" class="form-control" maxlength="150"  readonly/>
+			<span asp-validation-for="@Model.TableName" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ColumnName" class="form-label"><strong>@Localizer["Sql Column Name"] :</strong></label>
+			<input asp-for="@Model.ColumnName" class="form-control" maxlength="150"  readonly/>
+			<span asp-validation-for="@Model.ColumnName" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.SqlDataType" class="form-label"><strong>@Localizer["Native Sql Data Type"] :</strong></label>
+			<input asp-for="@Model.SqlDataType" class="form-control" maxlength="50"  readonly/>
+			<span asp-validation-for="@Model.SqlDataType" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.OrdinalPosition" class="form-label"><strong>@Localizer["Column Order In Source Table"] :</strong></label>
+			<input asp-for="@Model.OrdinalPosition" class="form-control text-end"   readonly/>
+			<span asp-validation-for="@Model.OrdinalPosition" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.IsNullable" class="form-label"><strong>@Localizer["Is Nullable"] :</strong></label>
+			<input asp-for="@Model.IsNullable" class="custom-checkbox-label" readonly/>
+			<span asp-validation-for="@Model.IsNullable" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.RefreshedAt" class="form-label"><strong>@Localizer["Last Discovered At"] :</strong></label>
+			<input asp-for="@Model.RefreshedAt" class="form-control"   readonly/>
+			<span asp-validation-for="@Model.RefreshedAt" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+
+</div>

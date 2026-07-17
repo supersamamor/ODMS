@@ -1,0 +1,86 @@
+@using Models
+@model DataUploadBatchViewModel
+
+<div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
+    <div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.DataSourceId" class="form-label"><strong>@Localizer["Data Source"] :</strong></label>
+			<select asp-for="@Model.DataSourceId" class="form-control" asp-items="@(dropdownService.GetDataSourceList(Model.DataSourceId))"><option value="">- Select Data Source -</option></select>
+			<span asp-validation-for="@Model.DataSourceId" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.FileName" class="form-label"><strong>@Localizer["Uploaded File Name"] :</strong></label>
+			<input asp-for="@Model.FileName" class="form-control" maxlength="260" />
+			<span asp-validation-for="@Model.FileName" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.FileType" class="form-label"><strong>@Localizer["CSV, XLSX, or JSON"] :</strong></label>
+			<input asp-for="@Model.FileType" class="form-control" maxlength="20" />
+			<span asp-validation-for="@Model.FileType" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.UploadedBy" class="form-label"><strong>@Localizer["Uploaded By"] :</strong></label>
+			<input asp-for="@Model.UploadedBy" class="form-control" maxlength="100" />
+			<span asp-validation-for="@Model.UploadedBy" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.StagingTableName" class="form-label"><strong>@Localizer["Generated Internal Staging Table Name"] :</strong></label>
+			<input asp-for="@Model.StagingTableName" class="form-control" maxlength="150"  readonly/>
+			<span asp-validation-for="@Model.StagingTableName" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.RowCount" class="form-label"><strong>@Localizer["Rows Imported"] :</strong></label>
+			<input asp-for="@Model.RowCount" class="form-control text-end"   readonly/>
+			<span asp-validation-for="@Model.RowCount" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ColumnCount" class="form-label"><strong>@Localizer["Columns Detected"] :</strong></label>
+			<input asp-for="@Model.ColumnCount" class="form-control text-end"   readonly/>
+			<span asp-validation-for="@Model.ColumnCount" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ImportStatus" class="form-label"><strong>@Localizer["Status"] :</strong></label>
+			<input asp-for="@Model.ImportStatus" class="form-control" maxlength="50" />
+			<span asp-validation-for="@Model.ImportStatus" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ImportedAt" class="form-label"><strong>@Localizer["Imported At"] :</strong></label>
+			<input asp-for="@Model.ImportedAt" class="form-control"   readonly/>
+			<span asp-validation-for="@Model.ImportedAt" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ErrorRemarks" class="form-label"><strong>@Localizer["Import Error"] :</strong></label>
+			<input asp-for="@Model.ErrorRemarks" class="form-control" maxlength="450"  readonly/>
+			<span asp-validation-for="@Model.ErrorRemarks" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+
+</div>

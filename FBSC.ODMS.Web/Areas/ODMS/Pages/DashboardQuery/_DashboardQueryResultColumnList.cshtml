@@ -1,0 +1,107 @@
+@using Models
+@model DashboardQueryViewModel
+<input type="hidden" id="DashboardQueryResultColumnCount" value="@Model?.DashboardQueryResultColumnList?.Count" />
+<div class="card">
+    <h5 class="card-header">
+        <span  class="card-header-custom">@Localizer["Dashboard Query Result Column"]</span>
+        <a id="btnAddDashboardQueryResultColumn" class="btn btnMaterial btn-flat primary semicircle cancel btnAddRemoveSubDetailList text-light" title="@Localizer["Add"]"><i class="fas fa-plus"></i></a>
+        <button class="cancel d-none" type="button" id="btnRemoveDashboardQueryResultColumn" value="RemoveDashboardQueryResultColumn"></button>
+    </h5>
+    <div class="card-body overflow-auto">
+        <table id="subDetailList" class="table table-hover table-striped responsive nowrap fills-table" width="100%">
+            <thead>
+                <tr>
+                    <th class="d-none"></th>
+                    <th class="text-center">
+								@Localizer["Column Name As Returned By The Query"]
+							</th>
+							<th class="text-center">
+								@Localizer["Column Order In Result Set"]
+							</th>
+							<th class="text-center">
+								@Localizer["Native Sql Data Type Returned"]
+							</th>
+							<th class="text-center">
+								@Localizer["Dimension, Measure, DateAxis, Label, Or Identifier"]
+							</th>
+							<th class="text-center">
+								@Localizer["Can Be Summed/Averaged/Counted"]
+							</th>
+							<th class="text-center">
+								@Localizer["SUM, COUNT, AVG, MIN, Or MAX"]
+							</th>
+							<th class="text-center">
+								@Localizer["Display Format, E.g. Currency Or Percent Mask"]
+							</th>
+							<th class="text-center">
+								@Localizer["Column Order For Mapping Pickers"]
+							</th>
+							
+                    <th class="text-center">
+                        @Localizer["Action"]
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.DashboardQueryResultColumnList != null)
+                {
+                    int counter = 0;
+                    foreach (var item in Model.DashboardQueryResultColumnList)
+                    {
+                        <tr>
+                            <td class="d-none">
+                                <input type="hidden" name="DashboardQueryResultColumnList[@counter].Id" value="@item.Id" />
+                                <input type="hidden" name="DashboardQueryResultColumnList[@counter].DashboardQueryId" value="@item.DashboardQueryId" />
+                            </td>
+                            <td>
+										<input  asp-for="@item.ColumnName" name="DashboardQueryResultColumnList[@counter].ColumnName" class="form-control" maxlength="150" readonly/>
+										<span data-valmsg-for="DashboardQueryResultColumnList[@counter].ColumnName" asp-validation-for="@item.ColumnName" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.ColumnName"  name="DashboardQueryResultColumnList[@counter].ColumnName"/>
+									</td>
+									<td>
+										<input  asp-for="@item.OrdinalPosition" name="DashboardQueryResultColumnList[@counter].OrdinalPosition" class="form-control"  readonly/>
+										<span data-valmsg-for="DashboardQueryResultColumnList[@counter].OrdinalPosition" asp-validation-for="@item.OrdinalPosition" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.OrdinalPosition"  name="DashboardQueryResultColumnList[@counter].OrdinalPosition"/>
+									</td>
+									<td>
+										<input  asp-for="@item.SqlDataType" name="DashboardQueryResultColumnList[@counter].SqlDataType" class="form-control" maxlength="50" readonly/>
+										<span data-valmsg-for="DashboardQueryResultColumnList[@counter].SqlDataType" asp-validation-for="@item.SqlDataType" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.SqlDataType"  name="DashboardQueryResultColumnList[@counter].SqlDataType"/>
+									</td>
+									<td>
+										<input  asp-for="@item.InferredRole" name="DashboardQueryResultColumnList[@counter].InferredRole" class="form-control" maxlength="50" />
+										<span data-valmsg-for="DashboardQueryResultColumnList[@counter].InferredRole" asp-validation-for="@item.InferredRole" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input asp-for="@item.IsAggregatable" name="DashboardQueryResultColumnList[@counter].IsAggregatable" class="custom-checkbox-label" />
+										<span data-valmsg-for="DashboardQueryResultColumnList[@counter].IsAggregatable" asp-validation-for="@item.IsAggregatable" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.DefaultAggregation" name="DashboardQueryResultColumnList[@counter].DefaultAggregation" class="form-control" maxlength="20" />
+										<span data-valmsg-for="DashboardQueryResultColumnList[@counter].DefaultAggregation" asp-validation-for="@item.DefaultAggregation" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.FormatString" name="DashboardQueryResultColumnList[@counter].FormatString" class="form-control" maxlength="50" />
+										<span data-valmsg-for="DashboardQueryResultColumnList[@counter].FormatString" asp-validation-for="@item.FormatString" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.Sequence" name="DashboardQueryResultColumnList[@counter].Sequence" class="form-control"  />
+										<span data-valmsg-for="DashboardQueryResultColumnList[@counter].Sequence" asp-validation-for="@item.Sequence" class="text-danger"></span>
+										
+									</td>
+									
+                            <td class="text-center">
+                                <a class="btn btnFills btn-outline-danger btnDeleteIcon cancel RemoveDashboardQueryResultColumnButton btnAddRemoveSubDetailList" title="@Localizer["Remove DashboardQueryResultColumn"]" removeId="@(item.Id)"></a>
+                            </td>
+                        </tr>
+                        counter++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

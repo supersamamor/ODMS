@@ -1,0 +1,53 @@
+@using Models
+@model DashboardQueryViewModel
+<script asp-add-nonce>
+    $(document).ready(function () { 
+		$.InitializeDashboardWidgetFieldValidations = function(count)
+        {
+			let reqs = [];			
+			for (let idx = 0; idx < count; idx++) {
+				reqs.push({name: "DashboardWidgetList[" + idx + "].DashboardId", el: "Input", minlength:0, maxlength:450, isrequired: true, description: "Dashboard"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].DashboardQueryId", el: "Input", minlength:0, maxlength:450, isrequired: true, description: "Dashboard Query"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].ReportTypeId", el: "Input", minlength:0, maxlength:450, isrequired: true, description: "Report Type"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].Title", el: "Input", minlength:0, maxlength:150, isrequired: true, description: "Widget Title"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].XAxisColumnName", el: "Input", minlength:0, maxlength:150, isrequired: false, description: "Maps To A DashboardQueryResultColumn.ColumnName"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].YAxisColumnsJson", el: "Input", minlength:0, maxlength:450, isrequired: false, description: "Json Array Of Measure Column Names"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].SeriesColumnName", el: "Input", minlength:0, maxlength:150, isrequired: false, description: "Optional Grouping/Series Column"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].AggregationOverride", el: "Input", minlength:0, maxlength:20, isrequired: false, description: "Overrides The Result Column`s Default Aggregation"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].DrillDownDashboardId", el: "Input", minlength:0, maxlength:450, isrequired: false, description: "Optional Dashboard Opened On Widget Click"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].GridPositionX", el: "Input", minlength:0, maxlength:0, isrequired: true, description: "Grid Column Position"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].GridPositionY", el: "Input", minlength:0, maxlength:0, isrequired: true, description: "Grid Row Position"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].GridWidth", el: "Input", minlength:0, maxlength:0, isrequired: true, description: "Grid Width In Columns"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].GridHeight", el: "Input", minlength:0, maxlength:0, isrequired: true, description: "Grid Height In Rows"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].RefreshIntervalOverrideSeconds", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Overrides Dashboard-Level Refresh Interval"});
+				reqs.push({name: "DashboardWidgetList[" + idx + "].Sequence", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Tab/Load Order"});
+				
+			}
+			let validator = $("#dashboardQuery-form").validate();
+			for (let j in reqs)
+			{
+				let e = reqs[j];
+				let el = $(`*[name="${e.name}"]`);
+				el.rules("add", {
+					required: {                
+						depends: function(element) {
+							return e.isrequired;
+						}
+					},
+					messages: {
+						required: (e.description === '') ? 'this field is required' : `'${e.description}' is required`,
+					},
+				});
+				if(e.isrequired == true)
+				{
+					let labelElement = $(`label[name="Label.${e.name}"]`);
+					$(labelElement).addClass("fieldrequired");
+					el.attr('data-val-required', (e.description === '') ? 'this field is required' : `'${e.description}' is required`);
+					el.attr('data-val', true);
+				}
+				if(e.maxlength > 0) {el.attr('maxlength', e.maxlength);}
+				if(e.minlength > 0) {el.attr('minlength', e.minlength);}   
+			} 
+		}       
+    });
+</script>

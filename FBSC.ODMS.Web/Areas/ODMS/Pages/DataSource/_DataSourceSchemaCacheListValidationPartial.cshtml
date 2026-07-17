@@ -1,0 +1,46 @@
+@using Models
+@model DataSourceViewModel
+<script asp-add-nonce>
+    $(document).ready(function () { 
+		$.InitializeDataSourceSchemaCacheFieldValidations = function(count)
+        {
+			let reqs = [];			
+			for (let idx = 0; idx < count; idx++) {
+				reqs.push({name: "DataSourceSchemaCacheList[" + idx + "].DataSourceId", el: "Input", minlength:0, maxlength:450, isrequired: true, description: "Data Source"});
+				reqs.push({name: "DataSourceSchemaCacheList[" + idx + "].SchemaName", el: "Input", minlength:0, maxlength:100, isrequired: true, description: "Sql Schema Name"});
+				reqs.push({name: "DataSourceSchemaCacheList[" + idx + "].TableName", el: "Input", minlength:0, maxlength:150, isrequired: true, description: "Sql Table Name"});
+				reqs.push({name: "DataSourceSchemaCacheList[" + idx + "].ColumnName", el: "Input", minlength:0, maxlength:150, isrequired: true, description: "Sql Column Name"});
+				reqs.push({name: "DataSourceSchemaCacheList[" + idx + "].SqlDataType", el: "Input", minlength:0, maxlength:50, isrequired: false, description: "Native Sql Data Type"});
+				reqs.push({name: "DataSourceSchemaCacheList[" + idx + "].OrdinalPosition", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Column Order In Source Table"});
+				reqs.push({name: "DataSourceSchemaCacheList[" + idx + "].IsNullable", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Is Nullable"});
+				reqs.push({name: "DataSourceSchemaCacheList[" + idx + "].RefreshedAt", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Last Discovered At"});
+				
+			}
+			let validator = $("#dataSource-form").validate();
+			for (let j in reqs)
+			{
+				let e = reqs[j];
+				let el = $(`*[name="${e.name}"]`);
+				el.rules("add", {
+					required: {                
+						depends: function(element) {
+							return e.isrequired;
+						}
+					},
+					messages: {
+						required: (e.description === '') ? 'this field is required' : `'${e.description}' is required`,
+					},
+				});
+				if(e.isrequired == true)
+				{
+					let labelElement = $(`label[name="Label.${e.name}"]`);
+					$(labelElement).addClass("fieldrequired");
+					el.attr('data-val-required', (e.description === '') ? 'this field is required' : `'${e.description}' is required`);
+					el.attr('data-val', true);
+				}
+				if(e.maxlength > 0) {el.attr('maxlength', e.maxlength);}
+				if(e.minlength > 0) {el.attr('minlength', e.minlength);}   
+			} 
+		}       
+    });
+</script>

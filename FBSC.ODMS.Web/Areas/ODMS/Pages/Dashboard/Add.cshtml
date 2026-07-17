@@ -1,0 +1,157 @@
+@page
+@model AddModel
+@{
+    ViewData["Title"] = Localizer["Add Dashboard"];
+    ViewData["ActiveMainPage"] = "Dashboard";
+    ViewData["Level1"] = "ODMS";
+	var breadcrumbs = new[] {
+		new { Title = "Dashboard List", Url = "/ODMS/Dashboard/Index", IsActive = false },
+		new { Title = "Add Dashboard", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<form id="dashboard-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+	<div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.Dashboard" />
+    </div> 	
+	<div id="toolbar-container" class="btn-group" role="group">     
+		<a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
+		<button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" title="@Localizer["Save changes"]"></button>
+	</div>   	
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<partial name="_DashboardWidgetListValidationPartial" model="@Model.Dashboard" />
+<partial name="_DashboardWidgetListValidationPartial" model="@Model.Dashboard" />
+<partial name="_DashboardAccessListValidationPartial" model="@Model.Dashboard" />
+
+<script asp-add-nonce>
+    $(document).ready(function () {
+		$.bindSaveConfirmationModal('Save', '#btnConfirmationModal','#dashboard-form');
+		$.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal','#dashboard-form', 'Do you want to cancel the changes?');
+		function InitializeForm()
+		{			
+
+			$('.DisableSelectDropdown').on('mousedown', function(e) {
+				e.preventDefault();
+				this.blur();
+				window.focus();
+			});
+			
+			$.InitializeDashboardWidgetFieldValidations($('#DashboardWidgetCount').val());
+			$('.RemoveDashboardWidgetButton ').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveDashboardWidget');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboard-form', InitializeForm, true);
+			});
+
+			$('#btnAddDashboardWidget').on( 'click', function () {
+				$('#AsyncAction').val('AddDashboardWidget');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboard-form', InitializeForm, true);
+			});
+
+			$.fn.reporttypeSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2ReportTypeData" })',
+						}
+					});
+				});
+				return this;
+			};
+			var reporttypelistdropdowns = document.getElementsByClassName('SelectReportType');
+			for ( var i=0; i< reporttypelistdropdowns.length; i++) {
+				$("#DashboardWidgetList_"+i+"_ReportTypeId").reporttypeSelect();
+			}
+
+			$.fn.dashboardquerySelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2DashboardQueryData" })',
+						}
+					});
+				});
+				return this;
+			};
+			var dashboardquerylistdropdowns = document.getElementsByClassName('SelectDashboardQuery');
+			for ( var i=0; i< dashboardquerylistdropdowns.length; i++) {
+				$("#DashboardWidgetList_"+i+"_DashboardQueryId").dashboardquerySelect();
+			}
+
+			$.InitializeDashboardWidgetFieldValidations($('#DashboardWidgetCount').val());
+			$('.RemoveDashboardWidgetButton ').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveDashboardWidget');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboard-form', InitializeForm, true);
+			});
+
+			$('#btnAddDashboardWidget').on( 'click', function () {
+				$('#AsyncAction').val('AddDashboardWidget');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboard-form', InitializeForm, true);
+			});
+
+			$.fn.reporttypeSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2ReportTypeData" })',
+						}
+					});
+				});
+				return this;
+			};
+			var reporttypelistdropdowns = document.getElementsByClassName('SelectReportType');
+			for ( var i=0; i< reporttypelistdropdowns.length; i++) {
+				$("#DashboardWidgetList_"+i+"_ReportTypeId").reporttypeSelect();
+			}
+
+			$.fn.dashboardquerySelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2DashboardQueryData" })',
+						}
+					});
+				});
+				return this;
+			};
+			var dashboardquerylistdropdowns = document.getElementsByClassName('SelectDashboardQuery');
+			for ( var i=0; i< dashboardquerylistdropdowns.length; i++) {
+				$("#DashboardWidgetList_"+i+"_DashboardQueryId").dashboardquerySelect();
+			}
+
+			$.InitializeDashboardAccessFieldValidations($('#DashboardAccessCount').val());
+			$('.RemoveDashboardAccessButton ').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveDashboardAccess');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboard-form', InitializeForm, true);
+			});
+
+			$('#btnAddDashboardAccess').on( 'click', function () {
+				$('#AsyncAction').val('AddDashboardAccess');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#dashboard-form', InitializeForm, true);
+			});
+
+			$.fn.dashboardthemeSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2DashboardThemeData" })',
+						}
+					});
+				});
+				return this;
+			};
+			$("#DashboardThemeId").dashboardthemeSelect();
+
+		}	
+		InitializeForm();
+    });
+</script>
+}

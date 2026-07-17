@@ -1,0 +1,42 @@
+@page
+@model DetailsModel
+@{
+    ViewData["Title"] = Localizer["View Data Upload Column"];
+    ViewData["ActiveMainPage"] = "DataUploadColumn";
+    ViewData["Level1"] = "ODMS";
+	var breadcrumbs = new[] {
+		new { Title = "Data Upload Column List", Url = "/ODMS/DataUploadColumn/Index", IsActive = false },
+		new { Title = "View Data Upload Column", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<div id="dataUploadColumn-container">
+    <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+    <div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.DataUploadColumn" />
+    </div>
+</div>
+<div id="toolbar-container" class="btn-group" role="group">
+    <a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadColumn.Create)).Succeeded)
+    {
+        <a asp-page="Add" id="btnAddRecord" class="btn btnFills btn-outline-success btnAddIcon" title="@Localizer["Add"]"></a>
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadColumn.Edit)).Succeeded)
+    {
+        <a asp-page="Edit" asp-route-id="@Model.DataUploadColumn.Id" class="btn btnFills btn-outline-primary btnEditLightIcon" title="@Localizer["Edit"]"></a>
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadColumn.Delete)).Succeeded)
+    {
+        <a asp-page="Delete" asp-route-id="@Model.DataUploadColumn.Id" class="btn btnFills btn-outline-danger btnDeleteIcon" title="@Localizer["Delete"]"></a>
+    }
+	@if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadColumn.History)).Succeeded)
+	{
+        <a asp-page="History" asp-route-id="@Model.DataUploadColumn.Id" class="btn btnFills btn-outline-primary btnHistoryIcon" title="@Localizer["History"]"></a>
+	}
+</div>
+
+@section Scripts {
+<partial name="_DisableFieldsPartial" model="@("dataUploadColumn-container")" />
+}

@@ -1,0 +1,12 @@
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\bin\Debug\net10.0\FBSC.Common.Identity.Abstractions.deps.json
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\bin\Debug\net10.0\FBSC.Common.Identity.Abstractions.dll
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\bin\Debug\net10.0\FBSC.Common.Identity.Abstractions.pdb
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\obj\Debug\net10.0\FBSC.Common.Identity.Abstractions.csproj.AssemblyReference.cache
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\obj\Debug\net10.0\FBSC.Common.Identity.Abstractions.GeneratedMSBuildEditorConfig.editorconfig
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\obj\Debug\net10.0\FBSC.Common.Identity.Abstractions.AssemblyInfoInputs.cache
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\obj\Debug\net10.0\FBSC.Common.Identity.Abstractions.AssemblyInfo.cs
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\obj\Debug\net10.0\FBSC.Common.Identity.Abstractions.csproj.CoreCompileInputs.cache
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\obj\Debug\net10.0\FBSC.Common.Identity.Abstractions.dll
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\obj\Debug\net10.0\refint\FBSC.Common.Identity.Abstractions.dll
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\obj\Debug\net10.0\FBSC.Common.Identity.Abstractions.pdb
+C:\FBSC.ODMS\FBSC.Common.Identity.Abstractions\obj\Debug\net10.0\ref\FBSC.Common.Identity.Abstractions.dll

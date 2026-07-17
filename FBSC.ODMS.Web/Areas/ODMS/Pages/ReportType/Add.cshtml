@@ -1,0 +1,104 @@
+@page
+@model AddModel
+@{
+    ViewData["Title"] = Localizer["Add Report Type"];
+    ViewData["ActiveMainPage"] = "ReportType";
+    ViewData["Level1"] = "ODMS";
+	var breadcrumbs = new[] {
+		new { Title = "Report Type List", Url = "/ODMS/ReportType/Index", IsActive = false },
+		new { Title = "Add Report Type", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<form id="reportType-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+	<div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.ReportType" />
+    </div> 	
+	<div id="toolbar-container" class="btn-group" role="group">     
+		<a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
+		<button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" title="@Localizer["Save changes"]"></button>
+	</div>   	
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<partial name="_DashboardWidgetListValidationPartial" model="@Model.ReportType" />
+
+<script asp-add-nonce>
+    $(document).ready(function () {
+		$.bindSaveConfirmationModal('Save', '#btnConfirmationModal','#reportType-form');
+		$.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal','#reportType-form', 'Do you want to cancel the changes?');
+		function InitializeForm()
+		{			
+
+			$('.DisableSelectDropdown').on('mousedown', function(e) {
+				e.preventDefault();
+				this.blur();
+				window.focus();
+			});
+			
+			$.InitializeDashboardWidgetFieldValidations($('#DashboardWidgetCount').val());
+			$('.RemoveDashboardWidgetButton ').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveDashboardWidget');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#reportType-form', InitializeForm, true);
+			});
+
+			$('#btnAddDashboardWidget').on( 'click', function () {
+				$('#AsyncAction').val('AddDashboardWidget');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#reportType-form', InitializeForm, true);
+			});
+
+			$.fn.dashboardSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2DashboardData" })',
+						}
+					});
+				});
+				return this;
+			};
+			var dashboardlistdropdowns = document.getElementsByClassName('SelectDashboard');
+			for ( var i=0; i< dashboardlistdropdowns.length; i++) {
+				$("#DashboardWidgetList_"+i+"_DrillDownDashboardId").dashboardSelect();
+			}
+
+			$.fn.dashboardSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2DashboardData" })',
+						}
+					});
+				});
+				return this;
+			};
+			var dashboardlistdropdowns = document.getElementsByClassName('SelectDashboard');
+			for ( var i=0; i< dashboardlistdropdowns.length; i++) {
+				$("#DashboardWidgetList_"+i+"_DashboardId").dashboardSelect();
+			}
+
+			$.fn.dashboardquerySelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2DashboardQueryData" })',
+						}
+					});
+				});
+				return this;
+			};
+			var dashboardquerylistdropdowns = document.getElementsByClassName('SelectDashboardQuery');
+			for ( var i=0; i< dashboardquerylistdropdowns.length; i++) {
+				$("#DashboardWidgetList_"+i+"_DashboardQueryId").dashboardquerySelect();
+			}
+
+		}	
+		InitializeForm();
+    });
+</script>
+}

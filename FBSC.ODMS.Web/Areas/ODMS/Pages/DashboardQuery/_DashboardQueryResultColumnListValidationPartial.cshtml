@@ -1,0 +1,47 @@
+@using Models
+@model DashboardQueryViewModel
+<script asp-add-nonce>
+    $(document).ready(function () { 
+		$.InitializeDashboardQueryResultColumnFieldValidations = function(count)
+        {
+			let reqs = [];			
+			for (let idx = 0; idx < count; idx++) {
+				reqs.push({name: "DashboardQueryResultColumnList[" + idx + "].DashboardQueryId", el: "Input", minlength:0, maxlength:450, isrequired: true, description: "Dashboard Query"});
+				reqs.push({name: "DashboardQueryResultColumnList[" + idx + "].ColumnName", el: "Input", minlength:0, maxlength:150, isrequired: true, description: "Column Name As Returned By The Query"});
+				reqs.push({name: "DashboardQueryResultColumnList[" + idx + "].OrdinalPosition", el: "Input", minlength:0, maxlength:0, isrequired: true, description: "Column Order In Result Set"});
+				reqs.push({name: "DashboardQueryResultColumnList[" + idx + "].SqlDataType", el: "Input", minlength:0, maxlength:50, isrequired: false, description: "Native Sql Data Type Returned"});
+				reqs.push({name: "DashboardQueryResultColumnList[" + idx + "].InferredRole", el: "Input", minlength:0, maxlength:50, isrequired: true, description: "Dimension, Measure, DateAxis, Label, Or Identifier"});
+				reqs.push({name: "DashboardQueryResultColumnList[" + idx + "].IsAggregatable", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Can Be Summed/Averaged/Counted"});
+				reqs.push({name: "DashboardQueryResultColumnList[" + idx + "].DefaultAggregation", el: "Input", minlength:0, maxlength:20, isrequired: false, description: "SUM, COUNT, AVG, MIN, Or MAX"});
+				reqs.push({name: "DashboardQueryResultColumnList[" + idx + "].FormatString", el: "Input", minlength:0, maxlength:50, isrequired: false, description: "Display Format, E.g. Currency Or Percent Mask"});
+				reqs.push({name: "DashboardQueryResultColumnList[" + idx + "].Sequence", el: "Input", minlength:0, maxlength:0, isrequired: true, description: "Column Order For Mapping Pickers"});
+				
+			}
+			let validator = $("#dashboardQuery-form").validate();
+			for (let j in reqs)
+			{
+				let e = reqs[j];
+				let el = $(`*[name="${e.name}"]`);
+				el.rules("add", {
+					required: {                
+						depends: function(element) {
+							return e.isrequired;
+						}
+					},
+					messages: {
+						required: (e.description === '') ? 'this field is required' : `'${e.description}' is required`,
+					},
+				});
+				if(e.isrequired == true)
+				{
+					let labelElement = $(`label[name="Label.${e.name}"]`);
+					$(labelElement).addClass("fieldrequired");
+					el.attr('data-val-required', (e.description === '') ? 'this field is required' : `'${e.description}' is required`);
+					el.attr('data-val', true);
+				}
+				if(e.maxlength > 0) {el.attr('maxlength', e.maxlength);}
+				if(e.minlength > 0) {el.attr('minlength', e.minlength);}   
+			} 
+		}       
+    });
+</script>

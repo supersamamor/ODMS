@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Authors>Fred Songco</Authors>
+    <Company>Corporate Technologies, Inc.</Company>
+    <Description>A library containing utility classes that can be used by web projects.</Description>
+    <Copyright>Copyright 2022 Corporate Technologies, Inc.</Copyright>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+    <PackageReference Include="LanguageExt.Transformers" Version="4.4.8" />
+    <PackageReference Include="Microsoft.Build" Version="18.7.1" />
+    <PackageReference Include="OpenIddict.Abstractions" Version="7.5.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FBSC.Common.Identity.Abstractions\FBSC.Common.Identity.Abstractions.csproj" />
+  </ItemGroup>
+</Project>

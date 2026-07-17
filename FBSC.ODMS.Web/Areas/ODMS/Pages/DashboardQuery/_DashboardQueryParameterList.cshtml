@@ -1,0 +1,99 @@
+@using Models
+@model DashboardQueryViewModel
+<input type="hidden" id="DashboardQueryParameterCount" value="@Model?.DashboardQueryParameterList?.Count" />
+<div class="card">
+    <h5 class="card-header">
+        <span  class="card-header-custom">@Localizer["Dashboard Query Parameter"]</span>
+        <a id="btnAddDashboardQueryParameter" class="btn btnMaterial btn-flat primary semicircle cancel btnAddRemoveSubDetailList text-light" title="@Localizer["Add"]"><i class="fas fa-plus"></i></a>
+        <button class="cancel d-none" type="button" id="btnRemoveDashboardQueryParameter" value="RemoveDashboardQueryParameter"></button>
+    </h5>
+    <div class="card-body overflow-auto">
+        <table id="subDetailList" class="table table-hover table-striped responsive nowrap fills-table" width="100%">
+            <thead>
+                <tr>
+                    <th class="d-none"></th>
+                    <th class="text-center">
+								@Localizer["Sql Parameter Placeholder, E.g. @DateFrom"]
+							</th>
+							<th class="text-center">
+								@Localizer["Parameter Data Type"]
+							</th>
+							<th class="text-center">
+								@Localizer["Dropdown, DateRange, Text, Or MultiSelect"]
+							</th>
+							<th class="text-center">
+								@Localizer["Default Value"]
+							</th>
+							<th class="text-center">
+								@Localizer["Is Required"]
+							</th>
+							<th class="text-center">
+								@Localizer["Optional Sql That Populates This Parameter`s Dropdown Values"]
+							</th>
+							<th class="text-center">
+								@Localizer["Filter Bar Order"]
+							</th>
+							
+                    <th class="text-center">
+                        @Localizer["Action"]
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.DashboardQueryParameterList != null)
+                {
+                    int counter = 0;
+                    foreach (var item in Model.DashboardQueryParameterList)
+                    {
+                        <tr>
+                            <td class="d-none">
+                                <input type="hidden" name="DashboardQueryParameterList[@counter].Id" value="@item.Id" />
+                                <input type="hidden" name="DashboardQueryParameterList[@counter].DashboardQueryId" value="@item.DashboardQueryId" />
+                            </td>
+                            <td>
+										<input  asp-for="@item.ParameterName" name="DashboardQueryParameterList[@counter].ParameterName" class="form-control" maxlength="100" />
+										<span data-valmsg-for="DashboardQueryParameterList[@counter].ParameterName" asp-validation-for="@item.ParameterName" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.DataType" name="DashboardQueryParameterList[@counter].DataType" class="form-control" maxlength="50" />
+										<span data-valmsg-for="DashboardQueryParameterList[@counter].DataType" asp-validation-for="@item.DataType" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.ControlType" name="DashboardQueryParameterList[@counter].ControlType" class="form-control" maxlength="50" />
+										<span data-valmsg-for="DashboardQueryParameterList[@counter].ControlType" asp-validation-for="@item.ControlType" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.DefaultValue" name="DashboardQueryParameterList[@counter].DefaultValue" class="form-control" maxlength="450" />
+										<span data-valmsg-for="DashboardQueryParameterList[@counter].DefaultValue" asp-validation-for="@item.DefaultValue" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input asp-for="@item.IsRequired" name="DashboardQueryParameterList[@counter].IsRequired" class="custom-checkbox-label" />
+										<span data-valmsg-for="DashboardQueryParameterList[@counter].IsRequired" asp-validation-for="@item.IsRequired" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.LookupSourceQuery" name="DashboardQueryParameterList[@counter].LookupSourceQuery" class="form-control"  />
+										<span data-valmsg-for="DashboardQueryParameterList[@counter].LookupSourceQuery" asp-validation-for="@item.LookupSourceQuery" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.Sequence" name="DashboardQueryParameterList[@counter].Sequence" class="form-control"  />
+										<span data-valmsg-for="DashboardQueryParameterList[@counter].Sequence" asp-validation-for="@item.Sequence" class="text-danger"></span>
+										
+									</td>
+									
+                            <td class="text-center">
+                                <a class="btn btnFills btn-outline-danger btnDeleteIcon cancel RemoveDashboardQueryParameterButton btnAddRemoveSubDetailList" title="@Localizer["Remove DashboardQueryParameter"]" removeId="@(item.Id)"></a>
+                            </td>
+                        </tr>
+                        counter++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

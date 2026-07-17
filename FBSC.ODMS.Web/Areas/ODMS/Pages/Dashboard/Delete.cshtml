@@ -1,0 +1,34 @@
+@page
+@model DeleteModel
+@{
+    ViewData["Title"] = Localizer["Delete Dashboard"];
+    ViewData["ActiveMainPage"] = "Dashboard";
+    ViewData["Level1"] = "ODMS";
+	var breadcrumbs = new[] {
+		new { Title = "Dashboard List", Url = "/ODMS/Dashboard/Index", IsActive = false },
+		new { Title = "Delete Dashboard", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<form id="dashboard-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+    <div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.Dashboard" />
+    </div>
+    <div id="toolbar-container" class="btn-group" role="group">
+        <a asp-page="Index" class="btn btnFills btn-outline-secondary btnCancelIcon" title="@Localizer["Cancel"]"></a>
+        <button type="button" id="btnDelete" class="btn btnFills btn-outline-danger btnDeleteIcon" title="@Localizer["Delete"]"></button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_DisableFieldsPartial" model="@("PartialLoaderContainer")" />
+    <partial name="_ValidationScriptsPartial" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            $.bindSaveConfirmationModal('Save', '#btnDelete', '#dashboard-form', 'Are you sure you want to delete this dashboard?');
+        });
+    </script>
+}

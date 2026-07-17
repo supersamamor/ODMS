@@ -1,0 +1,78 @@
+@using Models
+@model AiSqlGenerationRequestViewModel
+
+<div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
+    <div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.DataSourceId" class="form-label"><strong>@Localizer["Data Source"] :</strong></label>
+			<select asp-for="@Model.DataSourceId" class="form-control" asp-items="@(dropdownService.GetDataSourceList(Model.DataSourceId))"><option value="">- Select Data Source -</option></select>
+			<span asp-validation-for="@Model.DataSourceId" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.NaturalLanguagePrompt" class="form-label"><strong>@Localizer["User`s Plain-Language Question"] :</strong></label>
+			<input asp-for="@Model.NaturalLanguagePrompt" class="form-control"  />
+			<span asp-validation-for="@Model.NaturalLanguagePrompt" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.GeneratedSqlQueryText" class="form-label"><strong>@Localizer["AI-Generated Sql"] :</strong></label>
+			<input asp-for="@Model.GeneratedSqlQueryText" class="form-control"   readonly/>
+			<span asp-validation-for="@Model.GeneratedSqlQueryText" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.DashboardQueryId" class="form-label"><strong>@Localizer["Dashboard Query Created On Acceptance"] :</strong></label>
+			<input asp-for="ReferenceFieldDashboardQueryId" class="form-control" maxlength="450"  readonly />
+			<span asp-validation-for="@Model.DashboardQueryId" class="text-danger d-block mt-1"></span>
+			<input type="hidden" asp-for="@Model.DashboardQueryId"/>
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ConfidenceScore" class="form-label"><strong>@Localizer["Model Confidence 0-100"] :</strong></label>
+			<input asp-for="@Model.ConfidenceScore" class="form-control text-end"   readonly/>
+			<span asp-validation-for="@Model.ConfidenceScore" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ValidationStatus" class="form-label"><strong>@Localizer["Status"] :</strong></label>
+			<input asp-for="@Model.ValidationStatus" class="form-control" maxlength="50"  readonly/>
+			<span asp-validation-for="@Model.ValidationStatus" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ErrorRemarks" class="form-label"><strong>@Localizer["Generation Or Validation Error"] :</strong></label>
+			<input asp-for="@Model.ErrorRemarks" class="form-control" maxlength="450"  readonly/>
+			<span asp-validation-for="@Model.ErrorRemarks" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.RequestedBy" class="form-label"><strong>@Localizer["Requested By"] :</strong></label>
+			<input asp-for="@Model.RequestedBy" class="form-control" maxlength="100" />
+			<span asp-validation-for="@Model.RequestedBy" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.GeneratedAt" class="form-label"><strong>@Localizer["Generated At"] :</strong></label>
+			<input asp-for="@Model.GeneratedAt" class="form-control"   readonly/>
+			<span asp-validation-for="@Model.GeneratedAt" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+
+</div>

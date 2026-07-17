@@ -1,0 +1,22 @@
+@page
+@model DetailsModel
+
+@{
+    ViewData["Title"] = Localizer["View Audit Log"];
+    ViewData["ActiveMainPage"] = "AuditTrail";
+    ViewData["Level1"] = "Admin";
+    var breadcrumbs = new[] {
+        new { Title = "Audit Logs", Url = "/Admin/AuditTrail/Index", IsActive = false },
+        new { Title = "View Audit Log", Url = "", IsActive = true },
+    };
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<div class="card">
+    <h5 class="card-header"><span class="card-header-custom">@Localizer["Audit Log Details"]</span><br></h5>
+    <div class="card-body">
+        <partial name="_ViewAuditLogDetails" model="Model.AuditLog" />
+    </div>
+</div>
+<div id="toolbar-container" class="btn-group" role="group">
+    <a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
+</div>

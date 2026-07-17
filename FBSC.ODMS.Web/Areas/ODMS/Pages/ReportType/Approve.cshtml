@@ -1,0 +1,54 @@
+@page
+@model ApproveModel
+@{
+    ViewData["Title"] = Localizer["Approve Report Type"];
+    ViewData["ActiveMainPage"] = "ReportType";
+    ViewData["Level1"] = "ODMS";
+    var breadcrumbs = new[] {
+        new { Title = "ReportType List", Url = "/ODMS/ReportType/Index", IsActive = false },
+        new { Title = "Approve ReportType", Url = "", IsActive = true },
+    };
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<form id="reportType-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <partial name="_ApprovalStatusPartial" model="@Model.ApprovalStatus" />
+    <div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.ReportType" />
+    </div>
+    <div id="toolbar-container" class="btn-group" role="group">
+		<a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
+		@if (Model.ApprovalStatus == FBSC.ODMS.Core.ODMS.ApprovalStatus.ForApproval
+			|| Model.ApprovalStatus == FBSC.ODMS.Core.ODMS.ApprovalStatus.New)
+		{
+			<button type="button" id="btnApproveConfirmationModal" class="btn btnFills btn-outline-success btnApproveIcon cancel" name="Handler" value="Approve" title="@Localizer["Approve"]"></button>
+		}
+		else
+		{
+			<button type="button" class="btn btnFills btn-outline-secondary btnApproveIcon" title="@Localizer["Approve"]" disabled></button>
+		}
+		@if (Model.ApprovalStatus == FBSC.ODMS.Core.ODMS.ApprovalStatus.ForApproval
+			|| Model.ApprovalStatus == FBSC.ODMS.Core.ODMS.ApprovalStatus.New)
+		{
+			<button type="button" id="btnRejectConfirmationModal" class="btn btnFills btn-outline-danger btnRejectIcon" name="Handler" value="Reject" title="@Localizer["Reject"]"></button>
+		}
+		else
+		{
+			<button type="button" class="btn btnFills btn-outline-secondary btnRejectIcon" title="@Localizer["Reject"]" disabled></button>
+		}
+	</div>
+</form>
+<a id="back-to-top" href="#" class="btn btnFills btn-outline-primary btnArrowUpIcon back-to-top" role="button" aria-label="Scroll to top"></a>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_DisableFieldsPartial" model="@("PartialLoaderContainer")" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            function InitializeForm() {
+                $.bindSaveWithRemarksConfirmationModal('Approve', '#btnApproveConfirmationModal', '#reportType-form', 'ApprovalRemarks');
+                $.bindSaveWithRemarksConfirmationModal('Reject', '#btnRejectConfirmationModal', '#reportType-form', 'ApprovalRemarks');
+            }
+            InitializeForm();
+        });
+    </script>
+}

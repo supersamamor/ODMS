@@ -1,0 +1,9 @@
+@model FBSC.ApiHub.ViewModels.WebhookLogsViewModel
+
+<div class="card">
+    <h5 class="card-header"><span class="card-header-custom">@Localizer["Webhook Logs"]</span><br></h5>
+    <div class="card-body">
+        <input type="hidden" asp-for="@Model.Id" name="Id" /> 
+        <partial name="_ViewWebhookLogsDetails" model="Model" />
+    </div>
+</div>

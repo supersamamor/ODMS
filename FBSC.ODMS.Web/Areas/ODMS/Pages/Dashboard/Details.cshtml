@@ -1,0 +1,42 @@
+@page
+@model DetailsModel
+@{
+    ViewData["Title"] = Localizer["View Dashboard"];
+    ViewData["ActiveMainPage"] = "Dashboard";
+    ViewData["Level1"] = "ODMS";
+	var breadcrumbs = new[] {
+		new { Title = "Dashboard List", Url = "/ODMS/Dashboard/Index", IsActive = false },
+		new { Title = "View Dashboard", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<div id="dashboard-container">
+    <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+    <div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.Dashboard" />
+    </div>
+</div>
+<div id="toolbar-container" class="btn-group" role="group">
+    <a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Dashboard.Create)).Succeeded)
+    {
+        <a asp-page="Add" id="btnAddRecord" class="btn btnFills btn-outline-success btnAddIcon" title="@Localizer["Add"]"></a>
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Dashboard.Edit)).Succeeded)
+    {
+        <a asp-page="Edit" asp-route-id="@Model.Dashboard.Id" class="btn btnFills btn-outline-primary btnEditLightIcon" title="@Localizer["Edit"]"></a>
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Dashboard.Delete)).Succeeded)
+    {
+        <a asp-page="Delete" asp-route-id="@Model.Dashboard.Id" class="btn btnFills btn-outline-danger btnDeleteIcon" title="@Localizer["Delete"]"></a>
+    }
+	@if ((await AuthorizationService.AuthorizeAsync(User, Permission.Dashboard.History)).Succeeded)
+	{
+        <a asp-page="History" asp-route-id="@Model.Dashboard.Id" class="btn btnFills btn-outline-primary btnHistoryIcon" title="@Localizer["History"]"></a>
+	}
+</div>
+
+@section Scripts {
+<partial name="_DisableFieldsPartial" model="@("dashboard-container")" />
+}

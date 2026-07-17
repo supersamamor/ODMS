@@ -1,0 +1,17 @@
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\bin\Debug\net10.0\FBSC.ODMS.EmailSending.deps.json
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\bin\Debug\net10.0\FBSC.ODMS.EmailSending.dll
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\bin\Debug\net10.0\FBSC.ODMS.EmailSending.pdb
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\bin\Debug\net10.0\FBSC.Common.Services.Shared.dll
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\bin\Debug\net10.0\FBSC.Common.Utility.dll
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\bin\Debug\net10.0\FBSC.Common.Services.Shared.pdb
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\bin\Debug\net10.0\FBSC.Common.Utility.pdb
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\obj\Debug\net10.0\FBSC.ODMS.EmailSending.csproj.AssemblyReference.cache
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\obj\Debug\net10.0\FBSC.ODMS.EmailSending.GeneratedMSBuildEditorConfig.editorconfig
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\obj\Debug\net10.0\FBSC.ODMS.EmailSending.AssemblyInfoInputs.cache
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\obj\Debug\net10.0\FBSC.ODMS.EmailSending.AssemblyInfo.cs
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\obj\Debug\net10.0\FBSC.ODMS.EmailSending.csproj.CoreCompileInputs.cache
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\obj\Debug\net10.0\FBSC.ODM.884ADFFC.Up2Date
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\obj\Debug\net10.0\FBSC.ODMS.EmailSending.dll
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\obj\Debug\net10.0\refint\FBSC.ODMS.EmailSending.dll
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\obj\Debug\net10.0\FBSC.ODMS.EmailSending.pdb
+C:\FBSC.ODMS\FBSC.ODMS.EmailSending\obj\Debug\net10.0\ref\FBSC.ODMS.EmailSending.dll

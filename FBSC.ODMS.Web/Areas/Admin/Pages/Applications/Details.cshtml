@@ -1,0 +1,40 @@
+@page
+@model DetailsModel
+
+@{
+    ViewData["Title"] = Localizer["Application Details"];
+    ViewData["ActiveMainPage"] = "Applications";
+    ViewData["Level1"] = "Admin";
+    var breadcrumbs = new[] {
+        new { Title = "Application List", Url = "/Admin/Applications/Index", IsActive = false },
+        new { Title = "Application Details", Url = "", IsActive = true },
+    };
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<div class="card">
+    <h5 class="card-header"><span class="card-header-custom">@Localizer["Application Details"]</span><br></h5>
+    <div class="card-body">
+        <div class="form-group row">
+            <label asp-for="@Model.Application.ClientId" class="col-md-3 col-form-label"></label>
+            <div class="col-md-9">
+                <input asp-for="@Model.Application.ClientId" class="form-control" readonly />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="@Model.Application.ClientSecret" class="col-md-3 col-form-label"></label>
+            <div class="col-md-9">
+                <input asp-for="@Model.Application.ClientSecret" class="form-control" readonly />
+            </div>
+        </div>
+        <div class="alert alert-warning">
+            Copy the client secret and store in a secure place.
+        </div>
+    </div>
+</div>
+<div id="toolbar-container" class="btn-group" role="group">
+    <a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
+</div>
+
+@section Scripts {
+
+}

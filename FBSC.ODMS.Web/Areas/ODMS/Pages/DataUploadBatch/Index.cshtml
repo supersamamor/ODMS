@@ -1,0 +1,218 @@
+@page
+@model IndexModel
+
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+@{
+    ViewData["Title"] = Localizer["Data Upload Batch List"];
+    ViewData["ActiveMainPage"] = "DataUploadBatch";
+    ViewData["Level1"] = "ODMS";
+	IEnumerable<dynamic> breadCrumbs = [new { Title = "Data Upload Batch List", Url = "", IsActive = true }];
+}
+<partial name="_BreadcrumbPartial" model=@(breadCrumbs) />
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="dataUploadBatch" class="table table-hover table-bordered table-striped responsive nowrap fills-table" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+								@Localizer["Data Source"]
+							</th>
+							<th>
+								@Localizer["Uploaded File Name"]
+							</th>
+							<th>
+								@Localizer["CSV, XLSX, or JSON"]
+							</th>
+							<th>
+								@Localizer["Uploaded By"]
+							</th>
+							<th>
+								@Localizer["Generated Internal Staging Table Name"]
+							</th>
+							<th>
+								@Localizer["Rows Imported"]
+							</th>
+							<th>
+								@Localizer["Columns Detected"]
+							</th>
+							<th>
+								@Localizer["Status"]
+							</th>
+							<th>
+								@Localizer["Imported At"]
+							</th>
+							<th>
+								@Localizer["Import Error"]
+							</th>
+							  
+							
+                            <th>
+                                @Localizer["Actions"]
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="BatchUploadPartialContainer">
+    <partial name="_BatchUpload" model="Model.BatchUpload" />
+</div>
+@section Scripts {
+    <partial name="_DataTableScripts" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            var table = $('#dataUploadBatch').DataTable({
+                select: false,
+                serverSide: true,
+                responsive: true,
+                order: [[10, 'desc']],
+                dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DataTableDOMLayOut)',
+                ajax:
+                {
+                    url: '@Url.Page("/DataUploadBatch/Index", new { area = "ODMS", handler = "ListAll" })',
+                    type: "POST",
+                    headers: {
+                        RequestVerificationToken:
+                            $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                },
+                initComplete: function (settings, json) {
+                    BindTableRowCollapseEvent();
+                },
+                columns: [
+                    { data: "dataSourceId", name: "DataSourceId", responsivePriority: 1, title: '@Localizer["Data Source"]', searchable: false, className: "text-start" },
+				{ data: "fileName", name: "FileName", responsivePriority: 1, title: '@Localizer["Uploaded File Name"]', searchable: true, className: "text-start" },
+				{ data: "fileType", name: "FileType", responsivePriority: 1, title: '@Localizer["CSV, XLSX, or JSON"]', searchable: true, className: "text-start" },
+				{ data: "uploadedBy", name: "UploadedBy", responsivePriority: 2, title: '@Localizer["Uploaded By"]', searchable: true, className: "text-start" },
+				{ data: "stagingTableName", name: "StagingTableName", responsivePriority: 2, title: '@Localizer["Generated Internal Staging Table Name"]', searchable: false, className: "text-start" },
+				{ data: "rowCountFormatted", name: "RowCount", responsivePriority: 2, title: '@Localizer["Rows Imported"]', searchable: false, className: "fills-text-end" },
+				{ data: "columnCountFormatted", name: "ColumnCount", responsivePriority: 2, title: '@Localizer["Columns Detected"]', searchable: false, className: "fills-text-end" },
+				{ data: "importStatus", name: "ImportStatus", responsivePriority: 2, title: '@Localizer["Status"]', searchable: true, className: "text-start" },
+				{ data: "importedAtFormatted", name: "ImportedAt", responsivePriority: 2, title: '@Localizer["Imported At"]', searchable: false, className: "text-start" },
+				{ data: "errorRemarks", name: "ErrorRemarks", responsivePriority: 2, title: '@Localizer["Import Error"]', searchable: false, className: "text-start" },
+				   
+					
+                    {
+                        data: null,
+                        searchable: false,
+                        orderable: false,
+                        responsivePriority: 1,
+                        width: "10%",
+                        className: "fills-text-center",
+                        render: function (data, type, row, meta) {
+                            var url = '@Url.Page("/DataUploadBatch/Details", new { area = "ODMS" })' + '?id=' + row.id;
+							var button = '<a href="' + url + '" class="btn btnFills btn-outline-success btnInfoIcon btnViewDataUploadBatch" title="@Localizer["View"]"></a>';
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadBatch.Edit)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/DataUploadBatch/Edit", new { area = "ODMS" })' + '?id=' + row.id;
+											button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-primary btnEditIcon btnEditDataUploadBatch" title="@Localizer["Edit"]"></a>';
+							</text>
+						}
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadBatch.Delete)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/DataUploadBatch/Delete", new { area = "ODMS" })' + '?id=' + row.id;
+												button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-danger btnDeleteIcon btnDeleteDataUploadBatch" title="@Localizer["Delete"]"></a>';
+							</text>
+						}
+						
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadBatch.History)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/DataUploadBatch/History", new { area = "ODMS" })' + '?id=' + row.id;
+											button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-primary btnHistoryIcon" title="@Localizer["History"]"></a>';
+							</text>
+						}
+							return button;
+                        },
+                    },
+                    { data: "lastModifiedDate", name: "LastModifiedDate", title: '@Localizer["Last Modified Date"]', visible: false, searchable: false },
+                    { data: "id", name: "Id", visible: false },
+                ],
+                buttons: [
+        @* Add Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadBatch.Create)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-plus"></i>',
+                        className: 'btn btn-success btnAddDataUploadBatch text-light',
+                        titleAttr: '@Localizer["Add"]',
+                        action: function (e, dt, node, config) {
+                            window.location.href = '@Url.Page("/DataUploadBatch/Add", new { area = "ODMS" })';
+                        }
+                    },
+            </text>
+        }
+
+        @* Download Template Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadBatch.Upload)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-download"></i>',
+                        className: 'btn btn-primary',
+                        titleAttr: '@Localizer["Download Template"]',
+                        action: function (e, dt, node, config) {
+                            $('#download-template-form').submit();
+                        }
+                    },
+            </text>
+        }
+
+        @* Upload Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadBatch.Upload)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-upload"></i>',
+                        className: 'btn btn-primary',
+                        titleAttr: '@Localizer["Upload"]',
+                        action: function (e, dt, node, config) {
+                            $('#btnBatchUpload').click();
+                        }
+                    },
+            </text>
+        }
+
+        @* Page Length Button *@
+            {
+                extend: 'pageLength',
+                className: 'btn btn-primary',
+                titleAttr: '@Localizer["Rows per page"]'
+            }
+        ],
+            });
+            var debounce = new $.fn.dataTable.Debounce(table); // Add delay to search
+
+            $('.btn-table_filter').on('click', function (e) {
+                table.ajax.reload(null, false);
+            });
+            function BindTableRowCollapseEvent() {
+                $('#dataUploadBatch tbody').on('click', 'td.dtr-control', function () {
+                    $.showAjaxLoaderOnClick([".btnAddDataUploadBatch", ".btnEditDataUploadBatch", ".btnViewDataUploadBatch", ".btnDeleteDataUploadBatch"]);
+                });
+            }
+            $.showAjaxLoaderOnClick([".btnAddDataUploadBatch", ".btnEditDataUploadBatch", ".btnViewDataUploadBatch", ".btnDeleteDataUploadBatch"]);
+            $.InitializeSearchKeyCookies(table);
+            $('#btnBatchUpload').on('change', function (e) {
+                $('#batch-upload-form').submit();
+            });           
+        @if (!string.IsNullOrEmpty(Model.BatchUpload.BatchUploadFileName))
+        {
+            <text>
+                    $('#btnDownloadBatchUploadTemplateLink')[0].click();
+            </text>
+        }
+        });
+    </script>
+}

@@ -1,0 +1,245 @@
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var appName = Configuration.GetValue<string>("Application");
+    var backgroundClass = Configuration.GetValue<string>("BackgroundClass");
+    var appShortName = Configuration.GetValue<string>("ApplicationShortName");
+    var logo = "/img/logo.png";
+
+}
+<nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion p-0">
+    <div class="container-fluid d-flex flex-column p-0">
+        <hr class="sidebar-divider my-0">
+        <ul class="navbar-nav text-light" id="accordionSidebar">
+            <li class="">
+                <div class="logo-container">
+                    <img class="logo" alt="" src="@logo">
+                </div>
+            </li>
+            <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Dashboard")">
+                <a href="/ODMS/Dashboard" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Dashboard")">
+                    <i class="nav-icon nav-icon-dashboard"></i>
+					<span>
+						@Localizer["Dashboard"]
+					</span>
+                </a>
+            </li>
+            <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Admin")">
+                <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Admin")">
+                    <i class="nav-icon nav-icon-maintenance"></i>
+					<span>
+						@Localizer["Admin"]
+						<i class="right fas level-one-nav-icon fa-angle-down"></i>
+					</span>
+                </a>
+                <ul class="nav nav-treeview">
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Entities.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/Admin/Entities" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Entities")">
+                                <span>@Localizer["Entities"]</span>
+                            </a>
+                        </li>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Roles.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/Admin/Roles" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Roles")">
+                                <span>@Localizer["Roles"]</span>
+                            </a>
+                        </li>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Users.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/Admin/Users" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Users")">
+                                <span>@Localizer["Users"]</span>
+                            </a>
+                        </li>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Apis.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/Admin/Apis" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "APIs")">
+                                <span>@Localizer["APIs"]</span>
+                            </a>
+                        </li>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Applications.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/Admin/Applications" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Applications")">
+                                <span>@Localizer["Applications"]</span>
+                            </a>
+                        </li>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.AuditTrail.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/Admin/AuditTrail" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "AuditTrail")">
+                                <span>@Localizer["Audit Trail"]</span>
+                            </a>
+                        </li>
+                    }
+					@if((await AuthorizationService.AuthorizeAsync(User, Permission.ApproverSetup.View)).Succeeded)
+							{
+								<li class="nav-item">
+									<a href = "/ODMS/ApproverSetup" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Approval")">
+										<span>
+											@Localizer["Approval"]
+										</span>
+									</a>
+								</li>
+							}                   
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ReportSetup.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/ODMS/ReportSetup" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "ReportSetup")">
+                                <span>
+                                    @Localizer["Report Setup"]
+                                </span>
+                            </a>
+                        </li>
+                    }
+					@if ((await AuthorizationService.AuthorizeAsync(User, FBSC.HTMLTemplate.HTMLTemplatePermission.HTMLTemplate.View)).Succeeded)
+					{
+						<li class="nav-item">
+							<a href="/HTMLTemplate/Setup" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "HTMLTemplate")">
+								<span>
+									@Localizer["HTML Template"]
+								</span>
+							</a>
+						</li>
+					}
+                    <li class="nav-item">
+                        <a href="/Admin/BatchUploadJobs" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "BatchUploadJobs")">
+                            <span>
+                                @Localizer["Batch Upload Jobs"]
+                            </span>
+                        </a>
+                    </li>
+					@if ((await AuthorizationService.AuthorizeAsync(User, FBSC.ApiHub.WebhookPermission.WebhookApi.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/Webhook/WebhookApi" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "WebhookApi")">                                
+                                <span>
+                                    @Localizer["Api Hub"]
+                                </span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+
+            <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "ODMS")">
+                <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "ODMS")">
+                    <i class="nav-icon nav-icon-list"></i>
+                    <span>
+                        @Localizer["One Delivery Management System"]
+                        <i class="right fas level-one-nav-icon fa-angle-down"></i>
+                    </span>
+                </a>
+                <ul class="nav nav-treeview">
+					@if((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.View)).Succeeded)
+						{
+							<li class="nav-item">
+								<a href = "/ODMS/DataSource" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataSource")">
+									<span>
+										@Localizer["Data Source"]
+									</span>
+								</a>
+							</li>
+						}
+						@if((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadBatch.View)).Succeeded)
+						{
+							<li class="nav-item">
+								<a href = "/ODMS/DataUploadBatch" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataUploadBatch")">
+									<span>
+										@Localizer["Data Upload Batch"]
+									</span>
+								</a>
+							</li>
+						}
+						@if((await AuthorizationService.AuthorizeAsync(User, Permission.ReportType.View)).Succeeded)
+						{
+							<li class="nav-item">
+								<a href = "/ODMS/ReportType" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "ReportType")">
+									<span>
+										@Localizer["Report Type"]
+									</span>
+								</a>
+							</li>
+						}
+						@if((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQuery.View)).Succeeded)
+						{
+							<li class="nav-item">
+								<a href = "/ODMS/DashboardQuery" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DashboardQuery")">
+									<span>
+										@Localizer["Dashboard Query"]
+									</span>
+								</a>
+							</li>
+						}
+						@if((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardTheme.View)).Succeeded)
+						{
+							<li class="nav-item">
+								<a href = "/ODMS/DashboardTheme" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DashboardTheme")">
+									<span>
+										@Localizer["Dashboard Theme"]
+									</span>
+								</a>
+							</li>
+						}
+						@if((await AuthorizationService.AuthorizeAsync(User, Permission.Dashboard.View)).Succeeded)
+						{
+							<li class="nav-item">
+								<a href = "/ODMS/Dashboard" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Dashboard")">
+									<span>
+										@Localizer["Dashboard"]
+									</span>
+								</a>
+							</li>
+						}
+						@if((await AuthorizationService.AuthorizeAsync(User, Permission.AiSqlGenerationRequest.View)).Succeeded)
+						{
+							<li class="nav-item">
+								<a href = "/ODMS/AiSqlGenerationRequest" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "AiSqlGenerationRequest")">
+									<span>
+										@Localizer["AI SQL Generation Request"]
+									</span>
+								</a>
+							</li>
+						}
+						                    
+                </ul>
+            </li>
+            @{
+                var reportList = await dropdownService.GetReportList();
+                if (reportList.Count > 0)
+                {
+                    if ((await AuthorizationService.AuthorizeAsync(User, Permission.Report.View)).Succeeded)
+                    {
+                        <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Report")">
+                            <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Report")">
+                                <i class="nav-icon nav-icon-report"></i>
+                                <span>
+                                    @Localizer["Report"]
+                                    <i class="right fas level-one-nav-icon fa-angle-down"></i>
+                                </span>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                @foreach (var item in reportList)
+                                {
+                                    <li class="nav-item">
+                                        <a href="/ODMS/Report?Id=@item["ReportId"]" class="nav-link @ManageNavPages.PageNavClass(ViewContext, item["ReportClass"])">                                        
+                                            <span>@item["ReportName"]</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+            }
+        </ul>
+    </div>
+</nav>

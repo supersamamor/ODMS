@@ -1,0 +1,202 @@
+@page
+@model IndexModel
+
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+@{
+    ViewData["Title"] = Localizer["Dashboard Query Result Cache List"];
+    ViewData["ActiveMainPage"] = "DashboardQueryResultCache";
+    ViewData["Level1"] = "ODMS";
+	IEnumerable<dynamic> breadCrumbs = [new { Title = "Dashboard Query Result Cache List", Url = "", IsActive = true }];
+}
+<partial name="_BreadcrumbPartial" model=@(breadCrumbs) />
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="dashboardQueryResultCache" class="table table-hover table-bordered table-striped responsive nowrap fills-table" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+								@Localizer["Dashboard Query"]
+							</th>
+							<th>
+								@Localizer["Rows Cached"]
+							</th>
+							<th>
+								@Localizer["Approximate Payload Size In Bytes"]
+							</th>
+							<th>
+								@Localizer["Cached At"]
+							</th>
+							<th>
+								@Localizer["Expires At"]
+							</th>
+							<th>
+								@Localizer["Flagged Stale By A Failed Or Overdue Refresh"]
+							</th>
+							  
+							
+                            <th>
+                                @Localizer["Actions"]
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="BatchUploadPartialContainer">
+    <partial name="_BatchUpload" model="Model.BatchUpload" />
+</div>
+@section Scripts {
+    <partial name="_DataTableScripts" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            var table = $('#dashboardQueryResultCache').DataTable({
+                select: false,
+                serverSide: true,
+                responsive: true,
+                order: [[6, 'desc']],
+                dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DataTableDOMLayOut)',
+                ajax:
+                {
+                    url: '@Url.Page("/DashboardQueryResultCache/Index", new { area = "ODMS", handler = "ListAll" })',
+                    type: "POST",
+                    headers: {
+                        RequestVerificationToken:
+                            $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                },
+                initComplete: function (settings, json) {
+                    BindTableRowCollapseEvent();
+                },
+                columns: [
+                    { data: "dashboardQueryId", name: "DashboardQueryId", responsivePriority: 1, title: '@Localizer["Dashboard Query"]', searchable: false, className: "text-start" },
+				{ data: "rowCountFormatted", name: "RowCount", responsivePriority: 2, title: '@Localizer["Rows Cached"]', searchable: false, className: "fills-text-end" },
+				{ data: "cacheSizeBytesFormatted", name: "CacheSizeBytes", responsivePriority: 2, title: '@Localizer["Approximate Payload Size In Bytes"]', searchable: false, className: "fills-text-end" },
+				{ data: "cachedAtFormatted", name: "CachedAt", responsivePriority: 2, title: '@Localizer["Cached At"]', searchable: false, className: "text-start" },
+				{ data: "expiresAtFormatted", name: "ExpiresAt", responsivePriority: 2, title: '@Localizer["Expires At"]', searchable: false, className: "text-start" },
+				{ data: "isStaleFormatted", name: "IsStale", responsivePriority: 2, title: '@Localizer["Flagged Stale By A Failed Or Overdue Refresh"]', searchable: false, className: "fills-text-center" },
+				   
+					
+                    {
+                        data: null,
+                        searchable: false,
+                        orderable: false,
+                        responsivePriority: 1,
+                        width: "10%",
+                        className: "fills-text-center",
+                        render: function (data, type, row, meta) {
+                            var url = '@Url.Page("/DashboardQueryResultCache/Details", new { area = "ODMS" })' + '?id=' + row.id;
+							var button = '<a href="' + url + '" class="btn btnFills btn-outline-success btnInfoIcon btnViewDashboardQueryResultCache" title="@Localizer["View"]"></a>';
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQueryResultCache.Edit)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/DashboardQueryResultCache/Edit", new { area = "ODMS" })' + '?id=' + row.id;
+											button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-primary btnEditIcon btnEditDashboardQueryResultCache" title="@Localizer["Edit"]"></a>';
+							</text>
+						}
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQueryResultCache.Delete)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/DashboardQueryResultCache/Delete", new { area = "ODMS" })' + '?id=' + row.id;
+												button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-danger btnDeleteIcon btnDeleteDashboardQueryResultCache" title="@Localizer["Delete"]"></a>';
+							</text>
+						}
+						
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQueryResultCache.History)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/DashboardQueryResultCache/History", new { area = "ODMS" })' + '?id=' + row.id;
+											button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-primary btnHistoryIcon" title="@Localizer["History"]"></a>';
+							</text>
+						}
+							return button;
+                        },
+                    },
+                    { data: "lastModifiedDate", name: "LastModifiedDate", title: '@Localizer["Last Modified Date"]', visible: false, searchable: false },
+                    { data: "id", name: "Id", visible: false },
+                ],
+                buttons: [
+        @* Add Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQueryResultCache.Create)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-plus"></i>',
+                        className: 'btn btn-success btnAddDashboardQueryResultCache text-light',
+                        titleAttr: '@Localizer["Add"]',
+                        action: function (e, dt, node, config) {
+                            window.location.href = '@Url.Page("/DashboardQueryResultCache/Add", new { area = "ODMS" })';
+                        }
+                    },
+            </text>
+        }
+
+        @* Download Template Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQueryResultCache.Upload)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-download"></i>',
+                        className: 'btn btn-primary',
+                        titleAttr: '@Localizer["Download Template"]',
+                        action: function (e, dt, node, config) {
+                            $('#download-template-form').submit();
+                        }
+                    },
+            </text>
+        }
+
+        @* Upload Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQueryResultCache.Upload)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-upload"></i>',
+                        className: 'btn btn-primary',
+                        titleAttr: '@Localizer["Upload"]',
+                        action: function (e, dt, node, config) {
+                            $('#btnBatchUpload').click();
+                        }
+                    },
+            </text>
+        }
+
+        @* Page Length Button *@
+            {
+                extend: 'pageLength',
+                className: 'btn btn-primary',
+                titleAttr: '@Localizer["Rows per page"]'
+            }
+        ],
+            });
+            var debounce = new $.fn.dataTable.Debounce(table); // Add delay to search
+
+            $('.btn-table_filter').on('click', function (e) {
+                table.ajax.reload(null, false);
+            });
+            function BindTableRowCollapseEvent() {
+                $('#dashboardQueryResultCache tbody').on('click', 'td.dtr-control', function () {
+                    $.showAjaxLoaderOnClick([".btnAddDashboardQueryResultCache", ".btnEditDashboardQueryResultCache", ".btnViewDashboardQueryResultCache", ".btnDeleteDashboardQueryResultCache"]);
+                });
+            }
+            $.showAjaxLoaderOnClick([".btnAddDashboardQueryResultCache", ".btnEditDashboardQueryResultCache", ".btnViewDashboardQueryResultCache", ".btnDeleteDashboardQueryResultCache"]);
+            $.InitializeSearchKeyCookies(table);
+            $('#btnBatchUpload').on('change', function (e) {
+                $('#batch-upload-form').submit();
+            });           
+        @if (!string.IsNullOrEmpty(Model.BatchUpload.BatchUploadFileName))
+        {
+            <text>
+                    $('#btnDownloadBatchUploadTemplateLink')[0].click();
+            </text>
+        }
+        });
+    </script>
+}

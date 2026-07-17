@@ -1,0 +1,54 @@
+@using Models
+@model DataUploadColumnViewModel
+
+<div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
+    <div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.DataUploadBatchId" class="form-label"><strong>@Localizer["Data Upload Batch"] :</strong></label>
+			<select asp-for="@Model.DataUploadBatchId" class="form-control" asp-items="@(dropdownService.GetDataUploadBatchList(Model.DataUploadBatchId))"><option value="">- Select Data Upload Batch -</option></select>
+			<span asp-validation-for="@Model.DataUploadBatchId" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ColumnName" class="form-label"><strong>@Localizer["Detected Column Name"] :</strong></label>
+			<input asp-for="@Model.ColumnName" class="form-control" maxlength="150"  readonly/>
+			<span asp-validation-for="@Model.ColumnName" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.DetectedDataType" class="form-label"><strong>@Localizer["Auto-Detected Data Type"] :</strong></label>
+			<input asp-for="@Model.DetectedDataType" class="form-control" maxlength="50"  readonly/>
+			<span asp-validation-for="@Model.DetectedDataType" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.MappedSqlDataType" class="form-label"><strong>@Localizer["Sql Data Type Used In Staging Table"] :</strong></label>
+			<input asp-for="@Model.MappedSqlDataType" class="form-control" maxlength="50" />
+			<span asp-validation-for="@Model.MappedSqlDataType" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.OrdinalPosition" class="form-label"><strong>@Localizer["Column Order In File"] :</strong></label>
+			<input asp-for="@Model.OrdinalPosition" class="form-control text-end"   readonly/>
+			<span asp-validation-for="@Model.OrdinalPosition" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.SampleValue" class="form-label"><strong>@Localizer["First Non-Blank Sample Value"] :</strong></label>
+			<input asp-for="@Model.SampleValue" class="form-control" maxlength="450"  readonly/>
+			<span asp-validation-for="@Model.SampleValue" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+
+</div>

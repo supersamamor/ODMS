@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "/794PnsITKo=",
+  "success": true,
+  "projectFilePath": "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\fbs80020\\.nuget\\packages\\microsoft.build\\18.7.1\\microsoft.build.18.7.1.nupkg.sha512",
+    "C:\\Users\\fbs80020\\.nuget\\packages\\microsoft.build.framework\\18.7.1\\microsoft.build.framework.18.7.1.nupkg.sha512",
+    "C:\\Users\\fbs80020\\.nuget\\packages\\microsoft.net.stringtools\\18.7.1\\microsoft.net.stringtools.18.7.1.nupkg.sha512",
+    "C:\\Users\\fbs80020\\.nuget\\packages\\system.configuration.configurationmanager\\10.0.4\\system.configuration.configurationmanager.10.0.4.nupkg.sha512",
+    "C:\\Users\\fbs80020\\.nuget\\packages\\system.diagnostics.eventlog\\10.0.4\\system.diagnostics.eventlog.10.0.4.nupkg.sha512",
+    "C:\\Users\\fbs80020\\.nuget\\packages\\system.reflection.metadataloadcontext\\10.0.4\\system.reflection.metadataloadcontext.10.0.4.nupkg.sha512",
+    "C:\\Users\\fbs80020\\.nuget\\packages\\system.security.cryptography.protecteddata\\10.0.4\\system.security.cryptography.protecteddata.10.0.4.nupkg.sha512"
+  ],
+  "logs": []
+}

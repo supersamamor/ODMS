@@ -1,0 +1,43 @@
+@using Models
+@model DashboardViewModel
+<script asp-add-nonce>
+    $(document).ready(function () { 
+		$.InitializeDashboardAccessFieldValidations = function(count)
+        {
+			let reqs = [];			
+			for (let idx = 0; idx < count; idx++) {
+				reqs.push({name: "DashboardAccessList[" + idx + "].DashboardId", el: "Input", minlength:0, maxlength:450, isrequired: true, description: "Dashboard"});
+				reqs.push({name: "DashboardAccessList[" + idx + "].GranteeType", el: "Input", minlength:0, maxlength:20, isrequired: true, description: "User Or Role"});
+				reqs.push({name: "DashboardAccessList[" + idx + "].GranteeId", el: "Input", minlength:0, maxlength:100, isrequired: true, description: "User Or Role Identifier"});
+				reqs.push({name: "DashboardAccessList[" + idx + "].AccessLevel", el: "Input", minlength:0, maxlength:20, isrequired: true, description: "View, Edit, Or Owner"});
+				reqs.push({name: "DashboardAccessList[" + idx + "].GrantedAt", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Granted At"});
+				
+			}
+			let validator = $("#dashboard-form").validate();
+			for (let j in reqs)
+			{
+				let e = reqs[j];
+				let el = $(`*[name="${e.name}"]`);
+				el.rules("add", {
+					required: {                
+						depends: function(element) {
+							return e.isrequired;
+						}
+					},
+					messages: {
+						required: (e.description === '') ? 'this field is required' : `'${e.description}' is required`,
+					},
+				});
+				if(e.isrequired == true)
+				{
+					let labelElement = $(`label[name="Label.${e.name}"]`);
+					$(labelElement).addClass("fieldrequired");
+					el.attr('data-val-required', (e.description === '') ? 'this field is required' : `'${e.description}' is required`);
+					el.attr('data-val', true);
+				}
+				if(e.maxlength > 0) {el.attr('maxlength', e.maxlength);}
+				if(e.minlength > 0) {el.attr('minlength', e.minlength);}   
+			} 
+		}       
+    });
+</script>

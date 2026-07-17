@@ -1,0 +1,64 @@
+@page
+@model ViewModel
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+@{
+    ViewData["Title"] = Localizer["View Application"];
+    ViewData["ActiveMainPage"] = "Applications";
+    ViewData["Level1"] = "Admin";
+    var breadcrumbs = new[] {
+        new { Title = "Application List", Url = "/Admin/Applications/Index", IsActive = false },
+        new { Title = "View Application", Url = "", IsActive = true },
+    };
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<div id="ApplicationSetupContainer">
+    <div class="card">
+        <h5 class="card-header"><span class="card-header-custom">@Localizer["Application Info"]</span><br></h5>
+        <div class="card-body">
+            <partial name="_ViewApplicationDetails" model="Model.Application" />
+        </div>
+    </div>
+    <br />
+    <div class="card">
+        <h5 class="card-header"><span class="card-header-custom">@Localizer["Permissions"]</span><br></h5>
+        <div class="card-body overflow-x-scroll">
+            <partial name="_EditPermissions" model="Model.ApplicationPermissions" />
+        </div>
+    </div>
+</div>
+<div id="toolbar-container" class="btn-group" role="group">
+    <a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Applications.Create)).Succeeded)
+    {
+        <a asp-page="Add" id="btnAddRecord" class="btn btnFills btn-outline-success btnAddIcon" title="@Localizer["Add"]"></a>
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Applications.Edit)).Succeeded)
+    {
+        <a asp-page="Edit" asp-route-id="@Model.Application.ClientId" class="btn btnFills btn-outline-primary btnEditLightIcon" title="@Localizer["Edit"]"></a>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_DataTableScripts" />
+    <partial name="_DisableFieldsPartial" model="@("ApplicationSetupContainer")" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            var permissions = $("#permissions").DataTable({
+                select: false,
+                searching: true,
+                paging: true,
+                dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DataTableDOMLayOut)',
+                info: true,
+                buttons: [],
+                columnDefs: [
+                    {
+                        targets: [1],
+                        orderDataType: 'dom-checkbox',
+                    }
+                ]
+            });
+        });
+    </script>
+}

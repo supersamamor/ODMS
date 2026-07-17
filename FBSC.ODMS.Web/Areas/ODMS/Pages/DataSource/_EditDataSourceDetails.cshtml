@@ -1,0 +1,94 @@
+@using Models
+@model DataSourceViewModel
+
+<div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
+    <div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.Name" class="form-label"><strong>@Localizer["Friendly Label For This Connection"] :</strong></label>
+			<input asp-for="@Model.Name" class="form-control" maxlength="150" />
+			<span asp-validation-for="@Model.Name" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.SystemType" class="form-label"><strong>@Localizer["HRIS, Accounting, CRM, or Custom — free-text category for grouping/filtering"] :</strong></label>
+			<input asp-for="@Model.SystemType" class="form-control" maxlength="50" />
+			<span asp-validation-for="@Model.SystemType" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ConnectionMode" class="form-label"><strong>@Localizer["LiveConnection or UploadedDataset"] :</strong></label>
+			<input asp-for="@Model.ConnectionMode" class="form-control" maxlength="30" />
+			<span asp-validation-for="@Model.ConnectionMode" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ServerAddress" class="form-label"><strong>@Localizer["MS SQL Server Host Or Instance"] :</strong></label>
+			<input asp-for="@Model.ServerAddress" class="form-control" maxlength="200" />
+			<span asp-validation-for="@Model.ServerAddress" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.DatabaseName" class="form-label"><strong>@Localizer["Target Database Name"] :</strong></label>
+			<input asp-for="@Model.DatabaseName" class="form-control" maxlength="150" />
+			<span asp-validation-for="@Model.DatabaseName" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.AuthenticationType" class="form-label"><strong>@Localizer["SQL, WindowsIntegrated, or AzureAD"] :</strong></label>
+			<input asp-for="@Model.AuthenticationType" class="form-control" maxlength="50" />
+			<span asp-validation-for="@Model.AuthenticationType" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.Username" class="form-label"><strong>@Localizer["Connection Username"] :</strong></label>
+			<input asp-for="@Model.Username" class="form-control" maxlength="100" />
+			<span asp-validation-for="@Model.Username" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.Description" class="form-label"><strong>@Localizer["Description"] :</strong></label>
+			<input asp-for="@Model.Description" class="form-control" maxlength="450" />
+			<span asp-validation-for="@Model.Description" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.IsActive" class="form-label"><strong>@Localizer["Is Active"] :</strong></label>
+			<input asp-for="@Model.IsActive" class="custom-checkbox-label"/>
+			<span asp-validation-for="@Model.IsActive" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.LastTestedAt" class="form-label"><strong>@Localizer["Last Connection Test At"] :</strong></label>
+			<input asp-for="@Model.LastTestedAt" class="form-control"   readonly/>
+			<span asp-validation-for="@Model.LastTestedAt" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.LastTestStatus" class="form-label"><strong>@Localizer["Last Connection Test Result"] :</strong></label>
+			<input asp-for="@Model.LastTestStatus" class="form-control" maxlength="50"  readonly/>
+			<span asp-validation-for="@Model.LastTestStatus" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+
+</div>

@@ -1,0 +1,42 @@
+@page
+@model DetailsModel
+@{
+    ViewData["Title"] = Localizer["View Dashboard Widget"];
+    ViewData["ActiveMainPage"] = "DashboardWidget";
+    ViewData["Level1"] = "ODMS";
+	var breadcrumbs = new[] {
+		new { Title = "Dashboard Widget List", Url = "/ODMS/DashboardWidget/Index", IsActive = false },
+		new { Title = "View Dashboard Widget", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<div id="dashboardWidget-container">
+    <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+    <div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.DashboardWidget" />
+    </div>
+</div>
+<div id="toolbar-container" class="btn-group" role="group">
+    <a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardWidget.Create)).Succeeded)
+    {
+        <a asp-page="Add" id="btnAddRecord" class="btn btnFills btn-outline-success btnAddIcon" title="@Localizer["Add"]"></a>
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardWidget.Edit)).Succeeded)
+    {
+        <a asp-page="Edit" asp-route-id="@Model.DashboardWidget.Id" class="btn btnFills btn-outline-primary btnEditLightIcon" title="@Localizer["Edit"]"></a>
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardWidget.Delete)).Succeeded)
+    {
+        <a asp-page="Delete" asp-route-id="@Model.DashboardWidget.Id" class="btn btnFills btn-outline-danger btnDeleteIcon" title="@Localizer["Delete"]"></a>
+    }
+	@if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardWidget.History)).Succeeded)
+	{
+        <a asp-page="History" asp-route-id="@Model.DashboardWidget.Id" class="btn btnFills btn-outline-primary btnHistoryIcon" title="@Localizer["History"]"></a>
+	}
+</div>
+
+@section Scripts {
+<partial name="_DisableFieldsPartial" model="@("dashboardWidget-container")" />
+}

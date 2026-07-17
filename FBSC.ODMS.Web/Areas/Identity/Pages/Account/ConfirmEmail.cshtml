@@ -1,0 +1,42 @@
+@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Email Confirmation Success";
+    Layout = "_Layout";
+}
+
+<div class="auth-page-container">
+    <div class="container d-flex justify-content-center align-items-center auth-viewport-height">
+        <div class="card shadow-lg o-hidden border-0 my-5 overflow-hidden auth-card-max-width auth-card-rounded">
+            <div class="card-body p-0">
+                <div class="row g-0">
+                    <div class="col-lg-5 d-none d-lg-flex">
+                        <div class="flex-grow-1 bg-login-image auth-min-height-image"></div>
+                    </div>
+
+                    <div class="col-lg-7 d-flex align-items-center">
+                        <div class="p-5 text-center w-100">
+                            <div class="icon-circle icon-success mb-4 shadow-sm mx-auto auth-status-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+
+                            <h3 class="fw-bold text-dark mb-2">Email Confirmed!</h3>
+                            <p class="text-muted mb-4 small">
+                                Your account is now active and ready to use. Thank you for verifying your email address.
+                            </p>
+
+                            <hr class="my-4">
+
+                            <div class="d-grid">
+                                @* btn-user class from site.css handles rounding *@
+                                <a asp-page="./Login" class="btn btn-primary btn-user shadow-sm py-2">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Go to Login
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

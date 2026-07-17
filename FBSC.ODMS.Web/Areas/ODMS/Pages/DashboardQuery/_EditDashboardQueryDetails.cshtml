@@ -1,0 +1,110 @@
+@using Models
+@model DashboardQueryViewModel
+
+<div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
+    <div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.DataSourceId" class="form-label"><strong>@Localizer["Data Source"] :</strong></label>
+			<select asp-for="@Model.DataSourceId" class="form-control" asp-items="@(dropdownService.GetDataSourceList(Model.DataSourceId))"><option value="">- Select Data Source -</option></select>
+			<span asp-validation-for="@Model.DataSourceId" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.Name" class="form-label"><strong>@Localizer["Name"] :</strong></label>
+			<input asp-for="@Model.Name" class="form-control" maxlength="150" />
+			<span asp-validation-for="@Model.Name" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.Description" class="form-label"><strong>@Localizer["Description"] :</strong></label>
+			<input asp-for="@Model.Description" class="form-control" maxlength="450" />
+			<span asp-validation-for="@Model.Description" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.SqlQueryText" class="form-label"><strong>@Localizer["MS SQL Select Statement"] :</strong></label>
+			<input asp-for="@Model.SqlQueryText" class="form-control"  />
+			<span asp-validation-for="@Model.SqlQueryText" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.QueryHash" class="form-label"><strong>@Localizer["Hash Of Normalized Sql Text, Used For Cache Keying And Dedupe"] :</strong></label>
+			<input asp-for="@Model.QueryHash" class="form-control" maxlength="64"  readonly/>
+			<span asp-validation-for="@Model.QueryHash" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.IsParameterized" class="form-label"><strong>@Localizer["Has One Or More DashboardQueryParameter Rows"] :</strong></label>
+			<input asp-for="@Model.IsParameterized" class="custom-checkbox-label" readonly/>
+			<span asp-validation-for="@Model.IsParameterized" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.GeneratedByAI" class="form-label"><strong>@Localizer["Originated From An AiSqlGenerationRequest"] :</strong></label>
+			<input asp-for="@Model.GeneratedByAI" class="custom-checkbox-label" readonly/>
+			<span asp-validation-for="@Model.GeneratedByAI" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ValidationStatus" class="form-label"><strong>@Localizer["Valid, Invalid, Or NotYetValidated"] :</strong></label>
+			<input asp-for="@Model.ValidationStatus" class="form-control" maxlength="50"  readonly/>
+			<span asp-validation-for="@Model.ValidationStatus" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.LastValidatedAt" class="form-label"><strong>@Localizer["Last Validated At"] :</strong></label>
+			<input asp-for="@Model.LastValidatedAt" class="form-control"   readonly/>
+			<span asp-validation-for="@Model.LastValidatedAt" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.LastExecutionDurationMs" class="form-label"><strong>@Localizer["Last Execution Duration In Milliseconds"] :</strong></label>
+			<input asp-for="@Model.LastExecutionDurationMs" class="form-control text-end"   readonly/>
+			<span asp-validation-for="@Model.LastExecutionDurationMs" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.LastExecutedAt" class="form-label"><strong>@Localizer["Last Executed At"] :</strong></label>
+			<input asp-for="@Model.LastExecutedAt" class="form-control"   readonly/>
+			<span asp-validation-for="@Model.LastExecutedAt" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.LastExecutionErrorRemarks" class="form-label"><strong>@Localizer["Last Execution Error"] :</strong></label>
+			<input asp-for="@Model.LastExecutionErrorRemarks" class="form-control" maxlength="450"  readonly/>
+			<span asp-validation-for="@Model.LastExecutionErrorRemarks" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.IsActive" class="form-label"><strong>@Localizer["Is Active"] :</strong></label>
+			<input asp-for="@Model.IsActive" class="custom-checkbox-label"/>
+			<span asp-validation-for="@Model.IsActive" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+
+</div>

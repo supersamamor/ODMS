@@ -1,0 +1,58 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Install .NET 10 SDK'
+  inputs:
+    version: '10.0.x'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/FBSC.ODMS.Web.csproj'
+    feedsToUse: 'config'
+    nugetConfigPath: 'nuget.config'
+    externalFeedCredentials: 'CTI.Alabang.Nuget Service Connection'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    projects: '**/FBSC.ODMS.Web.csproj'
+    arguments: '-c $(BuildConfiguration) -o $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'Install dotnet-ef tool'
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install --configfile nuget-org.config --global dotnet-ef --version 10.0'
+
+- task: efcore-migration-script-generator-task@1
+  displayName: 'Generate EF Core migration scripts'
+  inputs:
+    projectpath: '$(Build.SourcesDirectory)/FBSC.ODMS.Infrastructure/FBSC.ODMS.Infrastructure.csproj'
+    databasecontexts: |
+      IdentityContext
+      ApplicationContext
+    startupprojectpath: '$(Build.SourcesDirectory)/FBSC.ODMS.Web/FBSC.ODMS.Web.csproj'
+    targetfolder: '$(build.artifactstagingdirectory)/migrations'
+    installdependencies: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish build artifacts'

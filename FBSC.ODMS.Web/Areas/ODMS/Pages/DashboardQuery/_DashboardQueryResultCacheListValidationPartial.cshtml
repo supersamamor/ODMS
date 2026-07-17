@@ -1,0 +1,45 @@
+@using Models
+@model DashboardQueryViewModel
+<script asp-add-nonce>
+    $(document).ready(function () { 
+		$.InitializeDashboardQueryResultCacheFieldValidations = function(count)
+        {
+			let reqs = [];			
+			for (let idx = 0; idx < count; idx++) {
+				reqs.push({name: "DashboardQueryResultCacheList[" + idx + "].DashboardQueryId", el: "Input", minlength:0, maxlength:450, isrequired: true, description: "Dashboard Query"});
+				reqs.push({name: "DashboardQueryResultCacheList[" + idx + "].ParameterSetHash", el: "Input", minlength:0, maxlength:64, isrequired: true, description: "Hash Of The Resolved Parameter Values For This Cache Entry"});
+				reqs.push({name: "DashboardQueryResultCacheList[" + idx + "].RowCount", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Rows Cached"});
+				reqs.push({name: "DashboardQueryResultCacheList[" + idx + "].CacheSizeBytes", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Approximate Payload Size In Bytes"});
+				reqs.push({name: "DashboardQueryResultCacheList[" + idx + "].CachedAt", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Cached At"});
+				reqs.push({name: "DashboardQueryResultCacheList[" + idx + "].ExpiresAt", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Expires At"});
+				reqs.push({name: "DashboardQueryResultCacheList[" + idx + "].IsStale", el: "Input", minlength:0, maxlength:0, isrequired: false, description: "Flagged Stale By A Failed Or Overdue Refresh"});
+				
+			}
+			let validator = $("#dashboardQuery-form").validate();
+			for (let j in reqs)
+			{
+				let e = reqs[j];
+				let el = $(`*[name="${e.name}"]`);
+				el.rules("add", {
+					required: {                
+						depends: function(element) {
+							return e.isrequired;
+						}
+					},
+					messages: {
+						required: (e.description === '') ? 'this field is required' : `'${e.description}' is required`,
+					},
+				});
+				if(e.isrequired == true)
+				{
+					let labelElement = $(`label[name="Label.${e.name}"]`);
+					$(labelElement).addClass("fieldrequired");
+					el.attr('data-val-required', (e.description === '') ? 'this field is required' : `'${e.description}' is required`);
+					el.attr('data-val', true);
+				}
+				if(e.maxlength > 0) {el.attr('maxlength', e.maxlength);}
+				if(e.minlength > 0) {el.attr('minlength', e.minlength);}   
+			} 
+		}       
+    });
+</script>

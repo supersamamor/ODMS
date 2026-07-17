@@ -1,0 +1,75 @@
+@using Models
+@model DashboardViewModel
+<input type="hidden" id="DashboardAccessCount" value="@Model?.DashboardAccessList?.Count" />
+<div class="card">
+    <h5 class="card-header">
+        <span  class="card-header-custom">@Localizer["Dashboard Access"]</span>
+        <a id="btnAddDashboardAccess" class="btn btnMaterial btn-flat primary semicircle cancel btnAddRemoveSubDetailList text-light" title="@Localizer["Add"]"><i class="fas fa-plus"></i></a>
+        <button class="cancel d-none" type="button" id="btnRemoveDashboardAccess" value="RemoveDashboardAccess"></button>
+    </h5>
+    <div class="card-body overflow-auto">
+        <table id="subDetailList" class="table table-hover table-striped responsive nowrap fills-table" width="100%">
+            <thead>
+                <tr>
+                    <th class="d-none"></th>
+                    <th class="text-center">
+								@Localizer["User Or Role"]
+							</th>
+							<th class="text-center">
+								@Localizer["User Or Role Identifier"]
+							</th>
+							<th class="text-center">
+								@Localizer["View, Edit, Or Owner"]
+							</th>
+							<th class="text-center">
+								@Localizer["Granted At"]
+							</th>
+							
+                    <th class="text-center">
+                        @Localizer["Action"]
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.DashboardAccessList != null)
+                {
+                    int counter = 0;
+                    foreach (var item in Model.DashboardAccessList)
+                    {
+                        <tr>
+                            <td class="d-none">
+                                <input type="hidden" name="DashboardAccessList[@counter].Id" value="@item.Id" />
+                                <input type="hidden" name="DashboardAccessList[@counter].DashboardId" value="@item.DashboardId" />
+                            </td>
+                            <td>
+										<input  asp-for="@item.GranteeType" name="DashboardAccessList[@counter].GranteeType" class="form-control" maxlength="20" />
+										<span data-valmsg-for="DashboardAccessList[@counter].GranteeType" asp-validation-for="@item.GranteeType" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.GranteeId" name="DashboardAccessList[@counter].GranteeId" class="form-control" maxlength="100" />
+										<span data-valmsg-for="DashboardAccessList[@counter].GranteeId" asp-validation-for="@item.GranteeId" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.AccessLevel" name="DashboardAccessList[@counter].AccessLevel" class="form-control" maxlength="20" />
+										<span data-valmsg-for="DashboardAccessList[@counter].AccessLevel" asp-validation-for="@item.AccessLevel" class="text-danger"></span>
+										
+									</td>
+									<td>
+										<input  asp-for="@item.GrantedAt" name="DashboardAccessList[@counter].GrantedAt" class="form-control"  readonly/>
+										<span data-valmsg-for="DashboardAccessList[@counter].GrantedAt" asp-validation-for="@item.GrantedAt" class="text-danger"></span>
+										<input type="hidden" asp-for="@item.GrantedAt"  name="DashboardAccessList[@counter].GrantedAt"/>
+									</td>
+									
+                            <td class="text-center">
+                                <a class="btn btnFills btn-outline-danger btnDeleteIcon cancel RemoveDashboardAccessButton btnAddRemoveSubDetailList" title="@Localizer["Remove DashboardAccess"]" removeId="@(item.Id)"></a>
+                            </td>
+                        </tr>
+                        counter++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

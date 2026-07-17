@@ -1,0 +1,147 @@
+@using Models
+@model ReportViewModel
+
+<div class="card">
+    <h5 class="card-header"><span class="card-header-custom">@Localizer["Report"]</span><br></h5>
+    <div class="card-body">
+        <input type="hidden" asp-for="@Model.Id" name="Id" />
+        <partial name="_EditReportDetails" model="Model" />
+
+        <!-- Dashboard Span Setup -->
+        <div class="row margin-top-20">
+            <div class="col-md-6 col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="@Model.SpanWidth" class="form-label"><strong>@Localizer["Dashboard Span Width"] :</strong></label>
+                    <select asp-for="@Model.SpanWidth" class="form-control">
+                        <option value="25">25% (Quarter Width)</option>
+                        <option value="50" selected>50% (Half Width)</option>
+                        <option value="100">100% (Full Width)</option>
+                    </select>
+                    <span asp-validation-for="@Model.SpanWidth" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.QueryType == FBSC.ODMS.Core.Constants.QueryType.QueryBuilder)
+{
+}
+else if (Model.QueryType == FBSC.ODMS.Core.Constants.QueryType.TSql)
+{
+    <br />
+    <div class="card">
+        <h5 class="card-header"><span class="card-header-custom">@Localizer["T-Sql"]</span><br></h5>
+        <div class="card-body">
+            <div class="col">
+                <div class="mb-3">
+                    <label asp-for="@Model.QueryString" class="form-label "><strong>@Localizer["Query String"] :</strong></label>
+                    <textarea asp-for="@Model.QueryString" class="form-control" maxlength="8000" rows=8></textarea>
+                    <span asp-validation-for="@Model.QueryString" class="text-danger"></span>
+                    @if (!string.IsNullOrEmpty(Model.ReportOrChartType) && !string.IsNullOrEmpty(FBSC.ODMS.Core.Constants.ReportChartType.ChartToolTip[Model.ReportOrChartType]))
+                    {
+                        <span class="form-label margin-top-10"><i>@Html.Raw(FBSC.ODMS.Core.Constants.ReportChartType.ChartToolTip[Model.ReportOrChartType])</i></span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <partial name="_ReportQueryFilterList" model="Model" />
+}
+
+@if (Model.ReportOrChartType == FBSC.ODMS.Core.Constants.ReportChartType.PDF)
+{
+    <br />
+    <div class="card">
+        <h5 class="card-header"><span class="card-header-custom">@Localizer["Report Template"]</span><br></h5>
+        <div class="card-body">
+            <div class="row">
+                <!-- Orientation and Paper Size - Side by Side -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="@Model.Orientation" class="form-label"><strong>@Localizer["Orientation"] :</strong></label>
+                        <select asp-for="@Model.Orientation" class="form-control" asp-items="@(new SelectList(Enum.GetValues<Rotativa.AspNetCore.Options.Orientation>()))">
+                            <option value="">- Select Orientation -</option>
+                        </select>
+                        <span asp-validation-for="@Model.Orientation" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="@Model.PaperSize" class="form-label"><strong>@Localizer["Paper Size"] :</strong></label>
+                        <select asp-for="@Model.PaperSize" class="form-control" asp-items="@(new SelectList(Enum.GetValues<Rotativa.AspNetCore.Options.Size>()))">
+                            <option value="">- Select Paper Size -</option>
+                        </select>
+                        <span asp-validation-for="@Model.PaperSize" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Margins - 4 Columns (2x2 on mobile, 4 on desktop) -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="mb-3">
+                        <label asp-for="@Model.MarginTop" class="form-label"><strong>@Localizer["Margin Top"] :</strong></label>
+                        <input asp-for="@Model.MarginTop" class="form-control" />
+                        <span asp-validation-for="@Model.MarginTop" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="mb-3">
+                        <label asp-for="@Model.MarginBottom" class="form-label"><strong>@Localizer["Margin Bottom"] :</strong></label>
+                        <input asp-for="@Model.MarginBottom" class="form-control" />
+                        <span asp-validation-for="@Model.MarginBottom" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="mb-3">
+                        <label asp-for="@Model.MarginLeft" class="form-label"><strong>@Localizer["Margin Left"] :</strong></label>
+                        <input asp-for="@Model.MarginLeft" class="form-control" />
+                        <span asp-validation-for="@Model.MarginLeft" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="mb-3">
+                        <label asp-for="@Model.MarginRight" class="form-label"><strong>@Localizer["Margin Right"] :</strong></label>
+                        <input asp-for="@Model.MarginRight" class="form-control" />
+                        <span asp-validation-for="@Model.MarginRight" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- HTML Template - Full Width -->
+                <div class="col-12">
+                    <div class="mb-3">
+                        <label asp-for="@Model.HtmlTemplate" class="form-label"><strong>@Localizer["HTML Template"] :</strong></label>
+                        <textarea rows="8" asp-for="@Model.HtmlTemplate" class="form-control"></textarea>
+                        <span asp-validation-for="@Model.HtmlTemplate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="mb-3">
+                        <label asp-for="@Model.HtmlFooterTemplate" class="form-label"><strong>@Localizer["HTML Footer Template"] :</strong></label>
+                        <textarea rows="8" asp-for="@Model.HtmlFooterTemplate" class="form-control"></textarea>
+                        <span asp-validation-for="@Model.HtmlFooterTemplate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (Model.ReportOrChartType == FBSC.ODMS.Core.Constants.ReportChartType.CustomHtml)
+{
+    <br />
+    <div class="card">
+        <h5 class="card-header"><span class="card-header-custom">@Localizer["Report Template"]</span><br></h5>
+        <div class="card-body">
+            <div class="row">
+                <!-- HTML Template - Full Width -->
+                <div class="col-12">
+                    <div class="mb-3">
+                        <label asp-for="@Model.HtmlTemplate" class="form-label"><strong>@Localizer["HTML Template"] :</strong></label>
+                        <textarea rows="8" asp-for="@Model.HtmlTemplate" class="form-control"></textarea>
+                        <span asp-validation-for="@Model.HtmlTemplate" class="text-danger"></span>
+                    </div>
+                </div>              
+            </div>
+        </div>
+    </div>
+}

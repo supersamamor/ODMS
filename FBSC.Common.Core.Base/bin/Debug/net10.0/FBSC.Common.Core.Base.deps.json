@@ -1,0 +1,159 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "FBSC.Common.Core.Base/1.0.0": {
+        "dependencies": {
+          "Microsoft.Build": "18.7.1"
+        },
+        "runtime": {
+          "FBSC.Common.Core.Base.dll": {}
+        }
+      },
+      "Microsoft.Build/18.7.1": {
+        "dependencies": {
+          "Microsoft.Build.Framework": "18.7.1",
+          "System.Configuration.ConfigurationManager": "10.0.4",
+          "System.Diagnostics.EventLog": "10.0.4",
+          "System.Reflection.MetadataLoadContext": "10.0.4",
+          "System.Security.Cryptography.ProtectedData": "10.0.4"
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Build.dll": {
+            "assemblyVersion": "15.1.0.0",
+            "fileVersion": "18.7.1.23011"
+          }
+        }
+      },
+      "Microsoft.Build.Framework/18.7.1": {
+        "dependencies": {
+          "Microsoft.NET.StringTools": "18.7.1"
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Build.Framework.dll": {
+            "assemblyVersion": "15.1.0.0",
+            "fileVersion": "18.7.1.23011"
+          }
+        }
+      },
+      "Microsoft.NET.StringTools/18.7.1": {
+        "runtime": {
+          "lib/net10.0/Microsoft.NET.StringTools.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "18.7.1.23011"
+          }
+        }
+      },
+      "System.Configuration.ConfigurationManager/10.0.4": {
+        "dependencies": {
+          "System.Diagnostics.EventLog": "10.0.4",
+          "System.Security.Cryptography.ProtectedData": "10.0.4"
+        },
+        "runtime": {
+          "lib/net10.0/System.Configuration.ConfigurationManager.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.426.12010"
+          }
+        }
+      },
+      "System.Diagnostics.EventLog/10.0.4": {
+        "runtime": {
+          "lib/net10.0/System.Diagnostics.EventLog.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.426.12010"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.Messages.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.426.12010"
+          }
+        }
+      },
+      "System.Reflection.MetadataLoadContext/10.0.4": {
+        "runtime": {
+          "lib/net10.0/System.Reflection.MetadataLoadContext.dll": {
+            "assemblyVersion": "10.0.0.4",
+            "fileVersion": "10.0.426.12010"
+          }
+        }
+      },
+      "System.Security.Cryptography.ProtectedData/10.0.4": {
+        "runtime": {
+          "lib/net10.0/System.Security.Cryptography.ProtectedData.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.426.12010"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "FBSC.Common.Core.Base/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Build/18.7.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BWFGVuZs9M6eSef12215dFwQUxoXAUW7VluUd2LLqa7nY09U9AzO/6Ms0RziPGmZ9Wa+MrXayOgsX6YjJkPWiw==",
+      "path": "microsoft.build/18.7.1",
+      "hashPath": "microsoft.build.18.7.1.nupkg.sha512"
+    },
+    "Microsoft.Build.Framework/18.7.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OkLtppCHnD0hrfeTQDZNSe6oxYW2/1qKmtE/iyF8ZzsdC541Txv0pUGrDZQTNr0E/OYxzpt5oVHqR26A6mzYnw==",
+      "path": "microsoft.build.framework/18.7.1",
+      "hashPath": "microsoft.build.framework.18.7.1.nupkg.sha512"
+    },
+    "Microsoft.NET.StringTools/18.7.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OhuO9c4ZqYBaqB7INwOpDLa7wX0VkR2T3MhjUSsPebLvZi0/Z7QzeeD5uiINd9L9Wev+EwvNUiF3N2hWVtdFPQ==",
+      "path": "microsoft.net.stringtools/18.7.1",
+      "hashPath": "microsoft.net.stringtools.18.7.1.nupkg.sha512"
+    },
+    "System.Configuration.ConfigurationManager/10.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4u3HLMYQqnTIF26VUiKhSuXtjFIvEfnwK9ZBUa4bXEc1koQCCkZx6ss5urKjqqimJMtuPHDKPHDchxkgoDNhjQ==",
+      "path": "system.configuration.configurationmanager/10.0.4",
+      "hashPath": "system.configuration.configurationmanager.10.0.4.nupkg.sha512"
+    },
+    "System.Diagnostics.EventLog/10.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xXo5NcIPeMUMfpo9Efl/3Rgomjb/Jfa3Aa0BgSfqYctN4YpwjPzvIrnD9JTwoKqe3pFtLF9vmtMl892+wwZ6EA==",
+      "path": "system.diagnostics.eventlog/10.0.4",
+      "hashPath": "system.diagnostics.eventlog.10.0.4.nupkg.sha512"
+    },
+    "System.Reflection.MetadataLoadContext/10.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kVaDOAIi02+yd7AZFNpZ88UZcBESiDI1Ib9l592QvZCYUA/xJloAucRAbyEnuOB+ubrpITGb8cMa3g8NhwLUIA==",
+      "path": "system.reflection.metadataloadcontext/10.0.4",
+      "hashPath": "system.reflection.metadataloadcontext.10.0.4.nupkg.sha512"
+    },
+    "System.Security.Cryptography.ProtectedData/10.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LmDnaYkcWkZSlZ07L7YcB6bH8sCiBZ7j28kPbYiXdF6f0iUiN7rxsRORlZGdj5saN/wZIqvF7lDBn/cpjU+e2g==",
+      "path": "system.security.cryptography.protecteddata/10.0.4",
+      "hashPath": "system.security.cryptography.protecteddata.10.0.4.nupkg.sha512"
+    }
+  }
+}

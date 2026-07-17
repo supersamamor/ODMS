@@ -1,0 +1,37 @@
+@model string
+
+<script asp-add-nonce>
+    $(document).ready(function () {
+        $("#@Model select").addClass("bg-grey");
+        $('#@Model input').attr('readonly', true);
+        $('#@Model textarea').attr('readonly', true);
+        $("#@Model input[type='checkbox']").on("click", function (e) {
+            e.preventDefault();
+        }).addClass("disabled");
+        $("#@Model input[type='radio']").on("click", function (e) {
+            e.preventDefault();
+        }).addClass("disabled");
+        $("#@Model input[type='file']").prop("disabled", "disabled");
+        $("#@Model input[type='file']").prop("disabled", true);     
+        $("#@Model a, #@Model button").removeClass("primary");
+        $("#@Model a, #@Model button").removeClass("accent");
+        $("#@Model a, #@Model button").addClass("secondary");        
+        $("#@Model a:not(#btnConfirmationModal):not(#btnCancelConfirmationModal), #@Model button:not(#btnConfirmationModal):not(#btnCancelConfirmationModal)")
+                .removeAttr('onclick')
+                .removeAttr('onchange')
+                .off('click')
+                .prop('disabled', true);
+
+        $('#@Model .btn-field').attr('class', "btn-field btn btn-secondary");
+        $('#@Model select').on('mousedown', function(e) {
+            e.preventDefault();
+            this.blur();
+            window.focus();
+        });
+        $("#@Model .file-upload-control").attr("style", "display:none;");
+    });
+    $.RemoveAttributeValidationViaClass = function(customClass)
+    {
+        $('input' + '.' + customClass).removeAttr('min');
+    }
+</script>

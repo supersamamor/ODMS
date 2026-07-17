@@ -1,0 +1,37 @@
+  @model IEnumerable<dynamic>
+<div class="listings-toolbar-container clearfix">
+    <div class="title col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item home">
+                    <a href="/">
+                        <svg width="20" height="20" viewBox="0 0 32 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_840_8580)">
+                                <path d="M16.0225 0.5C16.3294 0.500046 16.6484 0.588202 16.8682 0.766602L31.0508 13.0381L31.0518 13.0391C31.4139 13.351 31.5236 13.6385 31.4922 13.917L31.4893 13.9443V13.9727C31.4893 14.6655 30.8949 15.2285 30.2109 15.2285H27.9307L27.9336 15.7305L27.9727 24.4912C27.9725 24.6136 27.9625 24.7409 27.9473 24.876L27.9443 24.9043V25.8125C27.9443 26.7374 27.1815 27.4998 26.2227 27.5H25.333C25.2684 27.5 25.2295 27.4992 25.1943 27.4961L25.1543 27.4932L25.1152 27.4961C25.058 27.5001 24.9975 27.5 24.917 27.5H21.7773C20.8185 27.4998 20.0557 26.7374 20.0557 25.8125V21C20.0557 19.7485 19.0294 18.75 17.7773 18.75H14.2227C12.9706 18.75 11.9443 19.7485 11.9443 21V25.8125C11.9443 26.7374 11.1815 27.4998 10.2227 27.5H7.11621C7.05215 27.5 6.9853 27.4959 6.89941 27.4902L6.8623 27.4873L6.82617 27.4912C6.75621 27.4969 6.70966 27.5 6.66699 27.5H5.77734C4.81846 27.4998 4.05566 26.7374 4.05566 25.8125V19.6875C4.05566 19.6326 4.05583 19.607 4.05762 19.5908L4.06152 19.5625V15.2285H1.77734C1.04728 15.2283 0.5 14.6798 0.5 13.9727C0.5 13.614 0.613537 13.3084 0.898438 13.0244L15.126 0.817383L15.1387 0.805664L15.1504 0.793945C15.4001 0.548104 15.6827 0.5 16.0225 0.5Z" stroke="#007bff" stroke-width="2" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_840_8580">
+                                    <rect width="32" height="28" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                    </a>
+                </li>
+                @foreach (var item in Model)
+                {
+
+                    if (!item.IsActive && !string.IsNullOrEmpty(item.Url))
+                    {
+                        <li class="breadcrumb-item"><a href="@item.Url">@item.Title</a></li>
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <button class="btn btn-secondary btn-sm">@item.Title</button>
+                        </li>
+                    }
+                }
+            </ol>
+        </nav>
+    </div>   
+</div>
