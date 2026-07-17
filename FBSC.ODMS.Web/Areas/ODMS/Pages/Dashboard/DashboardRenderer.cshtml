@@ -1,0 +1,164 @@
+@page
+@model DashboardRendererModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["ActiveMainPage"] = "Dashboard";
+    ViewData["Level1"] = "Dashboard";
+    IEnumerable<dynamic> breadCrumbs = [new { Title = "Dashboard", Url = "", IsActive = true }];
+}
+<partial name="_BreadcrumbPartial" model=@(breadCrumbs) />
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+
+<!-- Keep chart-form separate so it doesn't wrap the partial -->
+<form id="chart-form" method="post">
+    <input type="hidden" asp-for="@Model.SelectedReportId" />
+</form>
+
+<div id="PartialLoaderContainer">
+    <partial name="_Chart" model="@Model.ReportList" />
+</div>
+
+@{
+    var dataAnalyticsModalId = "data-analytics-modal";
+}
+<partial name="_ModalPartial" model="@dataAnalyticsModalId" />
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ChartBuilderScripts" />
+    <script asp-add-nonce>
+        $(document).ready(function() {
+            function RefreshChart() {
+                var reportCount = $('#ReportListCount').val();
+                for (let idx = 0; idx < reportCount; idx++) {
+                    var domId = $('#ReportList_' + idx + '_DomId').val();
+                    var reportId = $('#ReportList_' + idx + '_ReportId').val();
+                    var drillDownReportId = $('#ReportList_' + idx + '_DrillDownReportId').val();
+                    var reportName = $('#ReportList_' + idx + '_ReportName').val();
+                    var reportOrChartType = $('#ReportList_' + idx + '_ReportOrChartType').val();
+                    var columnHeaders = $('#ReportList_' + idx + '_ColumnHeaders').val();
+                    var results = $('#ReportList_' + idx + '_Results').val();
+                    var displayLegend = $('#ReportList_' + idx + '_DisplayLegend').val();
+                    var isPercentage = $('#ReportList_' + idx + '_IsPercentage').val();
+
+                    // SAFE PARSING: Fallback to null if the string is empty (e.g., for PDF widgets)
+                    var parsedHeaders = columnHeaders ? JSON.parse(columnHeaders) : null;
+                    var parsedResults = results ? JSON.parse(results) : null;
+
+                    $.BuildChart(domId, reportName, reportOrChartType, parsedHeaders, parsedResults, displayLegend, isPercentage, reportId, drillDownReportId);
+                }
+            }
+
+            RefreshChart();
+
+            $('.dashboard-filter-form .btn-apply-filter').on('click', function(e) {            
+                e.preventDefault(); // Prevents any default button behavior
+
+                var submitBtn = $(this);
+                var form = submitBtn.closest('form'); // Dynamically find the parent form
+
+                var reportId = form.data('reportid');
+                var domId = form.data('domid');
+                var originalBtnHtml = submitBtn.html();
+
+                // Extract the anti-forgery token from this specific form
+                var token = form.find('input[name="__RequestVerificationToken"]').val();
+
+                submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+
+                $.ajax({
+                    url: '?handler=RefreshDashboardWidget&reportId=' + encodeURIComponent(reportId),
+                    type: 'POST',
+                    data: form.serialize(),
+                    headers: {
+                        "RequestVerificationToken": token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+
+                            // Handle PDF rendering by updating the iframe source directly
+                            if (response.reportOrChartType === 'PDF') {
+                                $('#PdfFrame_' + domId).attr('src', response.pdfUrl);
+                            }
+                            else if (response.reportOrChartType === 'Custom Html') {
+                                $('#CustomHtmlFrame_' + domId).html(response.customHtmlContent);
+                            }
+                            // Handle standard charts and tables
+                            else {
+                                var reportCount = $('#ReportListCount').val();
+                                var reportName = "";
+                                var isPercentage = "false";
+                                var drillDownReportId = "";
+
+                                for (let idx = 0; idx < reportCount; idx++) {
+                                    if ($('#ReportList_' + idx + '_DomId').val() === domId) {
+                                        reportName = $('#ReportList_' + idx + '_ReportName').val();
+                                        isPercentage = $('#ReportList_' + idx + '_IsPercentage').val();
+                                        drillDownReportId = $('#ReportList_' + idx + '_DrillDownReportId').val();
+                                        break;
+                                    }
+                                }
+
+                                var parsedHeaders = response.columnHeaders ? JSON.parse(response.columnHeaders) : null;
+                                var parsedResults = response.results ? JSON.parse(response.results) : null;
+
+                                $.BuildChart(
+                                    domId,
+                                    reportName,
+                                    response.reportOrChartType,
+                                    parsedHeaders,
+                                    parsedResults,
+                                    response.displayLegend,
+                                    isPercentage === "true",
+                                    reportId,
+                                    drillDownReportId
+                                );
+                            }
+                        } else {
+                            alert("Error refreshing data.");
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        alert("A critical error occurred while fetching data. Check console for details.");
+                    },
+                    complete: function() {
+                        submitBtn.prop('disabled', false).html(originalBtnHtml);
+                    }
+                });
+            });
+            function analyzeDataModalPopup(reff) {
+                var reportId = $(reff)[0].dataset.reportid;
+                $('#SelectedReportId').val(reportId);
+                openDataAnalyticsModal('@dataAnalyticsModalId');
+            }
+            $(".btnDataAnalyzeData").on('click', function(e) {
+                analyzeDataModalPopup(this);
+            });
+            function openDataAnalyticsModal(modalId) {
+                $('body').removeClass('loaded');
+                var url = '?handler=DataAnalytics';
+
+                $.post(url, $('#chart-form').serialize(), function(response) {
+                    var placeholderElement = $('#' + modalId);
+                    placeholderElement.find('.modal-body').html(response);
+                    placeholderElement.find('.modal-title').html("");
+                    placeholderElement.find('.modal').modal('show');
+
+                    // Event handler for the close button
+                    placeholderElement.find('.modal-footer .btnClose').click(function() {
+                        placeholderElement.find('.modal').modal('hide');
+                    });
+
+                    // Event handler for the 'x' button
+                    placeholderElement.find('.modal-header .close').click(function() {
+                        placeholderElement.find('.modal').modal('hide');
+                    });
+
+                    $('body').addClass('loaded');
+                }).fail(function() { });
+            }
+        });
+    </script>
+}

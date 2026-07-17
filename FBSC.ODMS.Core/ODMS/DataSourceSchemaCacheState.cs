@@ -12,8 +12,9 @@ public record DataSourceSchemaCacheState : BaseEntity
 	public string? SqlDataType { get; init; }
 	public int? OrdinalPosition { get; init; }
 	public bool IsNullable { get; init; }
+	public string? InferredSemanticType { get; init; }
 	public DateTime? RefreshedAt { get; init; }
-	
+
 	public DataSourceState? DataSource { get; init; }
 	
 	

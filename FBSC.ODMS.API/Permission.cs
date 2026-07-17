@@ -131,6 +131,7 @@ public static class Permission
 		public const string Delete = "P.AiSqlGenerationRequest.D";
 		public const string Upload = "P.AiSqlGenerationRequest.U";
 		public const string History = "P.AiSqlGenerationRequest.H";
+		public const string Approve = "P.AiSqlGenerationRequest.A";
 	}
 	public static class DashboardRefreshJob
 	{

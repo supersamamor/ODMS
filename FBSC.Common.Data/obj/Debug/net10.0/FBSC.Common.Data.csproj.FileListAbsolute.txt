@@ -15,3 +15,21 @@ C:\FBSC.ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Common.Data.dll
 C:\FBSC.ODMS\FBSC.Common.Data\obj\Debug\net10.0\refint\FBSC.Common.Data.dll
 C:\FBSC.ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Common.Data.pdb
 C:\FBSC.ODMS\FBSC.Common.Data\obj\Debug\net10.0\ref\FBSC.Common.Data.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\bin\Debug\net10.0\FBSC.Common.Data.deps.json
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\bin\Debug\net10.0\FBSC.Common.Data.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\bin\Debug\net10.0\FBSC.Common.Data.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\bin\Debug\net10.0\FBSC.Common.Core.Base.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\bin\Debug\net10.0\FBSC.Common.Identity.Abstractions.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\bin\Debug\net10.0\FBSC.Common.Core.Base.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\bin\Debug\net10.0\FBSC.Common.Identity.Abstractions.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Common.Data.csproj.AssemblyReference.cache
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Common.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Common.Data.AssemblyInfoInputs.cache
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Common.Data.AssemblyInfo.cs
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Common.Data.csproj.CoreCompileInputs.cache
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Common.Data.sourcelink.json
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Com.1772A7AC.Up2Date
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Common.Data.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\refint\FBSC.Common.Data.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\FBSC.Common.Data.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.Common.Data\obj\Debug\net10.0\ref\FBSC.Common.Data.dll

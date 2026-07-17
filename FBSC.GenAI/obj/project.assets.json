@@ -14,17 +14,17 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.GenAI\\FBSC.GenAI.csproj",
+      "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.GenAI\\FBSC.GenAI.csproj",
       "projectName": "FBSC.GenAI",
-      "projectPath": "C:\\FBSC.ODMS\\FBSC.GenAI\\FBSC.GenAI.csproj",
+      "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.GenAI\\FBSC.GenAI.csproj",
       "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-      "outputPath": "C:\\FBSC.ODMS\\FBSC.GenAI\\obj\\",
+      "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.GenAI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\FBSC.ODMS\\NuGet.Config",
+        "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
         "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"

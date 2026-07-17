@@ -55,7 +55,23 @@
 		<label asp-for="@Model.Username" class="form-label"><strong>@Localizer["Connection Username"] :</strong></label>
 			<input asp-for="@Model.Username" class="form-control" maxlength="100" />
 			<span asp-validation-for="@Model.Username" class="text-danger d-block mt-1"></span>
-			
+
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.PasswordEncrypted" class="form-label"><strong>@Localizer["Connection Password (leave blank to keep the current value)"] :</strong></label>
+			<input asp-for="@Model.PasswordEncrypted" type="password" autocomplete="new-password" class="form-control" maxlength="450" />
+			<span asp-validation-for="@Model.PasswordEncrypted" class="text-danger d-block mt-1"></span>
+			<small class="form-text text-muted">@Localizer["Stored encrypted at rest - never displayed once saved."]</small>
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ConnectionStringEncrypted" class="form-label"><strong>@Localizer["Full Connection String (used instead of the fields above when Connection Mode is ConnectionString - leave blank to keep the current value)"] :</strong></label>
+			<input asp-for="@Model.ConnectionStringEncrypted" type="password" autocomplete="new-password" class="form-control" maxlength="450" />
+			<span asp-validation-for="@Model.ConnectionStringEncrypted" class="text-danger d-block mt-1"></span>
+			<small class="form-text text-muted">@Localizer["Stored encrypted at rest - never displayed once saved."]</small>
 	</div>
 </div>
 <div class="col">

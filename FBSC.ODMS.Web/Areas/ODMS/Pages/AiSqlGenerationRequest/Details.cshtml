@@ -35,6 +35,17 @@
 	{
         <a asp-page="History" asp-route-id="@Model.AiSqlGenerationRequest.Id" class="btn btnFills btn-outline-primary btnHistoryIcon" title="@Localizer["History"]"></a>
 	}
+	@if (string.IsNullOrEmpty(Model.AiSqlGenerationRequest.DashboardQueryId)
+		&& !string.IsNullOrEmpty(Model.AiSqlGenerationRequest.GeneratedSqlQueryText)
+		&& (await AuthorizationService.AuthorizeAsync(User, Permission.AiSqlGenerationRequest.Approve)).Succeeded)
+	{
+		<form method="post" asp-page-handler="CreateDashboardQuery" id="approveAiSqlForm" class="d-inline">
+			<input type="hidden" name="id" value="@Model.AiSqlGenerationRequest.Id" />
+			<button type="submit" class="btn btnFills btn-outline-success" title="@Localizer["Approve - create dashboard query from this SQL"]">
+				<i class="fas fa-check-circle"></i> @Localizer["Approve"]
+			</button>
+		</form>
+	}
 </div>
 
 @section Scripts {

@@ -4,11 +4,13 @@ using FBSC.Common.Data;
 using FBSC.Common.Utility.Validators;
 using FBSC.ODMS.Core.ODMS;
 using FBSC.ODMS.Infrastructure.Data;
+using FBSC.ODMS.Infrastructure.Extensions;
 using FluentValidation;
 using LanguageExt;
 using LanguageExt.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using static LanguageExt.Prelude;
 
 namespace FBSC.ODMS.Application.Features.ODMS.DataSource.Commands;
@@ -17,7 +19,8 @@ public record AddDataSourceCommand : DataSourceState, IRequest<Validation<Error,
 
 public class AddDataSourceCommandHandler(ApplicationContext context,
                                 IMapper mapper,
-                                CompositeValidator<AddDataSourceCommand> validator,IdentityContext identityContext) : BaseCommandHandler<ApplicationContext, DataSourceState, AddDataSourceCommand>(context, mapper, validator), IRequestHandler<AddDataSourceCommand, Validation<Error, DataSourceState>>
+                                CompositeValidator<AddDataSourceCommand> validator,IdentityContext identityContext,
+                                IConfiguration configuration) : BaseCommandHandler<ApplicationContext, DataSourceState, AddDataSourceCommand>(context, mapper, validator), IRequestHandler<AddDataSourceCommand, Validation<Error, DataSourceState>>
 {
     public async Task<Validation<Error, DataSourceState>> Handle(AddDataSourceCommand request, CancellationToken cancellationToken) =>
 		await Validators.ValidateTAsync(request, cancellationToken).BindT(
@@ -27,13 +30,16 @@ public class AddDataSourceCommandHandler(ApplicationContext context,
 	public async Task<Validation<Error, DataSourceState>> AddDataSource(AddDataSourceCommand request, CancellationToken cancellationToken)
 	{
 		DataSourceState entity = Mapper.Map<DataSourceState>(request);
+		// Encrypted at rest with the same AES helper + per-record key convention FBSC.ApiHub
+		// uses for its own credential fields - never stored as plaintext.
+		entity = entity.EncryptSecrets(configuration.GetValue<string>("EncryptionDecryptionKeyPrefix")!);
 		AddEntitySubCollection<DataSourceState, DataSourceSchemaCacheState>(entity, nameof(request.DataSourceSchemaCacheList));
 		_ = await Context.AddAsync(entity, cancellationToken);
 		await Helpers.ApprovalHelper.AddApprovers(Context, identityContext, ApprovalModule.DataSource, entity.Id, cancellationToken);
 		_ = await Context.SaveChangesAsync(cancellationToken);
 		return Success<Error, DataSourceState>(entity);
 	}
-	
+
 }
 
 public class AddDataSourceCommandValidator : AbstractValidator<AddDataSourceCommand>

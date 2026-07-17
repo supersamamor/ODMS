@@ -32,6 +32,14 @@ public record DataSourceViewModel : BaseViewModel
 	[Display(Name = "Connection Username")]
 	[StringLength(100, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string? Username { get; init; }
+	[Display(Name = "Connection Password")]
+	[StringLength(450, ErrorMessage = "{0} length can't be more than {1}.")]
+	[DataType(DataType.Password)]
+	public string? PasswordEncrypted { get; init; }
+	[Display(Name = "Full Connection String")]
+	[StringLength(450, ErrorMessage = "{0} length can't be more than {1}.")]
+	[DataType(DataType.Password)]
+	public string? ConnectionStringEncrypted { get; init; }
 			[Display(Name = "Description")]
 	[StringLength(450, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string? Description { get; init; }

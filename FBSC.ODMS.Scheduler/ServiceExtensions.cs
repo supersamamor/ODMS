@@ -19,6 +19,17 @@ namespace FBSC.ODMS.Scheduler
 					q.UseJobFactory<MicrosoftDependencyInjectionJobFactory>();
 					q.UseSimpleTypeLoader();
 					q.UseInMemoryStore();
+
+					// Registered here (code-based trigger) rather than via the XML job-store
+					// plugin used by the other jobs below, since this job's cadence is a fixed
+					// polling interval rather than a per-environment cron schedule.
+					var dashboardCacheRefreshJobKey = new JobKey(nameof(DashboardCacheRefreshJob));
+					q.AddJob<DashboardCacheRefreshJob>(opts => opts.WithIdentity(dashboardCacheRefreshJobKey));
+					q.AddTrigger(opts => opts
+						.ForJob(dashboardCacheRefreshJobKey)
+						.WithIdentity($"{nameof(DashboardCacheRefreshJob)}-trigger")
+						.WithSimpleSchedule(s => s.WithIntervalInMinutes(1).RepeatForever())
+						.StartAt(DateBuilder.FutureDate(30, IntervalUnit.Second)));
 				});
 				services.AddQuartzServer(options =>
 				{
@@ -27,6 +38,7 @@ namespace FBSC.ODMS.Scheduler
 				services.AddTransient<FileScanJob>();
 				services.AddTransient<ApprovalNotificationJob>();
 				services.AddTransient<BatchUploadJob>();
+				services.AddTransient<DashboardCacheRefreshJob>();
             }            
         }
     }

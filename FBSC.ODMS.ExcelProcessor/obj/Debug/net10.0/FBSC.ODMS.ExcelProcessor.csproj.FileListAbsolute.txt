@@ -31,3 +31,37 @@ C:\FBSC.ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODMS.ExcelProcessor
 C:\FBSC.ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\refint\FBSC.ODMS.ExcelProcessor.dll
 C:\FBSC.ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODMS.ExcelProcessor.pdb
 C:\FBSC.ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\ref\FBSC.ODMS.ExcelProcessor.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.ODMS.ExcelProcessor.deps.json
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.ODMS.ExcelProcessor.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.ODMS.ExcelProcessor.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.ApiHub.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Core.Base.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Core.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Data.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Identity.Abstractions.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Utility.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Web.Utility.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.HTMLTemplate.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.ODMS.Core.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.ODMS.Infrastructure.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Core.Base.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.ODMS.Core.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.ODMS.Infrastructure.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.ApiHub.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Core.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Data.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Identity.Abstractions.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Utility.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.Common.Web.Utility.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\bin\Debug\net10.0\FBSC.HTMLTemplate.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODMS.ExcelProcessor.csproj.AssemblyReference.cache
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODMS.ExcelProcessor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODMS.ExcelProcessor.AssemblyInfoInputs.cache
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODMS.ExcelProcessor.AssemblyInfo.cs
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODMS.ExcelProcessor.csproj.CoreCompileInputs.cache
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODMS.ExcelProcessor.sourcelink.json
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODM.D19EF7C5.Up2Date
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODMS.ExcelProcessor.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\refint\FBSC.ODMS.ExcelProcessor.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\FBSC.ODMS.ExcelProcessor.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.ODMS.ExcelProcessor\obj\Debug\net10.0\ref\FBSC.ODMS.ExcelProcessor.dll

@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="FBSC.ODMS.Tests" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.9" />
     <PackageReference Include="Microsoft.Build" Version="18.7.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.9" />
@@ -12,6 +15,7 @@
     <PackageReference Include="Quartz.AspNetCore" Version="3.18.2" />
     <PackageReference Include="Quartz.Plugins" Version="3.18.2" />
     <PackageReference Include="System.Drawing.Common" Version="10.0.9" />
+    <PackageReference Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="180.37.3" />
   </ItemGroup>
   <ItemGroup>
 	<ProjectReference Include="..\FBSC.ApiHub\FBSC.ApiHub.csproj" />

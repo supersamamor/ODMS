@@ -53,6 +53,7 @@ public static class ServiceCollectionExtensions
         DateHelper.TimeOffset = Configuration.GetValue<int>("TimeOffset");
         services.AddTransient<AIDataAnalyticsServices>();
         services.AddTransient<AIReportQueryGenerationServices>();
+        services.AddTransient<AIDashboardQueryGenerationServices>();
         services.Configure<List<Settings.ApplicationEcosystem>>(Configuration.GetSection("ApplicationEcosystem"));
         services.AddHTMLTemplateServices(Configuration);
         services.AddTransient<DynamicLoaderService>();

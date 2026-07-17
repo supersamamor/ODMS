@@ -3,8 +3,6 @@
     var appName = Configuration.GetValue<string>("Application");
     var backgroundClass = Configuration.GetValue<string>("BackgroundClass");
     var appShortName = Configuration.GetValue<string>("ApplicationShortName");
-    var logo = "/img/logo.png";
-
 }
 <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion p-0">
     <div class="container-fluid d-flex flex-column p-0">
@@ -12,17 +10,49 @@
         <ul class="navbar-nav text-light" id="accordionSidebar">
             <li class="">
                 <div class="logo-container">
-                    <img class="logo" alt="" src="@logo">
+                    <!-- Same inline SVG brand mark used on the login screen -
+                         see Login.cshtml's .brand-lockup for the source of truth. -->
+                    <div class="logo brand-lockup" aria-label="@Localizer["Application logo"]">
+                        <svg class="brand-mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                            <rect x="2" y="6" width="26" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="2.5" />
+                            <rect x="8" y="20" width="4" height="7" rx="1" fill="currentColor" />
+                            <rect x="14" y="15" width="4" height="12" rx="1" fill="currentColor" />
+                            <rect x="20" y="11" width="4" height="16" rx="1" fill="currentColor" />
+                            <circle cx="33" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="2" />
+                            <circle cx="35" cy="23" r="3" fill="none" stroke="currentColor" stroke-width="2" />
+                            <path d="M29 11 L26 15 M31 21 L27 23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                        </svg>
+                        <span class="brand-wordmark">InsightForge</span>
+                    </div>
                 </div>
             </li>
-            <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Dashboard")">
-                <a href="/ODMS/Dashboard" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Dashboard")">
-                    <i class="nav-icon nav-icon-dashboard"></i>
-					<span>
-						@Localizer["Dashboard"]
-					</span>
-                </a>
-            </li>
+            @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Dashboard.View)).Succeeded)
+            {
+                <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Dashboard")">
+                    <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Dashboard")">
+                        <i class="nav-icon nav-icon-dashboard"></i>
+                        <span>
+                            @Localizer["Dashboards"]
+                            <i class="right fas level-one-nav-icon fa-angle-down"></i>
+                        </span>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/ODMS/Dashboard" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Dashboard")">
+                                <span>@Localizer["Browse All Dashboards"]</span>
+                            </a>
+                        </li>
+                        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Dashboard.Create)).Succeeded)
+                        {
+                            <li class="nav-item">
+                                <a href="/ODMS/Dashboard/Add" class="nav-link">
+                                    <span>@Localizer["New Dashboard"]</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
             <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Admin")">
                 <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Admin")">
                     <i class="nav-icon nav-icon-maintenance"></i>
@@ -130,88 +160,86 @@
                 </ul>
             </li>
 
-            <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "ODMS")">
-                <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "ODMS")">
-                    <i class="nav-icon nav-icon-list"></i>
-                    <span>
-                        @Localizer["One Delivery Management System"]
-                        <i class="right fas level-one-nav-icon fa-angle-down"></i>
-                    </span>
-                </a>
-                <ul class="nav nav-treeview">
-					@if((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.View)).Succeeded)
-						{
-							<li class="nav-item">
-								<a href = "/ODMS/DataSource" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataSource")">
-									<span>
-										@Localizer["Data Source"]
-									</span>
-								</a>
-							</li>
-						}
-						@if((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadBatch.View)).Succeeded)
-						{
-							<li class="nav-item">
-								<a href = "/ODMS/DataUploadBatch" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataUploadBatch")">
-									<span>
-										@Localizer["Data Upload Batch"]
-									</span>
-								</a>
-							</li>
-						}
-						@if((await AuthorizationService.AuthorizeAsync(User, Permission.ReportType.View)).Succeeded)
-						{
-							<li class="nav-item">
-								<a href = "/ODMS/ReportType" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "ReportType")">
-									<span>
-										@Localizer["Report Type"]
-									</span>
-								</a>
-							</li>
-						}
-						@if((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQuery.View)).Succeeded)
-						{
-							<li class="nav-item">
-								<a href = "/ODMS/DashboardQuery" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DashboardQuery")">
-									<span>
-										@Localizer["Dashboard Query"]
-									</span>
-								</a>
-							</li>
-						}
-						@if((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardTheme.View)).Succeeded)
-						{
-							<li class="nav-item">
-								<a href = "/ODMS/DashboardTheme" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DashboardTheme")">
-									<span>
-										@Localizer["Dashboard Theme"]
-									</span>
-								</a>
-							</li>
-						}
-						@if((await AuthorizationService.AuthorizeAsync(User, Permission.Dashboard.View)).Succeeded)
-						{
-							<li class="nav-item">
-								<a href = "/ODMS/Dashboard" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Dashboard")">
-									<span>
-										@Localizer["Dashboard"]
-									</span>
-								</a>
-							</li>
-						}
-						@if((await AuthorizationService.AuthorizeAsync(User, Permission.AiSqlGenerationRequest.View)).Succeeded)
-						{
-							<li class="nav-item">
-								<a href = "/ODMS/AiSqlGenerationRequest" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "AiSqlGenerationRequest")">
-									<span>
-										@Localizer["AI SQL Generation Request"]
-									</span>
-								</a>
-							</li>
-						}
-						                    
-                </ul>
-            </li>
+            @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.View)).Succeeded
+                || (await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadBatch.View)).Succeeded)
+            {
+                <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "DataSource")">
+                    <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataSource")">
+                        <i class="nav-icon nav-icon-list"></i>
+                        <span>
+                            @Localizer["Data Sources"]
+                            <i class="right fas level-one-nav-icon fa-angle-down"></i>
+                        </span>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.View)).Succeeded)
+                        {
+                            <li class="nav-item">
+                                <a href="/ODMS/DataSource" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataSource")">
+                                    <span>@Localizer["Connections"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataUploadBatch.View)).Succeeded)
+                        {
+                            <li class="nav-item">
+                                <a href="/ODMS/DataUploadBatch" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataUploadBatch")">
+                                    <span>@Localizer["Data Upload Batch"]</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+            @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ReportType.View)).Succeeded
+                || (await AuthorizationService.AuthorizeAsync(User, Permission.DashboardTheme.View)).Succeeded
+                || (await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQuery.View)).Succeeded
+                || (await AuthorizationService.AuthorizeAsync(User, Permission.AiSqlGenerationRequest.View)).Succeeded)
+            {
+                <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "DashboardAdmin")">
+                    <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DashboardAdmin")">
+                        <i class="nav-icon nav-icon-maintenance"></i>
+                        <span>
+                            @Localizer["Dashboard Admin"]
+                            <i class="right fas level-one-nav-icon fa-angle-down"></i>
+                        </span>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ReportType.View)).Succeeded)
+                        {
+                            <li class="nav-item">
+                                <a href="/ODMS/ReportType" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "ReportType")">
+                                    <span>@Localizer["Report Types"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardTheme.View)).Succeeded)
+                        {
+                            <li class="nav-item">
+                                <a href="/ODMS/DashboardTheme" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DashboardTheme")">
+                                    <span>@Localizer["Themes"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DashboardQuery.View)).Succeeded)
+                        {
+                            <li class="nav-item">
+                                <a href="/ODMS/DashboardQuery" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DashboardQuery")">
+                                    <span>@Localizer["Dashboard Queries"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.AiSqlGenerationRequest.View)).Succeeded)
+                        {
+                            <li class="nav-item">
+                                <a href="/ODMS/AiSqlGenerationRequest" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "AiSqlGenerationRequest")">
+                                    <span>@Localizer["AI SQL Generation Requests"]</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
             @{
                 var reportList = await dropdownService.GetReportList();
                 if (reportList.Count > 0)

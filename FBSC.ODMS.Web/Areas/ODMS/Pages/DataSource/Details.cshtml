@@ -35,6 +35,15 @@
 	{
         <a asp-page="History" asp-route-id="@Model.DataSource.Id" class="btn btnFills btn-outline-primary btnHistoryIcon" title="@Localizer["History"]"></a>
 	}
+	@if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.Approve)).Succeeded)
+	{
+		<form method="post" asp-page-handler="TestConnection" class="d-inline">
+			<input type="hidden" name="id" value="@Model.DataSource.Id" />
+			<button type="submit" class="btn btnFills btn-outline-info" title="@Localizer["Test Connection"]">
+				<i class="fas fa-plug"></i> @Localizer["Test Connection"]
+			</button>
+		</form>
+	}
 </div>
 
 @section Scripts {

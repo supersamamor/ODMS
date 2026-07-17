@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\FBSC.ODMS\\FBSC.ODMS.API\\FBSC.ODMS.API.csproj": {}
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.API\\FBSC.ODMS.API.csproj": {}
   },
   "projects": {
-    "C:\\FBSC.ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj",
         "projectName": "FBSC.ApiHub",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.ApiHub\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ApiHub\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -34,17 +34,17 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj"
               }
             }
           }
@@ -397,20 +397,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.Common.API\\FBSC.Common.API.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.API\\FBSC.Common.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.Common.API\\FBSC.Common.API.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.API\\FBSC.Common.API.csproj",
         "projectName": "FBSC.Common.API",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.API\\FBSC.Common.API.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.API\\FBSC.Common.API.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.Common.API\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -427,8 +427,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\FBSC.ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj"
               }
             }
           }
@@ -928,20 +928,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj",
         "projectName": "FBSC.Common.Core.Base",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -1276,20 +1276,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj",
         "projectName": "FBSC.Common.Core",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.Common.Core\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -1306,11 +1306,11 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\FBSC.ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj"
               }
             }
           }
@@ -1639,20 +1639,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj",
         "projectName": "FBSC.Common.Data",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.Common.Data\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -1669,11 +1669,11 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj"
               }
             }
           }
@@ -2002,20 +2002,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj",
         "projectName": "FBSC.Common.Identity.Abstractions",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.Common.Identity.Abstractions\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Identity.Abstractions\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -2350,20 +2350,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj",
         "projectName": "FBSC.Common.Utility",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.Common.Utility\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -2726,20 +2726,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj",
         "projectName": "FBSC.Common.Web.Utility",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.Common.Web.Utility\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Web.Utility\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -2756,8 +2756,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\FBSC.ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Identity.Abstractions\\FBSC.Common.Identity.Abstractions.csproj"
               }
             }
           }
@@ -3094,20 +3094,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj",
         "projectName": "FBSC.HTMLTemplate",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.HTMLTemplate\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.HTMLTemplate\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -3124,14 +3124,14 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj"
               }
             }
           }
@@ -3468,20 +3468,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.ODMS.API\\FBSC.ODMS.API.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.API\\FBSC.ODMS.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.ODMS.API\\FBSC.ODMS.API.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.API\\FBSC.ODMS.API.csproj",
         "projectName": "FBSC.ODMS.API",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.API\\FBSC.ODMS.API.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.API\\FBSC.ODMS.API.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.ODMS.API\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -3498,11 +3498,11 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\FBSC.ODMS\\FBSC.Common.API\\FBSC.Common.API.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.API\\FBSC.Common.API.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.API\\FBSC.Common.API.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.API\\FBSC.Common.API.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj"
               }
             }
           }
@@ -3982,20 +3982,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj",
         "projectName": "FBSC.ODMS.Application",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Application\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -4012,11 +4012,11 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\FBSC.ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core\\FBSC.Common.Core.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj"
               }
             }
           }
@@ -4357,20 +4357,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.ODMS.Core\\FBSC.ODMS.Core.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Core\\FBSC.ODMS.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.ODMS.Core\\FBSC.ODMS.Core.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Core\\FBSC.ODMS.Core.csproj",
         "projectName": "FBSC.ODMS.Core",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Core\\FBSC.ODMS.Core.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Core\\FBSC.ODMS.Core.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Core\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -4387,8 +4387,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Core.Base\\FBSC.Common.Core.Base.csproj"
               }
             }
           }
@@ -4717,20 +4717,20 @@
         }
       }
     },
-    "C:\\FBSC.ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj": {
+    "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj",
         "projectName": "FBSC.ODMS.Infrastructure",
-        "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-        "outputPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\FBSC.ODMS\\NuGet.Config",
+          "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
           "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -4747,20 +4747,20 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\FBSC.ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Data\\FBSC.Common.Data.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Utility\\FBSC.Common.Utility.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj"
               },
-              "C:\\FBSC.ODMS\\FBSC.ODMS.Core\\FBSC.ODMS.Core.csproj": {
-                "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Core\\FBSC.ODMS.Core.csproj"
+              "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Core\\FBSC.ODMS.Core.csproj": {
+                "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Core\\FBSC.ODMS.Core.csproj"
               }
             }
           }
@@ -4797,6 +4797,10 @@
             "Microsoft.Extensions.Options.ConfigurationExtensions": {
               "target": "Package",
               "version": "[10.0.9, )"
+            },
+            "Microsoft.SqlServer.TransactSql.ScriptDom": {
+              "target": "Package",
+              "version": "[180.37.3, )"
             },
             "Quartz.AspNetCore": {
               "target": "Package",

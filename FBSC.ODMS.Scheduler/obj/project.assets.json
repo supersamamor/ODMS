@@ -1287,6 +1287,60 @@
           }
         }
       },
+      "Microsoft.SqlServer.TransactSql.ScriptDom/180.37.3": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Microsoft.SqlServer.TransactSql.ScriptDom.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.SqlServer.TransactSql.ScriptDom.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "resource": {
+          "lib/net8.0/cs/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "cs"
+          },
+          "lib/net8.0/de/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "de"
+          },
+          "lib/net8.0/es/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "es"
+          },
+          "lib/net8.0/fr/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "fr"
+          },
+          "lib/net8.0/it/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "it"
+          },
+          "lib/net8.0/ja/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/net8.0/ko/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "ko"
+          },
+          "lib/net8.0/pl/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "pl"
+          },
+          "lib/net8.0/pt-BR/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "pt-BR"
+          },
+          "lib/net8.0/ru/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "ru"
+          },
+          "lib/net8.0/tr/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "tr"
+          },
+          "lib/net8.0/zh-Hans/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "zh-Hans"
+          },
+          "lib/net8.0/zh-Hant/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll": {
+            "locale": "zh-Hant"
+          }
+        }
+      },
       "Microsoft.Win32.SystemEvents/10.0.9": {
         "type": "package",
         "compile": {
@@ -2064,6 +2118,7 @@
           "Microsoft.Build": "18.7.1",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.9",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.9",
+          "Microsoft.SqlServer.TransactSql.ScriptDom": "180.37.3",
           "Quartz.AspNetCore": "3.18.2",
           "Quartz.Plugins": "3.18.2",
           "System.Drawing.Common": "10.0.9"
@@ -3864,6 +3919,83 @@
         "microsoft.sqlserver.server.nuspec"
       ]
     },
+    "Microsoft.SqlServer.TransactSql.ScriptDom/180.37.3": {
+      "sha512": "mVJb9XiE+BktZjeKlVJKjaSmBFHlCANJy+eDc+AjbMNPxUSWmpXs6tiqG37/s0OEUNcqVRUyc8K6MAMFgyzrrA==",
+      "type": "package",
+      "path": "microsoft.sqlserver.transactsql.scriptdom/180.37.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net472/Microsoft.SqlServer.TransactSql.ScriptDom.dll",
+        "lib/net472/Microsoft.SqlServer.TransactSql.ScriptDom.pdb",
+        "lib/net472/Microsoft.SqlServer.TransactSql.ScriptDom.xml",
+        "lib/net472/cs/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/de/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/es/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/fr/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/it/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/ja/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/ko/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/pl/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/pt-BR/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/ru/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/tr/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/zh-Hans/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net472/zh-Hant/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/Microsoft.SqlServer.TransactSql.ScriptDom.dll",
+        "lib/net8.0/Microsoft.SqlServer.TransactSql.ScriptDom.pdb",
+        "lib/net8.0/Microsoft.SqlServer.TransactSql.ScriptDom.xml",
+        "lib/net8.0/cs/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/de/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/es/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/fr/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/it/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/ja/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/ko/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/pl/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/pt-BR/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/ru/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/tr/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/zh-Hans/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/net8.0/zh-Hant/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/Microsoft.SqlServer.TransactSql.ScriptDom.dll",
+        "lib/netstandard2.0/Microsoft.SqlServer.TransactSql.ScriptDom.pdb",
+        "lib/netstandard2.0/Microsoft.SqlServer.TransactSql.ScriptDom.xml",
+        "lib/netstandard2.0/cs/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/de/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/es/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/fr/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/it/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/ja/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/ko/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/pl/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/pt-BR/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/ru/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/tr/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/zh-Hans/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.0/zh-Hant/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/Microsoft.SqlServer.TransactSql.ScriptDom.dll",
+        "lib/netstandard2.1/Microsoft.SqlServer.TransactSql.ScriptDom.pdb",
+        "lib/netstandard2.1/Microsoft.SqlServer.TransactSql.ScriptDom.xml",
+        "lib/netstandard2.1/cs/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/de/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/es/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/fr/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/it/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/ja/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/ko/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/pl/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/pt-BR/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/ru/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/tr/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/zh-Hans/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "lib/netstandard2.1/zh-Hant/Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll",
+        "microsoft.sqlserver.transactsql.scriptdom.180.37.3.nupkg.sha512",
+        "microsoft.sqlserver.transactsql.scriptdom.nuspec",
+        "nuspecicon.png"
+      ]
+    },
     "Microsoft.Win32.SystemEvents/10.0.9": {
       "sha512": "dk5HKolAR9bBxlL4dl6Koaf0s/Q47QApog+/o341LSuvWGW6ig4q5fTsgYG0MrK//l2Slv6mygncMK/8lgXVDg==",
       "type": "package",
@@ -4879,17 +5011,17 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.ODMS.Scheduler\\FBSC.ODMS.Scheduler.csproj",
+      "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Scheduler\\FBSC.ODMS.Scheduler.csproj",
       "projectName": "FBSC.ODMS.Scheduler",
-      "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Scheduler\\FBSC.ODMS.Scheduler.csproj",
+      "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Scheduler\\FBSC.ODMS.Scheduler.csproj",
       "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-      "outputPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Scheduler\\obj\\",
+      "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Scheduler\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\FBSC.ODMS\\NuGet.Config",
+        "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
         "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -4906,14 +5038,14 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\FBSC.ODMS\\FBSC.Common.Services.Shared\\FBSC.Common.Services.Shared.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Services.Shared\\FBSC.Common.Services.Shared.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Services.Shared\\FBSC.Common.Services.Shared.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Services.Shared\\FBSC.Common.Services.Shared.csproj"
             },
-            "C:\\FBSC.ODMS\\FBSC.ODMS.ExcelProcessor\\FBSC.ODMS.ExcelProcessor.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.ExcelProcessor\\FBSC.ODMS.ExcelProcessor.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.ExcelProcessor\\FBSC.ODMS.ExcelProcessor.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.ExcelProcessor\\FBSC.ODMS.ExcelProcessor.csproj"
             },
-            "C:\\FBSC.ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Infrastructure\\FBSC.ODMS.Infrastructure.csproj"
             }
           }
         }

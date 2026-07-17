@@ -102,6 +102,8 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
 		modelBuilder.Entity<DataSourceSchemaCacheState>().Property(e => e.TableName).HasMaxLength(150);
 		modelBuilder.Entity<DataSourceSchemaCacheState>().Property(e => e.ColumnName).HasMaxLength(150);
 		modelBuilder.Entity<DataSourceSchemaCacheState>().Property(e => e.SqlDataType).HasMaxLength(50);
+		modelBuilder.Entity<DataSourceSchemaCacheState>().Property(e => e.InferredSemanticType).HasMaxLength(20);
+		modelBuilder.Entity<DataSourceSchemaCacheState>().HasIndex(e => new { e.DataSourceId, e.SchemaName, e.TableName, e.ColumnName }).IsUnique();
 		modelBuilder.Entity<DataUploadBatchState>().Property(e => e.FileName).HasMaxLength(260);
 		modelBuilder.Entity<DataUploadBatchState>().Property(e => e.FileType).HasMaxLength(20);
 		modelBuilder.Entity<DataUploadBatchState>().Property(e => e.UploadedBy).HasMaxLength(100);

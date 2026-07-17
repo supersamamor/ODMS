@@ -2,6 +2,7 @@ using FBSC.Common.API;
 using FBSC.Common.Web.Utility.Logging;
 using FBSC.ODMS.API.Services;
 using FBSC.ODMS.Application;
+using FBSC.ODMS.Infrastructure;
 using FBSC.ODMS.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -26,6 +27,7 @@ builder.Services.AddHealthChecks().AddDbContextCheck<ApplicationContext>();
 builder.Services.AddDbContext<IdentityContext>(options
        => options.UseSqlServer(configuration.GetConnectionString("ApplicationContext")));
 builder.Services.AddScoped<IWebhookSecretService, WebhookSecretService>();
+builder.Services.AddDashboardEngineServices();
 builder.Services.AddMemoryCache();
 if (configuration.GetValue<bool>("UseInMemoryDatabase"))
 {

@@ -14,6 +14,7 @@ using Serilog;
 using FBSC.ODMS.Scheduler;
 using Microsoft.Extensions.FileProviders;
 using FBSC.ApiHub;
+using FBSC.ODMS.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,7 @@ services.AddEmailSendingAService(configuration);
 services.AddExcelProcessor();
 services.AddSharedServices(configuration);
 services.AddApiHubServices(configuration);
+services.AddDashboardEngineServices();
 services.AddScheduler(configuration);
 services.AddHttpsRedirection(options =>
 {

@@ -17,10 +17,14 @@
 	<div id="PartialLoaderContainer">
         <partial name="_InputFieldsPartial" model="Model.AiSqlGenerationRequest" />
     </div> 	
-	<div id="toolbar-container" class="btn-group" role="group">     
+	<div id="toolbar-container" class="btn-group" role="group">
 		<a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" title="@Localizer["Back"]"></a>
-		<button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" title="@Localizer["Save changes"]"></button>
-	</div>   	
+		<button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" name="Handler" value="Save" title="@Localizer["Save changes"]"></button>
+		@if (Configuration.GetValue<bool>("EnableGenerativeAIIntegration"))
+		{
+			<button type="button" id="btnGenerateFromAIModal" class="btn btn-info text-light" name="Handler" value="GenerateQueryFromAI" title="@Localizer["Generate SQL from AI"]"><i class="fas fa-robot"></i></button>
+		}
+	</div>
 </form>
 
 @section Scripts {
@@ -29,9 +33,10 @@
 <script asp-add-nonce>
     $(document).ready(function () {
 		$.bindSaveConfirmationModal('Save', '#btnConfirmationModal','#aiSqlGenerationRequest-form');
+		$.bindSaveConfirmationModal('GenerateFromAI', '#btnGenerateFromAIModal', '#aiSqlGenerationRequest-form', "Do you want to generate SQL via AI? Generated SQL still requires explicit approval before it can be used on a widget.");
 		$.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal','#aiSqlGenerationRequest-form', 'Do you want to cancel the changes?');
 		function InitializeForm()
-		{			
+		{
 
 			$('.DisableSelectDropdown').on('mousedown', function(e) {
 				e.preventDefault();

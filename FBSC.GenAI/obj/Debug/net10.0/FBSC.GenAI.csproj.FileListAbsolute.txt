@@ -9,3 +9,15 @@ C:\FBSC.ODMS\FBSC.GenAI\obj\Debug\net10.0\FBSC.GenAI.dll
 C:\FBSC.ODMS\FBSC.GenAI\obj\Debug\net10.0\refint\FBSC.GenAI.dll
 C:\FBSC.ODMS\FBSC.GenAI\obj\Debug\net10.0\FBSC.GenAI.pdb
 C:\FBSC.ODMS\FBSC.GenAI\obj\Debug\net10.0\ref\FBSC.GenAI.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\bin\Debug\net10.0\FBSC.GenAI.deps.json
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\bin\Debug\net10.0\FBSC.GenAI.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\bin\Debug\net10.0\FBSC.GenAI.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\obj\Debug\net10.0\FBSC.GenAI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\obj\Debug\net10.0\FBSC.GenAI.AssemblyInfoInputs.cache
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\obj\Debug\net10.0\FBSC.GenAI.AssemblyInfo.cs
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\obj\Debug\net10.0\FBSC.GenAI.csproj.CoreCompileInputs.cache
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\obj\Debug\net10.0\FBSC.GenAI.sourcelink.json
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\obj\Debug\net10.0\FBSC.GenAI.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\obj\Debug\net10.0\refint\FBSC.GenAI.dll
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\obj\Debug\net10.0\FBSC.GenAI.pdb
+C:\Users\fbs80020\OneDrive - Filinvest\Documents\ODMS\FBSC.GenAI\obj\Debug\net10.0\ref\FBSC.GenAI.dll

@@ -4446,6 +4446,7 @@
           "FBSC.ODMS.Core": "1.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "10.0.9",
           "Microsoft.Build": "18.7.1",
+          "Microsoft.SqlServer.TransactSql.ScriptDom": "180.37.3",
           "Quartz.AspNetCore": "3.18.2",
           "Quartz.Plugins": "3.18.2",
           "System.Drawing.Common": "10.0.9"
@@ -10441,17 +10442,17 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\FBSC.ODMS\\FBSC.ODMS.Web\\FBSC.ODMS.Web.csproj",
+      "projectUniqueName": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Web\\FBSC.ODMS.Web.csproj",
       "projectName": "FBSC.ODMS.Web",
-      "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Web\\FBSC.ODMS.Web.csproj",
+      "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Web\\FBSC.ODMS.Web.csproj",
       "packagesPath": "C:\\Users\\fbs80020\\.nuget\\packages\\",
-      "outputPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Web\\obj\\",
+      "outputPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\FBSC.ODMS\\NuGet.Config",
+        "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\NuGet.Config",
         "C:\\Users\\fbs80020\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -10468,32 +10469,32 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\FBSC.ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ApiHub\\FBSC.ApiHub.csproj"
             },
-            "C:\\FBSC.ODMS\\FBSC.Common.Services.Shared\\FBSC.Common.Services.Shared.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Services.Shared\\FBSC.Common.Services.Shared.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Services.Shared\\FBSC.Common.Services.Shared.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Services.Shared\\FBSC.Common.Services.Shared.csproj"
             },
-            "C:\\FBSC.ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.Common.Web.Utility\\FBSC.Common.Web.Utility.csproj"
             },
-            "C:\\FBSC.ODMS\\FBSC.GenAI\\FBSC.GenAI.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.GenAI\\FBSC.GenAI.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.GenAI\\FBSC.GenAI.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.GenAI\\FBSC.GenAI.csproj"
             },
-            "C:\\FBSC.ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.HTMLTemplate\\FBSC.HTMLTemplate.csproj"
             },
-            "C:\\FBSC.ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Application\\FBSC.ODMS.Application.csproj"
             },
-            "C:\\FBSC.ODMS\\FBSC.ODMS.EmailSending\\FBSC.ODMS.EmailSending.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.EmailSending\\FBSC.ODMS.EmailSending.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.EmailSending\\FBSC.ODMS.EmailSending.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.EmailSending\\FBSC.ODMS.EmailSending.csproj"
             },
-            "C:\\FBSC.ODMS\\FBSC.ODMS.ExcelProcessor\\FBSC.ODMS.ExcelProcessor.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.ExcelProcessor\\FBSC.ODMS.ExcelProcessor.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.ExcelProcessor\\FBSC.ODMS.ExcelProcessor.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.ExcelProcessor\\FBSC.ODMS.ExcelProcessor.csproj"
             },
-            "C:\\FBSC.ODMS\\FBSC.ODMS.Scheduler\\FBSC.ODMS.Scheduler.csproj": {
-              "projectPath": "C:\\FBSC.ODMS\\FBSC.ODMS.Scheduler\\FBSC.ODMS.Scheduler.csproj"
+            "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Scheduler\\FBSC.ODMS.Scheduler.csproj": {
+              "projectPath": "C:\\Users\\fbs80020\\OneDrive - Filinvest\\Documents\\ODMS\\FBSC.ODMS.Scheduler\\FBSC.ODMS.Scheduler.csproj"
             }
           }
         }
