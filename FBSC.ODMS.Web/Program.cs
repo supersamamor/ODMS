@@ -216,6 +216,7 @@ if (configuration.GetValue<bool>("EnableDatabaseSeed"))
 	await UserRole.Seed(scope.ServiceProvider);
 	await DefaultDashboard.Seed(scope.ServiceProvider);
 	await DefaultApiHub.Seed(scope.ServiceProvider);
+	await DefaultInsightForgeDashboard.Seed(scope.ServiceProvider);
 	Log.Information("Finished seeding database");
 }
 app.Run();
