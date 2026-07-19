@@ -1,38 +1,35 @@
 @using Models
 @model DataUploadViewModel
 
-<div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
-    <div class="col">
-	<div class="mb-3">
-		<label asp-for="@Model.Description" class="form-label"><strong>@Localizer["Description"] :</strong></label>
-			<input asp-for="@Model.Description" class="form-control" maxlength="450" />
-			<span asp-validation-for="@Model.Description" class="text-danger d-block mt-1"></span>
-			
-	</div>
-</div>
-<div class="col">
-	<div class="mb-3">
-		<label asp-for="@Model.FilePath" class="form-label"><strong>@Localizer["Uploaded File"] :</strong></label>
-			<input asp-for="@Model.FilePathForm" class="file-upload-control" />            
-                            @if (!string.IsNullOrEmpty(Model.FilePath)) { 
-                            var fileName = System.IO.Path.GetFileName(Model.FilePath);
-                            var url = @Url.Page($"/{WebConstants.ViewAttachmentPath}/Index", new { area = "ODMS" }) + "?subFolder=DataUpload&id=" + Model.Id + "&fieldName=" + nameof(Model.FilePath) + "&fileName=" + fileName;
-                            <div class="input-group col-md-12 file-upload-filename">
-                                <input asp-for="@Model.FilePath" class="form-control" readonly />
-                                <a href="@url" class="input-group-text btn btn-success file-view-button" target="_blank">@Localizer["View"]</a>
-                            </div>
-                            }
-			<span asp-validation-for="@Model.FilePathForm" class="text-danger d-block mt-1"></span>
-			
-	</div>
-</div>
-<div class="col">
-	<div class="mb-3">
-		<label asp-for="@Model.FileType" class="form-label"><strong>@Localizer["CSV, XLSX, or JSON"] :</strong></label>
-			<input asp-for="@Model.FileType" class="form-control" maxlength="20" />
-			<span asp-validation-for="@Model.FileType" class="text-danger d-block mt-1"></span>
-			
-	</div>
-</div>
-
+<div class="row g-3">
+    <div class="col-12 col-md-6">
+        <div class="mb-3">
+            <label asp-for="@Model.Description" class="form-label"><strong>@Localizer["Description"] :</strong></label>
+            <input asp-for="@Model.Description" class="form-control" maxlength="450" />
+            <span asp-validation-for="@Model.Description" class="text-danger d-block mt-1"></span>
+        </div>
+    </div>
+    <div class="col-12 col-md-6">
+        <div class="mb-3">
+            <label asp-for="@Model.FileType" class="form-label"><strong>@Localizer["CSV, XLSX, or JSON"] :</strong></label>
+            <input asp-for="@Model.FileType" class="form-control" maxlength="20" />
+            <span asp-validation-for="@Model.FileType" class="text-danger d-block mt-1"></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="mb-3">
+            <label asp-for="@Model.FilePath" class="form-label"><strong>@Localizer["Uploaded File"] :</strong></label>
+            <input asp-for="@Model.FilePathForm" class="file-upload-control" />
+            @if (!string.IsNullOrEmpty(Model.FilePath))
+            {
+                var fileName = System.IO.Path.GetFileName(Model.FilePath);
+                var url = @Url.Page($"/{WebConstants.ViewAttachmentPath}/Index", new { area = "ODMS" }) + "?subFolder=DataUpload&id=" + Model.Id + "&fieldName=" + nameof(Model.FilePath) + "&fileName=" + fileName;
+                <div class="input-group col-md-12 file-upload-filename">
+                    <input asp-for="@Model.FilePath" class="form-control" readonly />
+                    <a href="@url" class="input-group-text btn btn-success file-view-button" target="_blank">@Localizer["View"]</a>
+                </div>
+            }
+            <span asp-validation-for="@Model.FilePathForm" class="text-danger d-block mt-1"></span>
+        </div>
+    </div>
 </div>

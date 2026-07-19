@@ -140,10 +140,10 @@ body.theme-teal {
 
 /* Theme 8: Rose Pink */
 body.theme-rose {
-    --custom-primary: #f43f5e;
-    --custom-primary-hover: #e11d48;
-    --custom-primary-active: #be123c;
-    --custom-primary-rgb: 244, 63, 94;
+    --custom-primary: #e11d48;
+    --custom-primary-hover: #be123c;
+    --custom-primary-active: #9f1239;
+    --custom-primary-rgb: 225, 29, 72;
     --text-active-color: #ffffff;
     --text-hover-color: #1a1a1a;
     --text-active-hover-color: #ffffff;
@@ -166,9 +166,6 @@ body {
     color: var(--bs-body-color);
 }
 
-.login-logo {
-    width: 300px;
-}
 /* Dense UI Typography - Consolidated selector */
 .dt-buttons button,
 .dataTables_filter,
@@ -372,8 +369,14 @@ select:disabled {
 }
 
 .logo {
-    width: 150px;
+    display: inline-flex;
+    color: var(--custom-primary);
 }
+
+    .logo .app-logo-svg {
+        width: 130px;
+        height: auto;
+    }
 
 .sidebar .nav-item .nav-link {
     display: block;
@@ -387,12 +390,12 @@ select:disabled {
 }
 
     .sidebar .nav-item .nav-link.active {
-        background-color: var(--bg-hover-color);
+        background-color: var(--custom-primary);
         color: var(--text-active-color) !important;
     }
 
         .sidebar .nav-item .nav-link.active:hover {
-            background-color: var(--bg-hover-color);
+            background-color: var(--custom-primary-hover);
             color: var(--text-active-hover-color) !important;
         }
 
@@ -661,17 +664,12 @@ div.dataTables_wrapper div.dataTables_filter {
 
 /* ==================== PAGE SPECIFIC STYLES ==================== */
 
-/* Login Page */
+/* Auth pages (shared across Areas/Identity/Pages/Account/*.cshtml — Login, Register, ForgotPassword, etc.) */
 .bg-login-image {
     background-image: url('/img/Login_Background/Background.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: top center;
-}
-
-.login-box {
-    padding: 13rem !important;
-    padding-top: 5rem !important;
 }
 
 .login-link {
@@ -689,7 +687,6 @@ form.user .btn-user {
     padding: .75rem 1rem;
 }
 
-/* Social Login */
 .social-login-section {
     margin-top: 20px;
     padding-top: 20px;
@@ -930,11 +927,6 @@ form.user .btn-user {
 #themeSwitchContainer,
 #languangeSwitchContainer {
     display: none !important;
-}
-
-.img-dps {
-    right: 10px;
-    width: 100px;
 }
 
 .color-transparent {
@@ -1236,18 +1228,9 @@ form.user .btn-user {
     }
 }
 
-@media (max-width: 1272px) {
-    .login-box {
-        padding: 5rem 2rem !important;
-    }
-
-    .login-logo {
-        max-width: 200px;
-    }
-}
-
 @media (max-width: 769px) {
     .bg-login-image {
         background-size: 100% auto;
     }
 }
+

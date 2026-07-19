@@ -131,12 +131,12 @@
 
 .btn-accent {
   color: #ffffff;
-  background-color: #EC407A;
+  background-color: #C2185B;
 }
 
 .btn-accent:hover, .btn-accent:focus, .btn-accent.focus, .btn-accent:active, .btn-accent.active {
   color: #ffffff;
-  background-color: #E91E63;
+  background-color: #AD1457;
 }
 
 .btn-raised {

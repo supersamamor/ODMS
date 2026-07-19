@@ -1,0 +1,64 @@
+/* ==================== LOGIN PAGE (page-scoped) ====================
+   Linked only from Areas/Identity/Pages/Account/Login.cshtml via @section Styles.
+   Do not link this file from any shared layout — see refactor plan §6/7. */
+
+.login-page-wrapper {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    min-height: 100vh;
+}
+
+.login-page-banner {
+    flex: 1 1 50%;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.login-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.login-page-form {
+    flex: 1 1 50%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 460px;
+    padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 3rem);
+}
+
+.login-logo {
+    color: var(--custom-primary);
+    display: flex;
+    justify-content: center;
+}
+
+    .login-logo .app-logo-svg {
+        width: min(220px, 60%);
+        height: auto;
+    }
+
+.img-dps {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    width: clamp(48px, 8vw, 90px);
+    height: auto;
+    z-index: 2;
+}
+
+@media (max-width: 575.98px) {
+    .img-dps {
+        display: none;
+    }
+}

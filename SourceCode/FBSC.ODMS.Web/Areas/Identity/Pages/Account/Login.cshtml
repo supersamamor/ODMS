@@ -4,7 +4,6 @@
     ViewData["Title"] = "Log in";
     Layout = "_Layout";
     var appName = Configuration.GetValue<string>("Application");
-    var logo = "/img/Login_Background/logo-login-screen.png";
     var userIcon = "/img/Login_Icons/Userx16.png";
     var passwordIcon = "/img/Login_Icons/Passwordx16.png";
     // Check if there's a validation error and get the error message
@@ -22,17 +21,20 @@
         }
     }
 }
-<div class="card vh-100">
-    <div class="card-body p-0">
-        <div class="row vh-100">
-            <div class="col-lg-6 d-none d-lg-flex">
-                <div class="flex-grow-1 bg-login-image"></div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+}
+<div class="login-page-wrapper">
+    <div class="login-page-banner d-none d-lg-flex">
+        <img src="~/img/Login_Background/delivery-illustration.svg"
+             alt="Illustration of a delivery truck and reporting dashboard"
+             class="login-banner-img" />
+    </div>
+    <div class="login-page-form">
+        <div class="login-box">
+            <div class="text-center login-logo mb-3">
+                <partial name="~/Pages/Shared/_Logo.cshtml" />
             </div>
-            <div class="col-lg-6">
-                <div class="login-box">
-                    <div class="text-center">
-                        <img src="@logo" alt="App Logo" class="mb-3 login-logo" />
-                    </div>
                     @if (string.Compare(Configuration["Authentication:EmailLoginEnabled"], "true", true) == 0)
                     {
                         <!-- Modal -->
@@ -129,14 +131,8 @@
                     }
 
                 </div>
-
-            </div>
         </div>
-    </div>
-    <div class="text-center position-relative bottom-0 right-0">
-        <img src="~/img/dpo_dps_logo.png" alt="App Logo"
-             class="mb-3 col-2 col-md-2 col-lg-1 position-absolute right-0 bottom-0 img-dps" />
-    </div>
+    <img src="~/img/dpo_dps_logo.png" alt="App Logo" class="img-dps" />
 </div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

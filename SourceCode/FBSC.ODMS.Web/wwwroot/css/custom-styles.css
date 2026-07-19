@@ -1,1 +1,81 @@
-﻿/* --- Custom Css Should Be Here --- */
+/* --- Custom Css Should Be Here --- */
+
+/* ==================== CRUD edit-form field grouping ====================
+   Used by Areas/ODMS/Pages/**/_Edit{Module}Details.cshtml partials to group
+   related fields under a labeled section instead of one field per full-width row. */
+.form-section {
+    margin-bottom: 1.75rem;
+}
+
+    .form-section:last-child {
+        margin-bottom: 0;
+    }
+
+.form-section-title {
+    font-family: var(--font-primary);
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--custom-primary);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: .85rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ==================== Sub-collection card rows ====================
+   Used by Areas/ODMS/Pages/**/_{SubCollection}List.cshtml partials in place of
+   a plain <table>, which becomes unreadable once there are 5+ columns. */
+.sub-collection-list {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.sub-collection-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    background-color: var(--bg-light);
+    box-shadow: var(--shadow-sm);
+}
+
+.sub-collection-fields {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.sub-collection-field label {
+    display: block;
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: .3rem;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+}
+
+.sub-collection-actions {
+    flex: 0 0 auto;
+    display: flex;
+    align-self: center;
+    gap: .35rem;
+}
+
+@media (max-width: 575.98px) {
+    .sub-collection-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sub-collection-actions {
+        justify-content: flex-end;
+    }
+}

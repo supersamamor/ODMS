@@ -19,7 +19,7 @@
         @Html.Raw(JavaScriptSnippet.ScriptBody)
     </script>
 </head>
-<body class="overflow-hidden @backgroundClass">
+<body class="@backgroundClass">
     @RenderBody()
     <script asp-add-nonce src="~/lib/jquery/dist/jquery.min.js"></script>
     <script asp-add-nonce src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>

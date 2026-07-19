@@ -3,7 +3,6 @@
     var appName = Configuration.GetValue<string>("Application");
     var backgroundClass = Configuration.GetValue<string>("BackgroundClass");
     var appShortName = Configuration.GetValue<string>("ApplicationShortName");
-    var logo = "/img/logo.png";
 
 }
 <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion p-0">
@@ -12,7 +11,9 @@
         <ul class="navbar-nav text-light" id="accordionSidebar">
             <li class="">
                 <div class="logo-container">
-                    <img class="logo" alt="" src="@logo">
+                    <div class="logo">
+                        <partial name="~/Pages/Shared/_Logo.cshtml" />
+                    </div>
                 </div>
             </li>
             <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Dashboard")">
