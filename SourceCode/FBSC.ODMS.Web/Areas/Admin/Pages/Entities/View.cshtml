@@ -1,0 +1,29 @@
+@page
+@model ViewModel
+@{
+    ViewData["Title"] = Localizer["View Entity"];
+    ViewData["ActiveMainPage"] = "Entities";
+    ViewData["Level1"] = "Admin";
+    var breadcrumbs = new[] {
+        new { Title = "Entities List", Url = "/Admin/Entities/Index", IsActive = false },
+        new { Title = "View Entity", Url = "", IsActive = true },
+    };
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<div class="card">
+    <h5 class="card-header"><span class="card-header-custom">@Localizer["Entity Info"]</span><br></h5>
+    <div class="card-body">
+        <partial name="_ViewEntityDetails" model="Model.Entity" />
+    </div>
+</div>
+<div id="toolbar-container" class="btn-group" role="group">
+    <a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Entities.Create)).Succeeded)
+    {
+        <a asp-page="Add" class="btn btnFills btn-outline-success btnAddIcon" aria-label="@Localizer["Add"]" title="@Localizer["Add"]"></a>
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Entities.Edit)).Succeeded)
+    {
+        <a asp-page="Edit" asp-route-id="@Model.Entity.Id" class="btn btnFills btn-outline-primary btnEditIcon" aria-label="@Localizer["Edit"]" title="@Localizer["Edit"]"></a>
+    }
+</div>

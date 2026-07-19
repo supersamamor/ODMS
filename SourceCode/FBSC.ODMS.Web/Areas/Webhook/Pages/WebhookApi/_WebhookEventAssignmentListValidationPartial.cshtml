@@ -1,0 +1,38 @@
+@model FBSC.ApiHub.ViewModels.WebhookApiViewModel
+<script asp-add-nonce>
+    $(document).ready(function () {
+        $.InitializeWebhookEventAssignmentFieldValidations = function (count) {
+            let reqs = [];
+            for (let idx = 0; idx < count; idx++) {
+                reqs.push({ name: "WebhookEventAssignmentList[" + idx + "].WebhookApiId", el: "Input", minlength: 0, maxlength: 0, isrequired: true, description: "Webhook Api" });
+                reqs.push({ name: "WebhookEventAssignmentList[" + idx + "].EventName", el: "Input", minlength: 0, maxlength: 255, isrequired: true, description: "Event Name" });
+                reqs.push({ name: "WebhookEventAssignmentList[" + idx + "].Route", el: "Input", minlength: 0, maxlength: 255, isrequired: true, description: "Route" });
+                reqs.push({ name: "WebhookEventAssignmentList[" + idx + "].Method", el: "Input", minlength: 0, maxlength: 15, isrequired: true, description: "Method" });
+                reqs.push({ name: "WebhookEventAssignmentList[" + idx + "].HMAC", el: "Input", minlength: 0, maxlength: 0, isrequired: true, description: "HMAC" });
+            }
+            let validator = $("#webhookApi-form").validate();
+            for (let j in reqs) {
+                let e = reqs[j];
+                let el = $(`*[name="${e.name}"]`);
+                el.rules("add", {
+                    required: {
+                        depends: function (element) {
+                            return e.isrequired;
+                        }
+                    },
+                    messages: {
+                        required: (e.description === '') ? 'this field is required' : `'${e.description}' is required`,
+                    },
+                });
+                if (e.isrequired == true) {
+                    let labelElement = $(`label[name="Label.${e.name}"]`);
+                    $(labelElement).addClass("fieldrequired");
+                    el.attr('data-val-required', (e.description === '') ? 'this field is required' : `'${e.description}' is required`);
+                    el.attr('data-val', true);
+                }
+                if (e.maxlength > 0) { el.attr('maxlength', e.maxlength); }
+                if (e.minlength > 0) { el.attr('minlength', e.minlength); }
+            }
+        }
+    });
+</script>

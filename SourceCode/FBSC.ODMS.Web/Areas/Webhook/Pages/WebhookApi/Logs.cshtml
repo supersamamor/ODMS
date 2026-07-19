@@ -1,0 +1,115 @@
+@page
+@model LogsModel
+
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+@{
+    ViewData["Title"] = Localizer["Webhook / Api Logs List"];
+    ViewData["ActiveMainPage"] = "WebhookApi";
+    ViewData["Level1"] = "Admin";
+    var breadCrumbs = new[] {
+        new { Title = "Webhook", Url = "WebhookApi/Index", IsActive = false },
+        new { Title = "Webhook / Api Logs List", Url = "", IsActive = true },
+    };
+}
+<partial name="_BreadcrumbPartial" model=@(breadCrumbs) />
+<form id="webhookLogs-form" method="post">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <table id="webhookLogs" class="table table-hover table-bordered table-striped responsive nowrap fills-table" width="100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Localizer["Event"]
+                                </th>
+                                <th>
+                                    @Localizer["Data Id"]
+                                </th>
+                                <th>
+                                    @Localizer["Date / Time"]
+                                </th>                           
+                                <th>
+                                    @Localizer["Status"]
+                                </th>
+                                <th>
+                                    @Localizer["Actions"]
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toolbar-container" class="btn-group" role="group">
+        <a asp-page="Index" id="btnCancelConfirmationModal" class="btn btn-secondary" title="@Localizer["Back"]"><i class="fas fa-arrow-left"></i></a>
+    </div>
+</form>
+<input type="hidden" asp-for="@Model.WebhookApiId" />
+<input type="hidden" asp-for="@Model.WebhookApiName" />
+@section Scripts {
+    <partial name="_DataTableScripts" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            function InitializeForm() {
+                var table = $('#webhookLogs').DataTable({
+                    select: false,
+                    serverSide: true,
+                    order: [[2, 'desc']],
+                    dom: '<"top row"<"col-6 custom-search-container"f><"col-6 custom-toolbar-container"B>>' +
+                        'rt<"bottom row"<"col-6"i><"col-6"p>><"clear">', // Custom DOM to reorder elements
+                    ajax:
+                    {
+                        url: '@Url.Page("/WebhookApi/Logs", new { area = "Webhook", handler = "ListAll" })' + '&webhookApiId=' + $('#WebhookApiId').val(),
+                        type: "POST",
+                        headers: {
+                            RequestVerificationToken:
+                                $('input:hidden[name="__RequestVerificationToken"]').val()
+                        },
+                    },
+                    drawCallback: function (settings) {
+                        BindTableRowCollapseEvent();
+                    },
+                    columns: [
+                        { data: "event", name: "Event", responsivePriority: 1, title: '@Localizer["Event"]', searchable: true, orderable: true, className: "text-center" },
+                        { data: "dataId", name: "DataId", responsivePriority: 1, title: '@Localizer["Data Id"]', searchable: false, orderable: true, className: "text-start" },
+                        { data: "lastModifiedDateFormatted", name: "LastModifiedDate", responsivePriority: 1, title: '@Localizer["Date / Time"]', searchable: false, orderable: true, className: "text-center" },                    
+                        { data: "statusBadge", name: "Status", responsivePriority: 1, title: '@Localizer["Status"]', searchable: false, className: "text-center" },
+                        {
+                            data: null,
+                            searchable: false,
+                            orderable: false,
+                            responsivePriority: 1,
+                            width: "10%",
+                            render: function (data, type, row, meta) {
+                                var url = '@Url.Page("/WebhookApi/ViewLog", new { area = "Webhook" })' + '?id=' + row.id + '&webhookApiId=' + row.webhookApiId;
+                                var button = '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-success btnInfoIcon" aria-label="@Localizer["View"]" title="@Localizer["View"]"></a>';
+                                url = '@Url.Page("/WebhookApi/Logs", new { area = "Webhook" })' + '?handler=Reprocess&webhookApiId=' + row.webhookApiId + '&webhookLogsId=' + row.id;
+                                button =  button + '<a href="' + url + '" class="btn btnFills btn-outline-success btnSendIcon btnReprocessApiLogs" aria-label="@Localizer["Resend"]" title="@Localizer["Resend"]"></a>';                               
+                                return button;
+                            },
+                            className: "text-center"
+                        }
+                    ],
+                    buttons: ['pageLength',],
+                });
+                var debounce = new $.fn.dataTable.Debounce(table); // Add delay to search
+
+                $('.btn-table_filter').on('click', function (e) {
+                    table.ajax.reload(null, false);
+                });
+                function BindTableRowCollapseEvent() {
+                    $('#webhookLogs tbody').on('click', 'td.dtr-control', function () {
+                        $.showAjaxLoaderOnClick([".btnReprocessApiLogs"]);
+                    });
+                    $.bindCancelConfirmationModal('Reprocess', '.btnReprocessApiLogs', '#webhookLogs-form', 'Do you want to resend the api call?');
+                }
+                $.InitializeSearchKeyCookies(table);
+            }
+            InitializeForm();
+        });
+    </script>
+}

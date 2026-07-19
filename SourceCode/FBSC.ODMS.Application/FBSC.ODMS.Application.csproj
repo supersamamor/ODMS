@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
+    <PackageReference Include="MediatR" Version="14.2.0" />
+    <PackageReference Include="LanguageExt.Transformers" Version="4.4.8" />
+    <PackageReference Include="Microsoft.Build" Version="18.7.1" />
+	<PackageReference Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="180.37.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FBSC.ODMS.Infrastructure\FBSC.ODMS.Infrastructure.csproj" />
+    <ProjectReference Include="..\FBSC.Common.Core\FBSC.Common.Core.csproj" />
+  </ItemGroup>
+</Project>

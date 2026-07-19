@@ -1,0 +1,77 @@
+@page
+@model EditModel
+@{
+    ViewData["Title"] = Localizer["Edit Report Setup"];
+    ViewData["ActiveMainPage"] = "ReportSetup";
+    ViewData["Level1"] = "Admin";
+    var breadcrumbs = new[] {
+        new { Title = "Report Setup List", Url = "/ODMS/ReportSetup/Index", IsActive = false },
+        new { Title = "Edit Report Setup", Url = "", IsActive = true },
+    };
+	Model.Report.ReportQueryFilterList = Model.Report.ReportQueryFilterList?.OrderBy(l=>l.Sequence).ToList();
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<partial name="_CodeMirrorStyles" />
+<partial name="_RichTextEditorStyles" />
+<form id="report-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+    <div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.Report" />
+    </div>
+    <div id="toolbar-container" class="btn-group" role="group">
+        <a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
+        <button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" aria-label="@Localizer["Save changes"]" title="@Localizer["Save changes"]"></button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />   
+    <partial name="_ReportQueryFilterListValidationPartial" model="@Model.Report" />
+    <partial name="_CodeMirrorScripts" />
+	<partial name="_RichTextEditorScripts" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+			$.bindSaveConfirmationModal('Update', '#btnConfirmationModal', '#report-form');
+			$.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal', '#report-form', 'Do you want to cancel the changes?');
+            function InitializeForm() {               
+                $('.DisableSelectDropdown').on('mousedown', function (e) {
+                    e.preventDefault();
+                    this.blur();
+                    window.focus();
+                });
+
+                $.InitializeReportQueryFilterFieldValidations($('#ReportQueryFilterCount').val());
+                $('.RemoveReportQueryFilterButton ').on('click', function () {
+                    $('#RemoveSubDetailId').val($(this).attr('removeid'));
+                    $('#AsyncAction').val('RemoveReportQueryFilter');
+                    $.triggerPageForm('ChangeFormValue', '#PartialLoaderContainer', '#report-form', InitializeForm);
+                });
+
+                $('#btnAddReportQueryFilter').on('click', function () {
+                    $('#AsyncAction').val('AddReportQueryFilter');
+                    $.triggerPageForm('ChangeFormValue', '#PartialLoaderContainer', '#report-form', InitializeForm);
+                });
+                $('#QueryType, #ReportOrChartType, .DataType, #DisplayOnDashboard').on('change', function () {
+                    $('#AsyncAction').val('');
+                    $.triggerPageForm('ChangeFormValue', '#PartialLoaderContainer', '#report-form', InitializeForm);
+                });
+                const textAreaQueryString = document.getElementById('QueryString');
+                if (textAreaQueryString) {
+                    var editor = CodeMirror.fromTextArea(
+                        textAreaQueryString, {
+                        mode: 'sql',
+                        theme: '3024-night',
+                        lineNumbers: true,
+                        autoCloseBrackets: true,
+                        autoCloseTags: true
+                    });
+                }
+                $('#HtmlTemplate').richText();
+				$('#HtmlFooterTemplate').richText();
+            }
+            InitializeForm();
+        });
+    </script>
+}

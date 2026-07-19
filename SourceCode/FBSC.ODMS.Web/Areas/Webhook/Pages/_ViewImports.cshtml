@@ -1,0 +1,16 @@
+@using FBSC.Common.Web.Utility.Authorization
+@using FBSC.ODMS.Web
+@using FBSC.ODMS.Web.Helper
+@using MediatR;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.Localization
+@namespace FBSC.ODMS.Web.Areas.Webhook.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, NetEscapades.AspNetCore.SecurityHeaders.TagHelpers
+@addTagHelper *, FBSC.Common.Web.Utility
+@inject IHtmlLocalizer<SharedResource> Localizer
+@inject IAuthorizationService AuthorizationService
+@inject FBSC.ODMS.Web.Service.DropdownServices dropdownService
+@inject FBSC.ApiHub.Services.DropdownServices webHookDropdown
+@inject IMediator Mediatr
+@inject IConfiguration Configuration

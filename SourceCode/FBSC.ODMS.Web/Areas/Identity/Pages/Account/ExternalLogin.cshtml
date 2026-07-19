@@ -1,0 +1,88 @@
+@page
+@model ExternalLoginModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_Layout";
+}
+
+<div class="auth-page-wrapper">
+    <div class="container d-flex justify-content-center align-items-center auth-viewport-height-85">
+        <div class="card shadow-lg o-hidden border-0 my-5 overflow-hidden auth-card-max-width auth-card-rounded">
+            <div class="card-body p-0">
+                <div class="row g-0">
+                    <div class="col-lg-5 d-none d-lg-flex">                      
+                        <div class="flex-grow-1 bg-login-image auth-min-height-image">
+                           
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <p class="color-transparent">
+                            -------------------------------------------------------------------------------------------------------
+                        </p>
+                        <div class="p-5">
+                            <div class="text-center mb-4">
+                                <h4 class="h4 text-dark fw-bold mb-2">Complete Your Profile</h4>
+                                <p class="login-box-msg text-muted small">
+                                    You've authenticated via <strong>@Model.ProviderDisplayName</strong>.
+                                </p>
+                            </div>
+
+                            <div class="alert alert-primary mb-4 auth-small-alert" role="alert">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Please provide your details below to finish creating your account.
+                            </div>
+
+                            <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="user">
+                                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="Input!.Name" class="form-label ms-2">Full Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="fas fa-user text-primary small"></i>
+                                        </span>
+                                        <input asp-for="Input!.Name" class="form-control border-start-0" placeholder="Enter your full name">
+                                    </div>
+                                    <span asp-validation-for="Input!.Name" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="Input!.Email" class="form-label ms-2">Email Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="fas fa-envelope text-primary small"></i>
+                                        </span>
+                                        <input asp-for="Input!.Email" class="form-control border-start-0" placeholder="name@example.com">
+                                    </div>
+                                    <span asp-validation-for="Input!.Email" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-group mb-4 ms-2">
+                                    <div class="form-check custom-checkbox">
+                                        <input asp-for="Input!.TermsAccepted" class="form-check-input" type="checkbox">
+                                        <label asp-for="Input!.TermsAccepted" class="form-check-label small">
+                                            I agree to the <a href="#" class="login-link fw-bold text-decoration-none">Terms of Service</a>
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="Input!.TermsAccepted" class="text-danger small"></span>
+                                </div>
+
+                                <div class="d-grid">
+                                    @* btn-user handles rounding and font from site.css *@
+                                    <button type="submit" class="btn btn-primary btn-user shadow-sm py-2">
+                                        <i class="fas fa-user-check me-2"></i> Complete Registration
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

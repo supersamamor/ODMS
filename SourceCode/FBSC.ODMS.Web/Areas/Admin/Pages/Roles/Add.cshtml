@@ -1,0 +1,61 @@
+@page
+@model AddModel
+@section Styles {
+<partial name="_DataTableStyles" />
+}
+@{
+    ViewData["Title"] = Localizer["Add Role"];
+    ViewData["ActiveMainPage"] = "Roles";
+    ViewData["Level1"] = "Admin";
+    var breadcrumbs = new[] {
+        new { Title = "Roles List", Url = "/Admin/Roles/Index", IsActive = false },
+        new { Title = "Add Role", Url = "", IsActive = true },
+    };
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<form id="role-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="card">
+        <h5 class="card-header"><span class="card-header-custom">@Localizer["Role Info"]</span><br></h5>
+        <div class="card-body">
+            <partial name="_EditRoleDetails" model="Model.Role" />
+        </div>
+    </div>
+    <br />
+    <div class="card">
+        <h5 class="card-header"><span class="card-header-custom">@Localizer["Permissions"]</span><br></h5>
+        <div class="card-body overflow-x-scroll">
+            <partial name="_EditPermissions" model="Model.Permissions" />
+        </div>
+    </div>
+    <div id="toolbar-container" class="btn-group" role="group">
+        <a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
+        <button type="button" id="btnConfirmationModal" class="btn btn-success  text-light" title="@Localizer["Save changes"]"><i class="fas fa-save"></i></button>
+    </div>
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<partial name="_DataTableScripts" />
+<script asp-add-nonce>
+    $(document).ready(function () {
+		$.bindSaveConfirmationModal('Save', '#btnConfirmationModal', '#role-form');
+		$.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal', '#role-form', 'Do you want to cancel the changes?');
+        var permissions = $("#permissions").DataTable({
+            select: false,
+            searching: true,
+            paging: true,
+			dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DataTableDOMLayOut)',
+            info: true,
+            buttons: [],
+            columnDefs: [
+                {
+                    targets: [1],
+                    orderDataType: 'dom-checkbox',
+                }
+            ]
+        });
+        $('#role-form').onSubmitIncludeAllFieldsFromTable(permissions);
+    });
+</script>
+}

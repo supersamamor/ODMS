@@ -1,0 +1,70 @@
+@page
+@model FBSC.ODMS.Web.Areas.HTMLTemplate.Pages.Setup.AddModel
+@{
+    ViewData["Title"] = Localizer["Add HTML Template"];
+    ViewData["ActiveMainPage"] = "HTMLTemplate";
+    ViewData["Level1"] = "Admin";
+    var breadcrumbs = new[] {
+        new { Title = "HTML Template List", Url = "/HTMLTemplate/Setup/Index", IsActive = false },
+        new { Title = "Add HTML Template", Url = "", IsActive = true },
+    };
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<partial name="_CodeMirrorStyles" />
+<partial name="_RichTextEditorStyles" />
+<form id="hTMLTemplate-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+    <div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.HTMLTemplateForm" />
+    </div>
+    <div id="toolbar-container" class="btn-group" role="group">
+        <a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
+        <button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" name="Handler" value="Save" aria-label="@Localizer["Save changes"]" title="@Localizer["Save changes"]"></button>
+        @if (Configuration.GetValue<bool>("EnableGenerativeAIIntegration") && (await AuthorizationService.AuthorizeAsync(User, Permission.AIDrivenDataAnalysisAndInsights.View)).Succeeded)
+        {
+            <button type="button" id="btnGenerateFromAIModal" class="btn btn-info text-light" name="Handler" value="GenerateQueryFromAI" title="@Localizer["Generate"]"><i class="fas fa-robot"></i></button>
+        }
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_CodeMirrorScripts" />
+    <partial name="_RichTextEditorScripts" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            $.bindSaveConfirmationModal('Save', '#btnConfirmationModal','#hTMLTemplate-form');
+            $.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal','#hTMLTemplate-form', 'Do you want to cancel the changes?');
+            $.bindSaveConfirmationModal('GenerateFromAI', '#btnGenerateFromAIModal', '#hTMLTemplate-form', "Do you want to generate HTML Template via AI?");
+            function InitializeForm()
+            {
+
+                $('.DisableSelectDropdown').on('mousedown', function(e) {
+                    e.preventDefault();
+                    this.blur();
+                    window.focus();
+                });
+                $('#HTMLTemplate').richText();
+				$('#HTMLFooterTemplate').richText();
+
+                const textAreaCustomCss = document.getElementById('CustomCss');
+                if (textAreaCustomCss) {  // Fixed: was checking textAreaHtmlTemplate
+                    var editorCss = CodeMirror.fromTextArea(  // Fixed: was editorHtml
+                        textAreaCustomCss, {
+                        mode: 'css',
+                        theme: 'monokai',   // Changed to monokai
+                        lineNumbers: true,
+                        autoCloseBrackets: true,
+                        matchBrackets: true,
+                        indentUnit: 4,
+                        tabSize: 4,
+                        lineWrapping: true
+                    });
+                }
+            }
+            InitializeForm();
+        });
+    </script>
+}

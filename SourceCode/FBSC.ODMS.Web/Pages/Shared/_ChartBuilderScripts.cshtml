@@ -1,0 +1,431 @@
+<script asp-add-nonce src="~/lib/chartjs/chart.js"></script>
+<partial name="_DataTableScripts" />
+<script asp-add-nonce>
+    // 1. Initialize a global dictionary to hold multiple chart instances
+    window.myCharts = window.myCharts || {};
+
+    // Generates a chart color palette derived from the active theme's
+    // --custom-primary CSS variable, so dashboard charts automatically
+    // match whichever theme is applied (see site.css "THEMES" section)
+    // without the backend needing to know which theme is active.
+    $.ThemeChartColors = (function () {
+        var cache = { key: null, palette: [] };
+
+        // Pastel bands close in feel to the original hardcoded palette,
+        // cycled per index so long palettes stay visually distinguishable.
+        var LIGHTNESS_BANDS = [82, 74, 88];
+        var SATURATION_BANDS = [55, 40, 68];
+
+        function hexToRgb(hex) {
+            hex = (hex || '').trim().replace('#', '');
+            if (hex.length === 3) {
+                hex = hex.split('').map(function (c) { return c + c; }).join('');
+            }
+            var num = parseInt(hex, 16);
+            if (isNaN(num)) {
+                return { r: 0, g: 191, b: 255 }; // Fallback: default sky-blue theme
+            }
+            return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            var max = Math.max(r, g, b), min = Math.min(r, g, b);
+            var h = 0, s = 0, l = (max + min) / 2;
+
+            if (max !== min) {
+                var d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    default: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return { h: h * 360, s: s * 100, l: l * 100 };
+        }
+
+        function hslToHex(h, s, l) {
+            h = ((h % 360) + 360) % 360;
+            s /= 100; l /= 100;
+            var c = (1 - Math.abs(2 * l - 1)) * s;
+            var x = c * (1 - Math.abs((h / 60) % 2 - 1));
+            var m = l - c / 2;
+            var r = 0, g = 0, b = 0;
+
+            if (h < 60) { r = c; g = x; b = 0; }
+            else if (h < 120) { r = x; g = c; b = 0; }
+            else if (h < 180) { r = 0; g = c; b = x; }
+            else if (h < 240) { r = 0; g = x; b = c; }
+            else if (h < 300) { r = x; g = 0; b = c; }
+            else { r = c; g = 0; b = x; }
+
+            var toHex = function (v) {
+                var hex = Math.round((v + m) * 255).toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            };
+            return '#' + toHex(r) + toHex(g) + toHex(b);
+        }
+
+        function getBaseHue() {
+            var raw = getComputedStyle(document.body).getPropertyValue('--custom-primary');
+            var rgb = hexToRgb(raw);
+            return rgbToHsl(rgb.r, rgb.g, rgb.b).h;
+        }
+
+        // Converts any hex color (theme-derived or otherwise) to an rgba()
+        // string at the given alpha, for translucent fills (line/radar area).
+        function hexToRgba(hex, alpha) {
+            var rgb = hexToRgb(hex);
+            return 'rgba(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', ' + alpha + ')';
+        }
+
+        // Returns `count` colors, rotated around the color wheel starting at
+        // the current theme's own hue, so the first series always reads as
+        // "on brand" for the active theme.
+        function generate(count) {
+            var cacheKey = document.body.className + '|' + count;
+            if (cache.key === cacheKey) {
+                return cache.palette;
+            }
+
+            var baseHue = getBaseHue();
+            var hueStep = 360 / Math.max(count, 6);
+            var palette = [];
+
+            for (var i = 0; i < count; i++) {
+                var hue = baseHue + (i * hueStep);
+                var lightness = LIGHTNESS_BANDS[i % LIGHTNESS_BANDS.length];
+                var saturation = SATURATION_BANDS[i % SATURATION_BANDS.length];
+                palette.push(hslToHex(hue, saturation, lightness));
+            }
+
+            cache = { key: cacheKey, palette: palette };
+            return palette;
+        }
+
+        return { generate: generate, hexToRgba: hexToRgba };
+    })();
+
+    // Fills in backgroundColor for any dataset the server left uncolored,
+    // using the current theme's palette. Datasets that already carry an
+    // explicit color (single hex string or a populated array) are left
+    // untouched, so this stays safe even if some report configs set their
+    // own colors deliberately.
+    //
+    // Whether a chart needs one color per data POINT (Pie/Doughnut/Polar
+    // Area) or one color per DATASET (Bar/Line/Radar/Horizontal Bar) is
+    // decided from chartRenderType here — not from whether the incoming
+    // backgroundColor happens to be a JSON array. The server's `Dataset`
+    // class (used for any 2-column report, regardless of chart type)
+    // always serializes BackgroundColor as an array, even when empty, so
+    // that shape can't reliably tell us which family a chart belongs to.
+    var PER_POINT_CHART_TYPES = ['pie', 'doughnut', 'polarArea'];
+
+    $.ApplyThemeChartColors = function (chartRenderType, datasets) {
+        if (!Array.isArray(datasets) || datasets.length === 0) {
+            return datasets;
+        }
+
+        var isPerPoint = PER_POINT_CHART_TYPES.indexOf(chartRenderType) !== -1;
+
+        var colorsNeeded = 0;
+        datasets.forEach(function (ds) {
+            colorsNeeded += isPerPoint ? Math.max((ds.data || []).length, 1) : 1;
+        });
+
+        var palette = $.ThemeChartColors.generate(Math.max(colorsNeeded, 6));
+        var cursor = 0;
+
+        datasets.forEach(function (ds) {
+            var hasColor = Array.isArray(ds.backgroundColor) ? ds.backgroundColor.length > 0 : !!ds.backgroundColor;
+            if (hasColor) {
+                return;
+            }
+
+            if (isPerPoint) {
+                ds.backgroundColor = (ds.data || []).map(function () {
+                    return palette[cursor++ % palette.length];
+                });
+            } else {
+                ds.backgroundColor = palette[cursor++ % palette.length];
+            }
+        });
+
+        return datasets;
+    };
+
+    // Line and Radar charts read poorly with a flat, fully-opaque fill the
+    // way Bar/Pie slices do. This keeps the same theme-derived color but
+    // turns it into a solid border + a soft translucent fill instead.
+    $.ApplyChartTypeStyling = function (chartRenderType, datasets) {
+        if (!Array.isArray(datasets) || (chartRenderType !== 'line' && chartRenderType !== 'radar')) {
+            return datasets;
+        }
+
+        datasets.forEach(function (ds) {
+            var solidColor = Array.isArray(ds.backgroundColor) ? null : ds.backgroundColor;
+            if (!solidColor) {
+                return;
+            }
+
+            ds.borderColor = solidColor;
+            ds.backgroundColor = $.ThemeChartColors.hexToRgba(solidColor, chartRenderType === 'radar' ? 0.25 : 0.15);
+            ds.borderWidth = ds.borderWidth || 2;
+            ds.pointBackgroundColor = solidColor;
+            ds.pointRadius = ds.pointRadius != null ? ds.pointRadius : 3;
+
+            if (chartRenderType === 'line') {
+                // Only Line needs the Filler plugin's fill:true — Radar already
+                // draws a filled polygon natively from backgroundColor, and
+                // routing it through Filler as well crashes chart.js (Filler
+                // resolves fill targets against a cartesian x/y boundary,
+                // which doesn't map onto Radar's polar scale).
+                ds.fill = true;
+                ds.tension = ds.tension != null ? ds.tension : 0.35;
+            }
+        });
+
+        return datasets;
+    };
+
+    // Configuration factory: per-chart-type option overrides layered on top of
+    // the shared base config in $.BuildChart. Keyed by the Chart.js render type
+    // (not the backend ReportChartType constant), so new backend chart types
+    // just need a case in the switch below mapping to one of these keys - or to
+    // 'bar'/'pie'/etc. if they need no special options at all.
+    $.ChartTypeOptionsFactory = {
+        bar: function (indexAxis) {
+            return { indexAxis: indexAxis };
+        },
+        line: function () {
+            return {};
+        },
+        radar: function () {
+            return {};
+        },
+        pie: function () {
+            return {};
+        },
+        doughnut: function () {
+            return {};
+        },
+        polarArea: function () {
+            return {};
+        },
+        // Bubble/Scatter plot raw (x, y) coordinates rather than category
+        // labels, so both axes need an explicit linear scale.
+        bubble: function () {
+            return {
+                scales: {
+                    x: { type: 'linear', position: 'bottom' },
+                    y: { type: 'linear' }
+                }
+            };
+        },
+        scatter: function () {
+            return {
+                scales: {
+                    x: { type: 'linear', position: 'bottom' },
+                    y: { type: 'linear' }
+                }
+            };
+        }
+    };
+
+    $(document).ready(function () {
+        $.BuildChart = function (chartContainer, reportName, charType, columnHeaders, dataSetResult, displayLegend, isPercentage, reportId, drillDownReportId) {
+
+            let chartRenderType = '';
+            let indexAxis = 'x';
+            switch (charType) {
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.HorizontalBar":
+                    chartRenderType = 'bar';
+                    indexAxis = 'y';
+                    break;
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.Bar":
+                    chartRenderType = 'bar';
+                    break;           
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.Pie":
+                    chartRenderType = 'pie';
+                    break;
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.Doughnut":
+                    chartRenderType = 'doughnut';
+                    break;          
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.PolarArea":
+                    chartRenderType = 'polarArea';
+                    break;
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.Line":
+                    chartRenderType = 'line';
+                    break;
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.Radar":
+                    chartRenderType = 'radar';
+                    break;
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.Bubble":
+                    chartRenderType = 'bubble';
+                    break;
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.Scatter":
+                    chartRenderType = 'scatter';
+                    break;
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.Table":
+                    chartRenderType = 'table-custom';
+                    break;
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.CustomHtml":
+                    chartRenderType = 'html-custom';
+                    break;
+                default:
+                    break;
+            }
+
+            if (chartRenderType != '') {
+                if (charType == '@FBSC.ODMS.Core.Constants.ReportChartType.Table') {
+                    if (dataSetResult != '' && dataSetResult != null) {
+                        // Destroy existing DataTable if it exists before recreating
+                        if ($.fn.DataTable.isDataTable('#' + chartContainer)) {
+                            $('#' + chartContainer).DataTable().destroy();
+                            $('#' + chartContainer).empty();
+                        }
+
+                        var table = $('#' + chartContainer).DataTable({
+                            data: dataSetResult,
+                            columns: columnHeaders,
+                            dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DashboardDataTableDOMLayOut)',
+                            buttons: [
+                                {
+                                    extend: 'excel',
+                                    text: '<i class="fa fa-file-excel" title="Export to Excel"></i>',
+                                    className: 'btn btn-success text-light',
+                                    title: reportName,
+                                    customize: function (xlsx) {
+                                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                        $('row c[r^="A"]', sheet).attr('s', '2');
+                                    }
+                                },
+                                {
+                                    extend: 'pdf',
+                                    text: '<i class="fa fa-file-pdf" title="Export to PDF"></i>',
+                                    className: 'btn btn-danger text-light',
+                                    title: reportName,
+                                    orientation: 'landscape',
+                                    customize: function (doc) {
+                                        doc.content[0].text = reportName;
+                                    }
+                                },
+                                {
+                                    extend: 'pageLength',
+                                    className: 'btn btn-primary',
+                                    titleAttr: '@Localizer["Rows per page"]'
+                                }
+                            ]
+                        });
+                    }
+                }
+                else if (charType == '@FBSC.ODMS.Core.Constants.ReportChartType.CustomHtml') {
+                    return; 
+                }
+                else {
+                    $.ApplyThemeChartColors(chartRenderType, dataSetResult);
+                    $.ApplyChartTypeStyling(chartRenderType, dataSetResult);
+
+                    const data = {
+                        labels: columnHeaders,
+                        datasets: dataSetResult
+                    };
+                    const ctx = document.getElementById(chartContainer).getContext('2d');
+
+                    // 2. Destroy the specific chart instance if it already exists to prevent canvas ghosting
+                    if (window.myCharts[chartContainer]) {
+                        window.myCharts[chartContainer].destroy();
+                    }
+
+                    // 3. Build type-specific option overrides from the factory (e.g.
+                    // indexAxis for Bar, linear x/y scales for Bubble/Scatter).
+                    var typeOptions = ($.ChartTypeOptionsFactory[chartRenderType] || function () { return {}; })(indexAxis);
+
+                    var chartOptions = {
+                        responsive: false,
+                        ...typeOptions,
+                        plugins: {
+                            legend: {
+                                display: displayLegend,
+                                position: 'bottom',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        // Bubble/Scatter points don't carry a category
+                                        // label - fall back to the dataset's own label.
+                                        var label = context.label || context.dataset.label || '';
+                                        var value = (chartRenderType === 'bubble' || chartRenderType === 'scatter')
+                                            ? '(' + context.raw.x + ', ' + context.raw.y + ')'
+                                            : (context.raw || 0);
+                                        return label + ': ' + value + (isPercentage == 'true' ? '%' : "");
+                                    }
+                                }
+                            },
+                        },
+                        elements: {
+                            arc: {
+                                borderWidth: 0
+                            }
+                        }
+                    };
+
+                    // 4. Drill-down: only wired up when this widget's report has a
+                    // DrillDownReportId configured (Report Setup > Drill-Down Report).
+                    // Clicking a data point (bar segment, pie slice, line point, bubble,
+                    // etc.) navigates to that OTHER report's detail page, passing along
+                    // the clicked category/point label as the filter.
+                    if (drillDownReportId) {
+                        chartOptions.onClick = function (event, elements, chart) {
+                            if (!elements || elements.length === 0) {
+                                return;
+                            }
+
+                            var element = elements[0];
+                            var dataset = chart.data.datasets[element.datasetIndex];
+
+                            // clickedLabelKey identifies which underlying query column the
+                            // clicked value came from, matching ReportDataHelper's own column
+                            // naming convention (the "Label" column backs category-based
+                            // charts, "X" backs Bubble/Scatter points). The drill-down target
+                            // report's own query filter FieldName must match this key for the
+                            // forced filter to take effect server-side.
+                            var isPointChart = (chartRenderType === 'bubble' || chartRenderType === 'scatter');
+                            var clickedLabelKey = isPointChart ? 'X' : 'Label';
+                            var clickedLabelValue;
+
+                            if (isPointChart) {
+                                var point = dataset.data[element.index];
+                                clickedLabelValue = (point && point.x !== undefined) ? point.x : dataset.label;
+                            } else {
+                                var label = chart.data.labels && chart.data.labels[element.index];
+                                clickedLabelValue = (label !== undefined && label !== null) ? label : dataset.label;
+                            }
+
+                            if (clickedLabelValue === undefined || clickedLabelValue === null) {
+                                return;
+                            }
+
+                            var url = '/ODMS/Report/Index?id=' + encodeURIComponent(drillDownReportId) + '&fieldName=' + encodeURIComponent(clickedLabelKey) + '&filterValue=' + encodeURIComponent(clickedLabelValue);
+                            window.location.href = url;
+                        };
+
+                        // Pointer cursor over clickable elements as an affordance for drill-down.
+                        chartOptions.onHover = function (event, elements) {
+                            event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                        };
+                    }
+
+                    // 5. Create a new chart instance and assign it to the dictionary using its unique ID
+                    window.myCharts[chartContainer] = new Chart(ctx, {
+                        type: chartRenderType,
+                        data: data,
+                        options: chartOptions
+                    });
+                }
+            }
+        };
+    });
+</script>
