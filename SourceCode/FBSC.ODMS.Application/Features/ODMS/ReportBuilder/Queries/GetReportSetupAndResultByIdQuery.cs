@@ -50,6 +50,11 @@ public class GetReportBuilderByIdQueryHandler(ApplicationContext context, IConfi
 		var connectionString = await Helpers.ReportDataHelper.ResolveConnectionStringAsync(
 			  context, configuration, report?.DataSourceId, cancellationToken);
 
+		// Top up any global filter parameters (@GlobalProject etc.) the caller
+		// didn't supply - idempotent, so real values set by the dashboard's
+		// RefreshDashboardWidget handler are kept as-is.
+		Helpers.ReportDataHelper.AppendGlobalFilters(request.Filters);
+
 		var resultsAndLabels = await Helpers.ReportDataHelper.ConvertSQLQueryToJsonAsync(
 			  authenticatedUser,
 			  connectionString,

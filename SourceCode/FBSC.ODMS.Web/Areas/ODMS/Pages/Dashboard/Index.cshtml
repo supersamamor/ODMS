@@ -10,27 +10,28 @@
 }
 
 @* Global header/filter bar (replaces the redundant "Dashboard" breadcrumb).
-   Controls broadcast into each widget's existing filter form and trigger its
-   Apply, so they only affect widgets whose report defines a matching filter. *@
+   Values post to RefreshDashboardWidget as GlobalProject/GlobalWeekNumber/
+   GlobalBusinessUnitId and reach every report's SQL as optional parameters
+   (see GlobalReportFilterFields + ReportDataHelper.AppendGlobalFilters). *@
 <div class="dashboard-header-bar">
     <div class="dashboard-header-title">
         <h1>@Localizer["Executive Dashboard"]</h1>
         <p>@Localizer["Real-time view of all project portfolio"]</p>
     </div>
     <div class="dashboard-header-controls">
-        <label class="dashboard-header-chip" title="@Localizer["Filter widgets by date"]">
+        <label class="dashboard-header-chip" title="@Localizer["Filter by work week"]">
             <i class="far fa-calendar-alt" aria-hidden="true"></i>
-            <input type="date" id="globalFilterDate" aria-label="@Localizer["Filter widgets by date"]" />
-        </label>
-        <label class="dashboard-header-chip dashboard-header-search" title="@Localizer["Search widgets"]">
-            <i class="fas fa-search" aria-hidden="true"></i>
-            <input type="search" id="globalWidgetSearch" placeholder="@Localizer["Search widgets..."]" aria-label="@Localizer["Search widgets"]" />
-        </label>
-        <label class="dashboard-header-chip" title="@Localizer["Filter widgets by business unit"]">
-            <i class="fas fa-filter" aria-hidden="true"></i>
-            <select id="globalFilterBU" aria-label="@Localizer["Filter widgets by business unit"]" asp-items="@(dropdownService.GetBusinessUnitList(""))">
-                <option value="">@Localizer["BU"]</option>
+            <select id="globalFilterWeek" aria-label="@Localizer["Filter by work week"]" asp-items="@(dropdownService.GetWorkWeekList())">
+                <option value="">@Localizer["All weeks"]</option>
             </select>
+        </label>
+        <label class="dashboard-header-chip dashboard-header-search" title="@Localizer["Search project"]">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input type="search" id="globalWidgetSearch" placeholder="@Localizer["Search project..."]" aria-label="@Localizer["Search project"]" />
+        </label>
+        <label class="dashboard-header-chip dashboard-header-bu" title="@Localizer["Filter by business unit"]">
+            <i class="fas fa-filter" aria-hidden="true"></i>
+            <select id="globalFilterBU" aria-label="@Localizer["Filter by business unit"]"></select>
         </label>
         <button type="button" id="btnDashboardExport" class="dashboard-header-chip dashboard-header-export" title="@Localizer["Export dashboard"]">
             <i class="fas fa-download" aria-hidden="true"></i>&nbsp;@Localizer["Export"]
@@ -81,75 +82,33 @@
 
             // ---- Global header/filter bar ----
 
-            // Live widget search: hides widget cards whose title doesn't match.
-            $('#globalWidgetSearch').on('input', function () {
-                var term = $(this).val().toLowerCase();
-                $('.dashboard-widget-card').each(function () {
-                    var title = $(this).find('.dashboard-widget-title-text').text().toLowerCase();
-                    $(this).closest('[class*="col-"]').toggle(title.indexOf(term) > -1);
-                });
+            $('#globalFilterBU').ajaxSelect({
+                placeholder: '@Localizer["BU"]',
+                ajax: {
+                    url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2BusinessUnitData" })',
+                }
             });
 
-            // Pushes a value into every widget filter the matcher accepts,
-            // then reuses that widget's own Apply (ajax refresh + spinner).
-            function broadcastGlobalFilter(matcher, value) {
-                $('.dashboard-filter-form').each(function () {
-                    var form = $(this);
-                    var touched = false;
-                    form.find('input[type="hidden"][name$=".FieldName"]').each(function () {
-                        var idxMatch = $(this).attr('name').match(/Filters\[(\d+)\]/);
-                        if (!idxMatch) { return; }
-                        var valueEl = form.find('[name="Filters[' + idxMatch[1] + '].FieldValue"]');
-                        if (matcher($(this).val() || '', valueEl)) {
-                            valueEl.val(value);
-                            touched = true;
-                        }
-                    });
-                    if (touched) {
-                        form.find('.btn-apply-filter').trigger('click');
-                    }
-                });
+            function globalFilterData() {
+                return {
+                    GlobalProject: $('#globalWidgetSearch').val() || '',
+                    GlobalWeekNumber: $('#globalFilterWeek').val() || '',
+                    GlobalBusinessUnitId: $('#globalFilterBU').val() || ''
+                };
             }
 
-            // BU: targets widget filters whose field name mentions BusinessUnit.
-            $('#globalFilterBU').on('change', function () {
-                var value = $(this).val();
-                broadcastGlobalFilter(function (fieldName) {
-                    return fieldName.toLowerCase().indexOf('businessunit') > -1;
-                }, value);
-            });
-
-            // Date: targets every Date-type widget filter.
-            $('#globalFilterDate').on('change', function () {
-                var value = $(this).val();
-                broadcastGlobalFilter(function (fieldName, valueEl) {
-                    return valueEl.attr('type') === 'date';
-                }, value);
-            });
-
-            $('#btnDashboardExport').on('click', function () {
-                window.print();
-            });
-
-            $('.dashboard-filter-form .btn-apply-filter').on('click', function(e) {            
-                e.preventDefault(); // Prevents any default button behavior
-
-                var submitBtn = $(this);
-                var form = submitBtn.closest('form'); // Dynamically find the parent form
-
-                var reportId = form.data('reportid');
-                var domId = form.data('domid');
-                var originalBtnHtml = submitBtn.html();
-
-                // Extract the anti-forgery token from this specific form
-                var token = form.find('input[name="__RequestVerificationToken"]').val();
-
-                submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+            // Shared widget refresh: used by both the per-widget Apply buttons
+            // and the global filter bar (which refreshes every widget).
+            function refreshWidget(reportId, domId, data, token, submitBtn) {
+                var originalBtnHtml = (submitBtn && submitBtn.length) ? submitBtn.html() : null;
+                if (originalBtnHtml) {
+                    submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                }
 
                 $.ajax({
                     url: '?handler=RefreshDashboardWidget&reportId=' + encodeURIComponent(reportId),
                     type: 'POST',
-                    data: form.serialize(),
+                    data: data,
                     headers: {
                         "RequestVerificationToken": token
                     },
@@ -203,9 +162,62 @@
                         alert("A critical error occurred while fetching data. Check console for details.");
                     },
                     complete: function() {
-                        submitBtn.prop('disabled', false).html(originalBtnHtml);
+                        if (originalBtnHtml) {
+                            submitBtn.prop('disabled', false).html(originalBtnHtml);
+                        }
                     }
                 });
+            }
+
+            function pageToken() {
+                return $('#chart-form input[name="__RequestVerificationToken"]').val();
+            }
+
+            // Refreshes every widget with the current global filter values -
+            // including widgets that have no filter form of their own.
+            function refreshAllWidgets() {
+                var globalQuery = $.param(globalFilterData());
+                var reportCount = $('#ReportListCount').val();
+                for (let idx = 0; idx < reportCount; idx++) {
+                    var domId = $('#ReportList_' + idx + '_DomId').val();
+                    var reportId = $('#ReportList_' + idx + '_ReportId').val();
+                    var form = $('#form_' + domId);
+                    var data = (form.length ? form.serialize() + '&' : '') + globalQuery;
+                    var token = (form.length ? form.find('input[name="__RequestVerificationToken"]').val() : '') || pageToken();
+                    refreshWidget(reportId, domId, data, token, form.length ? form.find('.btn-apply-filter') : null);
+                }
+            }
+
+            $('#globalFilterWeek').on('change', refreshAllWidgets);
+            $('#globalFilterBU').on('change', refreshAllWidgets);
+
+            var searchDebounce;
+            $('#globalWidgetSearch').on('input', function () {
+                clearTimeout(searchDebounce);
+                searchDebounce = setTimeout(refreshAllWidgets, 600);
+            }).on('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    clearTimeout(searchDebounce);
+                    refreshAllWidgets();
+                }
+            });
+
+            $('#btnDashboardExport').on('click', function () {
+                window.print();
+            });
+
+            // Per-widget Apply: same refresh, scoped to one widget, with the
+            // global values riding along so they're never lost on apply.
+            $('.dashboard-filter-form .btn-apply-filter').on('click', function(e) {
+                e.preventDefault();
+
+                var submitBtn = $(this);
+                var form = submitBtn.closest('form');
+                var token = form.find('input[name="__RequestVerificationToken"]').val() || pageToken();
+                var data = form.serialize() + '&' + $.param(globalFilterData());
+
+                refreshWidget(form.data('reportid'), form.data('domid'), data, token, submitBtn);
             });
             function analyzeDataModalPopup(reff) {
                 var reportId = $(reff)[0].dataset.reportid;

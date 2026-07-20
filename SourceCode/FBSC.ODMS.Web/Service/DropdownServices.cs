@@ -25,6 +25,30 @@ namespace FBSC.ODMS.Web.Service
             };
             return (await _mediaTr.Send(query)).Data.Select(l => new SelectListItem() { Value = l.Name, Text = l.Name });
         }
+        /// <summary>
+        /// ISO work-weeks of the current year, Week 1 through the current week,
+        /// e.g. "Week 29 · Jul 20 - Jul 26, 2026". Value is the week number,
+        /// which ReportDataHelper.AppendGlobalFilters precomputes into the
+        /// week's Monday-Sunday date range server-side.
+        /// </summary>
+        public IEnumerable<SelectListItem> GetWorkWeekList()
+        {
+            var today = DateTime.Today;
+            var isoYear = ISOWeek.GetYear(today);
+            var currentWeek = ISOWeek.GetWeekOfYear(today);
+            var items = new List<SelectListItem>(currentWeek);
+            for (var week = 1; week <= currentWeek; week++)
+            {
+                var start = ISOWeek.ToDateTime(isoYear, week, DayOfWeek.Monday);
+                var end = start.AddDays(6);
+                items.Add(new SelectListItem
+                {
+                    Value = week.ToString(),
+                    Text = string.Create(CultureInfo.InvariantCulture, $"Week {week} · {start:MMM d} - {end:MMM d}, {end:yyyy}"),
+                });
+            }
+            return items;
+        }
         public IEnumerable<SelectListItem> QueryTypeList()
         {
             IList<SelectListItem> items =

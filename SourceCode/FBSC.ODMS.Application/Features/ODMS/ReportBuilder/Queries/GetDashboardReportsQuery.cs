@@ -58,6 +58,10 @@ public class GetDashboardReportsQueryHandler(ApplicationContext context, IConfig
                     ? resolvedConnectionString
                     : defaultConnectionString;
 
+            // Guarantee the global filter parameters (@GlobalProject etc.) exist -
+            // empty on initial load, so reports referencing them never break.
+            Helpers.ReportDataHelper.AppendGlobalFilters(filters);
+
             var resultsAndLabels = await Helpers.ReportDataHelper.ConvertSQLQueryToJsonAsync(authenticatedUser, connectionString, report!, filters);
 
             reportResult.Add(new ReportResultModel()

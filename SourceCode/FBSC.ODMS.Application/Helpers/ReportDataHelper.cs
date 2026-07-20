@@ -164,6 +164,56 @@ namespace FBSC.ODMS.Application.Helpers
             string? PasswordEncrypted,
             string? ConnectionStringEncrypted);
 
+        /// <summary>
+        /// Appends the dashboard's global filter values (free-text project search,
+        /// ISO work-week of the current year, business unit id) to a report's filter
+        /// list under the <see cref="GlobalReportFilterFields"/> parameter names.
+        /// The selected week number is precomputed into its Monday-Sunday date range
+        /// (@GlobalWeekStartDate/@GlobalWeekEndDate) so report SQL never has to do
+        /// week math. Idempotent per field name: entries already present (e.g. added
+        /// earlier in the same request with real values) are left untouched, so query
+        /// handlers can call this defensively with no values to guarantee the
+        /// parameters always exist. Reports that don't reference these parameters are
+        /// unaffected - sp_executesql permits declared-but-unused parameters.
+        /// </summary>
+        public static void AppendGlobalFilters(
+            IList<ReportQueryFilterModel> filters,
+            string? projectSearch = null,
+            int? weekNumber = null,
+            string? businessUnitId = null)
+        {
+            string weekStart = "", weekEnd = "";
+            if (weekNumber is > 0)
+            {
+                var isoYear = System.Globalization.ISOWeek.GetYear(DateTime.Today);
+                var week = Math.Min(weekNumber.Value, System.Globalization.ISOWeek.GetWeeksInYear(isoYear));
+                var start = System.Globalization.ISOWeek.ToDateTime(isoYear, week, DayOfWeek.Monday);
+                weekStart = start.ToString("yyyy-MM-dd");
+                weekEnd = start.AddDays(6).ToString("yyyy-MM-dd");
+            }
+
+            AppendIfMissing(filters, GlobalReportFilterFields.Project, "", projectSearch ?? "");
+            AppendIfMissing(filters, GlobalReportFilterFields.WeekNumber, DataTypes.WholeNumber, weekNumber is > 0 ? weekNumber.Value.ToString() : "");
+            AppendIfMissing(filters, GlobalReportFilterFields.WeekStartDate, DataTypes.Date, weekStart);
+            AppendIfMissing(filters, GlobalReportFilterFields.WeekEndDate, DataTypes.Date, weekEnd);
+            AppendIfMissing(filters, GlobalReportFilterFields.BusinessUnit, "", businessUnitId ?? "");
+
+            static void AppendIfMissing(IList<ReportQueryFilterModel> filters, string fieldName, string dataType, string value)
+            {
+                if (filters.Any(f => string.Equals(f.FieldName, fieldName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return;
+                }
+                filters.Add(new ReportQueryFilterModel
+                {
+                    FieldName = fieldName,
+                    FieldDescription = fieldName,
+                    DataType = dataType,
+                    FieldValue = value,
+                });
+            }
+        }
+
         public static async Task<LabelResultAndStyle> ConvertSQLQueryToJsonAsync(
             IAuthenticatedUser authenticatedUser,
             string connectionString,
@@ -201,6 +251,7 @@ namespace FBSC.ODMS.Application.Helpers
                     {
                         case DataTypes.Years:
                         case DataTypes.Months:
+                        case DataTypes.WholeNumber:
                             type = SqlDbType.Int;
                             value = string.IsNullOrWhiteSpace(f.FieldValue) ? 0 : int.Parse(f.FieldValue);
                             break;

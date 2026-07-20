@@ -68,12 +68,21 @@ namespace FBSC.ODMS.Web.Areas.ODMS.Pages.Dashboard
         // Add this inside your Dashboard IndexModel class (Pages.Dashboard.IndexModel)
         public async Task<JsonResult> OnPostRefreshDashboardWidgetAsync(
             [FromQuery] string reportId,
-            [FromForm(Name = "Filters")] IList<ReportQueryFilterViewModel> filters)
+            [FromForm(Name = "Filters")] IList<ReportQueryFilterViewModel> filters,
+            [FromForm(Name = "GlobalProject")] string? globalProject,
+            [FromForm(Name = "GlobalWeekNumber")] int? globalWeekNumber,
+            [FromForm(Name = "GlobalBusinessUnitId")] string? globalBusinessUnitId)
         {
             var query = new GetReportSetupAndResultByIdQuery(reportId);
 
             // Map the incoming UI view models to the DTO expected by MediatR
             Mapper.Map(filters, query.Filters);
+
+            // Append the global filter bar's values as @GlobalProject /
+            // @GlobalWeekNumber (+precomputed @GlobalWeekStartDate/@GlobalWeekEndDate)
+            // / @GlobalBusinessUnitId parameters for the report SQL to opt into.
+            Application.Helpers.ReportDataHelper.AppendGlobalFilters(
+                query.Filters, globalProject, globalWeekNumber, globalBusinessUnitId);
 
             var reportResult = new ReportResultModel();
 
