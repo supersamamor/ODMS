@@ -4,6 +4,7 @@ namespace FBSC.ODMS.Core.Constants
     {
         public const string Table = "Table";
         public const string HorizontalBar = "Horizontal Bar";
+        public const string StackedHorizontalBar = "Stacked Horizontal Bar";
         public const string Bar = "Bar";
         public const string Pie = "Pie";
         public const string Doughnut = "Doughnut";
@@ -45,6 +46,7 @@ namespace FBSC.ODMS.Core.Constants
         {
             { Table, "<small>" + ShortCodeFinePrint +"</small>" },
             { HorizontalBar, MultiSeriesQueryGuidance + ShortCodeFinePrint + "</small>" },
+            { StackedHorizontalBar, MultiSeriesQueryGuidance + ShortCodeFinePrint + "</small>" },
             { Bar, MultiSeriesQueryGuidance + ShortCodeFinePrint + "</small>" },
             { Pie, DistributionQueryGuidance + ShortCodeFinePrint + "</small>" },
             { Doughnut, DistributionQueryGuidance + ShortCodeFinePrint + "</small>" },
@@ -58,6 +60,7 @@ namespace FBSC.ODMS.Core.Constants
         };
 
         public const string HorizontalBarQueryFormat = @"The query should have the following format for " + HorizontalBar + " Chart: Select {field where the label will come from} [Label], Count(*) {Label of the count} From {TableName}";
+        public const string StackedHorizontalBarQueryFormat = @"The query should have the following format for " + StackedHorizontalBar + " Chart: Select {field where the label will come from} [Label], {numeric field per stack segment, one column each} From {TableName}";
         public const string BarQueryFormat = @"The query should have the following format for " + Bar + " Chart: Select {field where the label will come from} [Label], Count(*) {Label of the count} From {TableName}";
         public const string PieQueryFormat = @"The query should have the following format for " + Pie + " Chart: Select {field where the label will come from} [Label], Count(*) {Label of the count} From {TableName}";
         public const string DoughnutQueryFormat = @"The query should have the following format for " + Doughnut + " Chart: Select {field where the label will come from} [Label], Count(*) {Label of the count} From {TableName}";
@@ -73,6 +76,7 @@ namespace FBSC.ODMS.Core.Constants
         public static readonly Dictionary<string, string> ChartQueryFormat = new()
         {
             { HorizontalBar, HorizontalBarQueryFormat },
+            { StackedHorizontalBar, StackedHorizontalBarQueryFormat },
             { Bar, BarQueryFormat },
             { Pie, PieQueryFormat },
             { Doughnut, DoughnutQueryFormat },

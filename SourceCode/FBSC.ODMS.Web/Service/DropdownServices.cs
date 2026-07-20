@@ -63,6 +63,7 @@ namespace FBSC.ODMS.Web.Service
             IList<SelectListItem> items =
             [
                 new() { Text = Core.Constants.ReportChartType.HorizontalBar, Value = Core.Constants.ReportChartType.HorizontalBar, },
+                new() { Text = Core.Constants.ReportChartType.StackedHorizontalBar, Value = Core.Constants.ReportChartType.StackedHorizontalBar, },
                 new() { Text = Core.Constants.ReportChartType.Bar, Value = Core.Constants.ReportChartType.Bar, },
                 new() { Text = Core.Constants.ReportChartType.Pie, Value = Core.Constants.ReportChartType.Pie, },
                 new() { Text = Core.Constants.ReportChartType.Doughnut, Value = Core.Constants.ReportChartType.Doughnut, },

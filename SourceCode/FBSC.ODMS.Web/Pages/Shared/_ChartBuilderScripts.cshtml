@@ -123,12 +123,43 @@
     // that shape can't reliably tell us which family a chart belongs to.
     var PER_POINT_CHART_TYPES = ['pie', 'doughnut', 'polarArea'];
 
+    // Datasets whose label IS a semantic status name (e.g. a RAG breakdown
+    // query with Green/Amber/Red columns) get the app's semantic status
+    // colors instead of theme-derived hues - a green segment must be green
+    // no matter which theme is active.
+    var SEMANTIC_LABEL_COLOR_VARS = {
+        'green': '--color-success',
+        'amber': '--color-warning',
+        'red': '--color-danger'
+    };
+
+    function semanticColorForLabel(label) {
+        var varName = SEMANTIC_LABEL_COLOR_VARS[(label || '').trim().toLowerCase()];
+        if (!varName) {
+            return null;
+        }
+        var value = getComputedStyle(document.body).getPropertyValue(varName).trim();
+        return value || null;
+    }
+
     $.ApplyThemeChartColors = function (chartRenderType, datasets) {
         if (!Array.isArray(datasets) || datasets.length === 0) {
             return datasets;
         }
 
         var isPerPoint = PER_POINT_CHART_TYPES.indexOf(chartRenderType) !== -1;
+
+        if (!isPerPoint) {
+            datasets.forEach(function (ds) {
+                var hasColor = Array.isArray(ds.backgroundColor) ? ds.backgroundColor.length > 0 : !!ds.backgroundColor;
+                if (!hasColor) {
+                    var semantic = semanticColorForLabel(ds.label);
+                    if (semantic) {
+                        ds.backgroundColor = semantic;
+                    }
+                }
+            });
+        }
 
         var colorsNeeded = 0;
         datasets.forEach(function (ds) {
@@ -199,6 +230,15 @@
         bar: function (indexAxis) {
             return { indexAxis: indexAxis };
         },
+        stackedBar: function (indexAxis) {
+            return {
+                indexAxis: indexAxis,
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true }
+                }
+            };
+        },
         line: function () {
             return {};
         },
@@ -234,15 +274,68 @@
         }
     };
 
+    // Inline plugin: prints the summed total at the end of each stack for
+    // stacked bar charts (e.g. "28" after a Green+Amber+Red RAG bar).
+    // Registered per-chart (not globally) so ordinary charts are untouched.
+    var stackedTotalsPlugin = {
+        id: 'stackedTotals',
+        afterDatasetsDraw: function (chart) {
+            var datasets = chart.data.datasets || [];
+            if (datasets.length === 0) {
+                return;
+            }
+            var horizontal = chart.options.indexAxis === 'y';
+            var categoryCount = (chart.data.labels || []).length;
+            var ctx = chart.ctx;
+            ctx.save();
+            ctx.font = '700 11px ' + (getComputedStyle(document.body).fontFamily || 'sans-serif');
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-color').trim() || '#2c3e50';
+
+            for (var index = 0; index < categoryCount; index++) {
+                var total = 0;
+                var anchor = null;
+                for (var d = 0; d < datasets.length; d++) {
+                    if (!chart.isDatasetVisible(d)) {
+                        continue;
+                    }
+                    total += Number(datasets[d].data[index]) || 0;
+                    var meta = chart.getDatasetMeta(d);
+                    if (meta.data && meta.data[index]) {
+                        anchor = meta.data[index];
+                    }
+                }
+                if (!anchor) {
+                    continue;
+                }
+                if (horizontal) {
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(total, anchor.x + 6, anchor.y);
+                } else {
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillText(total, anchor.x, anchor.y - 4);
+                }
+            }
+            ctx.restore();
+        }
+    };
+
     $(document).ready(function () {
         $.BuildChart = function (chartContainer, reportName, charType, columnHeaders, dataSetResult, displayLegend, isPercentage, reportId, drillDownReportId) {
 
             let chartRenderType = '';
             let indexAxis = 'x';
+            let isStacked = false;
             switch (charType) {
                 case "@FBSC.ODMS.Core.Constants.ReportChartType.HorizontalBar":
                     chartRenderType = 'bar';
                     indexAxis = 'y';
+                    break;
+                case "@FBSC.ODMS.Core.Constants.ReportChartType.StackedHorizontalBar":
+                    chartRenderType = 'bar';
+                    indexAxis = 'y';
+                    isStacked = true;
                     break;
                 case "@FBSC.ODMS.Core.Constants.ReportChartType.Bar":
                     chartRenderType = 'bar';
@@ -341,7 +434,10 @@
 
                     // 3. Build type-specific option overrides from the factory (e.g.
                     // indexAxis for Bar, linear x/y scales for Bubble/Scatter).
-                    var typeOptions = ($.ChartTypeOptionsFactory[chartRenderType] || function () { return {}; })(indexAxis);
+                    // Stacked bars share Chart.js render type 'bar' but need their
+                    // own factory entry for the stacked scales.
+                    var factoryKey = isStacked ? 'stackedBar' : chartRenderType;
+                    var typeOptions = ($.ChartTypeOptionsFactory[factoryKey] || function () { return {}; })(indexAxis);
 
                     var chartOptions = {
                         responsive: false,
@@ -422,7 +518,8 @@
                     window.myCharts[chartContainer] = new Chart(ctx, {
                         type: chartRenderType,
                         data: data,
-                        options: chartOptions
+                        options: chartOptions,
+                        plugins: isStacked ? [stackedTotalsPlugin] : []
                     });
                 }
             }

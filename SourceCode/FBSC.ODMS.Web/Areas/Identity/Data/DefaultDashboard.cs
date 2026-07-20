@@ -268,5 +268,102 @@ public static class DefaultDashboard
 			});
 			await context.SaveChangesAsync();
         }
+
+        // Seeded separately (own existence gate) so these land on databases
+        // that already carry the Activity Logs seeds above.
+        var healthByBu = await context.Report.FirstOrDefaultAsync(e => e.ReportName == "Health by BU");
+        if (healthByBu == null)
+        {
+            // Widget 1: stacked RAG bars with per-row totals. Static dummy data;
+            // swap the VALUES block for a real GROUP BY over Project/BusinessUnit
+            // once live data exists.
+            context.Report.Add(new ReportState()
+            {
+                Id = Guid.NewGuid().ToString(),
+                ReportName = "Health by BU",
+                QueryType = Core.Constants.QueryType.TSql,
+                ReportOrChartType = Core.Constants.ReportChartType.StackedHorizontalBar,
+                IsDistinct = false,
+                QueryString = @"SELECT [Label], [Green], [Amber], [Red]
+                    FROM (VALUES
+                        ('Filinvest Land, Inc.', 17, 7, 4),
+                        ('Filinvest Alabang, Inc.', 13, 6, 3),
+                        ('FDC Utilities, Inc.', 11, 4, 3),
+                        ('Countrywide Water Services, Inc.', 9, 4, 2),
+                        ('Chroma Hospitality, Inc.', 7, 3, 2),
+                        ('SharePro, Inc.', 6, 2, 1)
+                    ) v([Label], [Green], [Amber], [Red]);",
+                DisplayOnDashboard = true,
+                DisplayOnReportModule = false,
+                Sequence = 5,
+                SpanWidth = 50,
+                ReportRoleAssignmentList = [
+                    new ReportRoleAssignmentState()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        RoleName = Core.Constants.Roles.Admin
+                    }
+                ]
+            });
+
+            // Widget 2: budget-vs-target progress bars. Not a chart - Custom Html
+            // with every presentational value (percent widths, colors, badge class,
+            // delta label) precomputed in the query so the template is dumb
+            // substitution. Percentages share one scale so bar lengths compare
+            // across BUs; the blue tick marks each BU's budget target.
+            context.Report.Add(new ReportState()
+            {
+                Id = Guid.NewGuid().ToString(),
+                ReportName = "Budget Performance by BU",
+                QueryType = Core.Constants.QueryType.TSql,
+                ReportOrChartType = Core.Constants.ReportChartType.CustomHtml,
+                IsDistinct = false,
+                QueryString = @"SELECT [BusinessUnit], [ActualM], [DeltaLabel], [BadgeClass], [FillPct], [TargetPct], [BarColor]
+                    FROM (VALUES
+                        ('Filinvest Land', 312, '-28M', 'badge-soft-success', 92, 100, 'var(--color-success)'),
+                        ('Filinvest Alabang', 295, '+15M', 'badge-soft-danger', 87, 82, 'var(--color-danger)'),
+                        ('FDC Utilities', 198, '-22M', 'badge-soft-success', 58, 65, 'var(--color-success)'),
+                        ('Countrywide Water', 172, '-8M', 'badge-soft-success', 51, 53, 'var(--color-success)'),
+                        ('Chroma Hospitality', 115, '-5M', 'badge-soft-success', 34, 35, 'var(--color-success)'),
+                        ('SharePro', 88, '-2M', 'badge-soft-success', 26, 27, 'var(--color-success)')
+                    ) v([BusinessUnit], [ActualM], [DeltaLabel], [BadgeClass], [FillPct], [TargetPct], [BarColor]);",
+                DisplayOnDashboard = true,
+                DisplayOnReportModule = false,
+                HtmlTemplate = """
+                <div style="padding: 6px 4px;">
+                    <!--{#foreach Table}-->
+                    <div style="margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span style="font-size: var(--font-size-dense); color: var(--text-muted);">{BusinessUnit}</span>
+                            <span style="display: inline-flex; align-items: center; gap: 6px;">
+                                <strong style="font-size: var(--font-size-dense); color: var(--text-color);">&#8369;{ActualM}M</strong>
+                                <span class="badge-soft {BadgeClass}">{DeltaLabel}</span>
+                            </span>
+                        </div>
+                        <div style="position: relative; height: 12px; background-color: #e8ebf3; border-radius: 999px;">
+                            <div style="position: absolute; left: 0; top: 0; height: 12px; width: {FillPct}%; background-color: {BarColor}; border-radius: 999px;"></div>
+                            <div style="position: absolute; left: {TargetPct}%; top: -2px; height: 16px; width: 3px; background-color: #3b5bdb; border-radius: 2px;"></div>
+                        </div>
+                    </div>
+                    <!--{/foreach}-->
+                    <div style="display: flex; gap: 18px; margin-top: 4px; font-size: var(--font-size-dense); color: var(--text-muted);">
+                        <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: var(--color-success); margin-right: 5px;"></span>Within budget</span>
+                        <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: var(--color-danger); margin-right: 5px;"></span>Over budget</span>
+                        <span><span style="display: inline-block; width: 3px; height: 12px; background-color: #3b5bdb; margin-right: 5px;"></span>Budget target</span>
+                    </div>
+                </div>
+                """,
+                Sequence = 6,
+                SpanWidth = 50,
+                ReportRoleAssignmentList = [
+                    new ReportRoleAssignmentState()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        RoleName = Core.Constants.Roles.Admin
+                    }
+                ]
+            });
+            await context.SaveChangesAsync();
+        }
     }
 }

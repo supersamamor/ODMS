@@ -446,6 +446,7 @@ namespace FBSC.ODMS.Application.Helpers
                         switch (report.ReportOrChartType)
                         {
                             case ReportChartType.HorizontalBar:
+                            case ReportChartType.StackedHorizontalBar:
                             case ReportChartType.Bar:
                             case ReportChartType.Line:
                             case ReportChartType.Radar:
@@ -499,7 +500,7 @@ namespace FBSC.ODMS.Application.Helpers
             {
                 return report.ReportOrChartType switch
                 {
-                    ReportChartType.HorizontalBar or ReportChartType.Bar or ReportChartType.Line or ReportChartType.Radar => new LabelResultAndStyle
+                    ReportChartType.HorizontalBar or ReportChartType.StackedHorizontalBar or ReportChartType.Bar or ReportChartType.Line or ReportChartType.Radar => new LabelResultAndStyle
                     {
                         Results = JsonConvert.SerializeObject(multipleData.Values, Formatting.Indented),
                         ColumnHeaders = JsonConvert.SerializeObject(columnLabels, Formatting.Indented),
