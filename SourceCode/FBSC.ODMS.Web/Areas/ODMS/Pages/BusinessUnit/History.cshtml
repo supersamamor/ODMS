@@ -1,0 +1,81 @@
+@page
+@model HistoryModel
+@{
+    ViewData["Title"] = Localizer["Audit Trail - Business Unit"];
+    ViewData["ActiveMainPage"] = "BusinessUnit";
+    ViewData["Level1"] = "Admin";
+	var breadcrumbs = new[] {
+		new { Title = "Business Unit List", Url = "/ODMS/BusinessUnit/Index", IsActive = false },
+		new { Title = "Audit Trail - Business Unit", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<link rel="stylesheet" href="~/css/timeline.css" asp-append-version="true" />
+<div id="businessUnit-container">
+    <div class="card">
+        <h5 class="card-header"><span class="card-header-custom">Change History - (Record Id : @Model.BusinessUnit.Id)</span><br></h5>
+        <div class="card-body">
+            <ul class="timeline">
+                @{
+                    string invertedClass = "";
+                    var userHelper = new FBSC.ODMS.Web.Helper.UserHelper(Mediator);
+                }
+                @foreach (var item in Model.AuditLogList)
+                {
+                    <li class="@invertedClass">
+                        @Html.Raw(item.TypeFormatted)
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h6 class="timeline-title"><button class="timeline-link btnShowAuditTrailModal" data-auditlogsid="@item.Id"><i class="fas fa-calendar-alt"></i>@item.DateTimeFormatted</button></h6>
+                                <p class="timeline-history"><small class="text-muted"><i class="fas fa-history"></i>@(string.IsNullOrEmpty(item.DateTimeDuration) ? "Just now" : item.DateTimeDuration + " ago") by @Html.Raw(await userHelper.GetUserName(item.UserId!))</small></p>
+                            </div>
+                        </div>
+                    </li>
+                    if (invertedClass == "")
+                    {
+                        invertedClass = "timeline-inverted";
+                    }
+                    else
+                    {
+                        invertedClass = "";
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="toolbar-container" class="btn-group" role="group">
+    <a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.BusinessUnit.Create)).Succeeded)
+    {
+        <a asp-page="Add" id="btnAddRecord" class="btn btnFills btn-outline-success btnAddIcon" aria-label="@Localizer["Add"]" title="@Localizer["Add"]"></a>
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.BusinessUnit.Edit)).Succeeded)
+    {
+        <a asp-page="Edit" asp-route-id="@Model.BusinessUnit.Id" class="btn btnFills btn-outline-primary btnEditIcon" aria-label="@Localizer["Edit"]" title="@Localizer["Edit"]"></a>
+    }
+</div>
+@{
+    var historyModalId = "changes-history-modal";
+}
+<partial name="_ModalPartial" model="@historyModalId" />
+@section Scripts {
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            function InitializeForm() {
+                //Pop-up Audit Trail
+                function auditTrailModalPopup(reff) {
+                    var auditlogsid = $(reff)[0].dataset.auditlogsid;
+                    var url = '@Url.Page("/AuditTrail/Index", new { area = "ODMS" })' + '?handler=ChangesHistory&auditlogsid=' + auditlogsid + '&moduleName=' + '@nameof(Model.BusinessUnit)';
+                    var title = "Change History";
+                    openModal("@historyModalId", url, title, null);
+                }
+                $(".btnShowAuditTrailModal").on('click', function (e) {
+                    auditTrailModalPopup(this);
+                });
+            }
+            InitializeForm();
+        });
+    </script>
+}
+

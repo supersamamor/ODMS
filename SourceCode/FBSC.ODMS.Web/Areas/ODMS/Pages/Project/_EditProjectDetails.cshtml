@@ -1,0 +1,110 @@
+@using Models
+@model ProjectViewModel
+
+<div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
+    <div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ProjectName" class="form-label"><strong>@Localizer["Name of the Project"] :</strong></label>
+			<input asp-for="@Model.ProjectName" class="form-control" maxlength="255" />
+			<span asp-validation-for="@Model.ProjectName" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.BusinessUnitId" class="form-label"><strong>@Localizer["Assigned Business Unit"] :</strong></label>
+			<select asp-for="@Model.BusinessUnitId" class="form-control" asp-items="@(dropdownService.GetBusinessUnitList(Model.BusinessUnitId))"><option value="">- Select Assigned Business Unit -</option></select>
+			<span asp-validation-for="@Model.BusinessUnitId" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.Priority" class="form-label"><strong>@Localizer["Project Priority"] :</strong></label>
+			<input asp-for="@Model.Priority" class="form-control" maxlength="50" />
+			<span asp-validation-for="@Model.Priority" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.StartDate" class="form-label"><strong>@Localizer["Project Start Date"] :</strong></label>
+			<input type="date" asp-for="@Model.StartDate" class="form-control" />
+			<span asp-validation-for="@Model.StartDate" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.TargetEndDate" class="form-label"><strong>@Localizer["Target Completion Date"] :</strong></label>
+			<input type="date" asp-for="@Model.TargetEndDate" class="form-control" />
+			<span asp-validation-for="@Model.TargetEndDate" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.EstimatedBudget" class="form-label"><strong>@Localizer["Estimated Budget in Currency"] :</strong></label>
+			<input asp-for="@Model.EstimatedBudget" class="form-control text-end"  />
+			<span asp-validation-for="@Model.EstimatedBudget" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ProjectDescription" class="form-label"><strong>@Localizer["Detailed Description of Project"] :</strong></label>
+			<input asp-for="@Model.ProjectDescription" class="form-control" maxlength="1000" />
+			<span asp-validation-for="@Model.ProjectDescription" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ProjectManagerId" class="form-label"><strong>@Localizer["Assigned Project Manager"] :</strong></label>
+			<select asp-for="@Model.ProjectManagerId" class="form-control" asp-items="@(dropdownService.GetEmployeeList(Model.ProjectManagerId))"><option value="">- Select Assigned Project Manager -</option></select>
+			<span asp-validation-for="@Model.ProjectManagerId" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.HealthStatus" class="form-label"><strong>@Localizer["RAG Status (Red, Amber, Green)"] :</strong></label>
+			<input asp-for="@Model.HealthStatus" class="form-control" maxlength="20" />
+			<span asp-validation-for="@Model.HealthStatus" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.Phase" class="form-label"><strong>@Localizer["Current Phase (e.g. Development)"] :</strong></label>
+			<input asp-for="@Model.Phase" class="form-control" maxlength="100" />
+			<span asp-validation-for="@Model.Phase" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.ScheduleStatus" class="form-label"><strong>@Localizer["Schedule Status (e.g. Delayed)"] :</strong></label>
+			<input asp-for="@Model.ScheduleStatus" class="form-control" maxlength="50" />
+			<span asp-validation-for="@Model.ScheduleStatus" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.LastReviewDate" class="form-label"><strong>@Localizer["Date of Last Review"] :</strong></label>
+			<input type="date" asp-for="@Model.LastReviewDate" class="form-control" />
+			<span asp-validation-for="@Model.LastReviewDate" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+<div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.LastUpdatedDate" class="form-label"><strong>@Localizer["Date of Last Update"] :</strong></label>
+			<input type="date" asp-for="@Model.LastUpdatedDate" class="form-control" />
+			<span asp-validation-for="@Model.LastUpdatedDate" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+
+</div>

@@ -1,0 +1,202 @@
+@page
+@model IndexModel
+
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+@{
+    ViewData["Title"] = Localizer["Employee List"];
+    ViewData["ActiveMainPage"] = "Employee";
+    ViewData["Level1"] = "Admin";
+	IEnumerable<dynamic> breadCrumbs = [new { Title = "Employee List", Url = "", IsActive = true }];
+}
+<partial name="_BreadcrumbPartial" model=@(breadCrumbs) />
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="employee" class="table table-hover table-bordered table-striped responsive nowrap fills-table" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+								@Localizer["Department"]
+							</th>
+							<th>
+								@Localizer["Email"]
+							</th>
+							<th>
+								@Localizer["Employee Code"]
+							</th>
+							<th>
+								@Localizer["Name"]
+							</th>
+							<th>
+								@Localizer["Position"]
+							</th>
+							<th>
+								@Localizer["User Id"]
+							</th>
+							  
+							
+                            <th>
+                                @Localizer["Actions"]
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="BatchUploadPartialContainer">
+    <partial name="_BatchUpload" model="Model.BatchUpload" />
+</div>
+@section Scripts {
+    <partial name="_DataTableScripts" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            var table = $('#employee').DataTable({
+                select: false,
+                serverSide: true,
+                responsive: true,
+                order: [[6, 'desc']],
+                dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DataTableDOMLayOut)',
+                ajax:
+                {
+                    url: '@Url.Page("/Employee/Index", new { area = "ODMS", handler = "ListAll" })',
+                    type: "POST",
+                    headers: {
+                        RequestVerificationToken:
+                            $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                },
+                initComplete: function (settings, json) {
+                    BindTableRowCollapseEvent();
+                },
+                columns: [
+                    { data: "department", name: "Department", responsivePriority: 1, title: '@Localizer["Department"]', searchable: false, className: "text-start" },
+				{ data: "email", name: "Email", responsivePriority: 1, title: '@Localizer["Email"]', searchable: false, className: "text-start" },
+				{ data: "employeeCode", name: "EmployeeCode", responsivePriority: 1, title: '@Localizer["Employee Code"]', searchable: false, className: "text-start" },
+				{ data: "name", name: "Name", responsivePriority: 2, title: '@Localizer["Name"]', searchable: false, className: "text-start" },
+				{ data: "position", name: "Position", responsivePriority: 2, title: '@Localizer["Position"]', searchable: false, className: "text-start" },
+				{ data: "userId", name: "UserId", responsivePriority: 2, title: '@Localizer["User Id"]', searchable: false, className: "text-start" },
+				   
+					
+                    {
+                        data: null,
+                        searchable: false,
+                        orderable: false,
+                        responsivePriority: 1,
+                        width: "10%",
+                        className: "fills-text-center",
+                        render: function (data, type, row, meta) {
+                            var url = '@Url.Page("/Employee/Details", new { area = "ODMS" })' + '?id=' + row.id;
+							var button = '<a href="' + url + '" class="btn btnFills btn-outline-success btnInfoIcon btnViewEmployee" aria-label="@Localizer["View"]" title="@Localizer["View"]"></a>';
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.Employee.Edit)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/Employee/Edit", new { area = "ODMS" })' + '?id=' + row.id;
+											button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-primary btnEditIcon btnEditEmployee" aria-label="@Localizer["Edit"]" title="@Localizer["Edit"]"></a>';
+							</text>
+						}
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.Employee.Delete)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/Employee/Delete", new { area = "ODMS" })' + '?id=' + row.id;
+												button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-danger btnDeleteIcon btnDeleteEmployee" aria-label="@Localizer["Delete"]" title="@Localizer["Delete"]"></a>';
+							</text>
+						}
+						
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.Employee.History)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/Employee/History", new { area = "ODMS" })' + '?id=' + row.id;
+											button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-primary btnHistoryIcon" aria-label="@Localizer["History"]" title="@Localizer["History"]"></a>';
+							</text>
+						}
+							return button;
+                        },
+                    },
+                    { data: "lastModifiedDate", name: "LastModifiedDate", title: '@Localizer["Last Modified Date"]', visible: false, searchable: false },
+                    { data: "id", name: "Id", visible: false },
+                ],
+                buttons: [
+        @* Add Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Employee.Create)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-plus"></i>',
+                        className: 'btn btn-success btnAddEmployee text-light',
+                        titleAttr: '@Localizer["Add"]',
+                        action: function (e, dt, node, config) {
+                            window.location.href = '@Url.Page("/Employee/Add", new { area = "ODMS" })';
+                        }
+                    },
+            </text>
+        }
+
+        @* Download Template Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Employee.Upload)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-download"></i>',
+                        className: 'btn btn-primary',
+                        titleAttr: '@Localizer["Download Template"]',
+                        action: function (e, dt, node, config) {
+                            $('#download-template-form').submit();
+                        }
+                    },
+            </text>
+        }
+
+        @* Upload Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Employee.Upload)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-upload"></i>',
+                        className: 'btn btn-primary',
+                        titleAttr: '@Localizer["Upload"]',
+                        action: function (e, dt, node, config) {
+                            $('#btnBatchUpload').click();
+                        }
+                    },
+            </text>
+        }
+
+        @* Page Length Button *@
+            {
+                extend: 'pageLength',
+                className: 'btn btn-primary',
+                titleAttr: '@Localizer["Rows per page"]'
+            }
+        ],
+            });
+            var debounce = new $.fn.dataTable.Debounce(table); // Add delay to search
+
+            $('.btn-table_filter').on('click', function (e) {
+                table.ajax.reload(null, false);
+            });
+            function BindTableRowCollapseEvent() {
+                $('#employee tbody').on('click', 'td.dtr-control', function () {
+                    $.showAjaxLoaderOnClick([".btnAddEmployee", ".btnEditEmployee", ".btnViewEmployee", ".btnDeleteEmployee"]);
+                });
+            }
+            $.showAjaxLoaderOnClick([".btnAddEmployee", ".btnEditEmployee", ".btnViewEmployee", ".btnDeleteEmployee"]);
+            $.InitializeSearchKeyCookies(table);
+            $('#btnBatchUpload').on('change', function (e) {
+                $('#batch-upload-form').submit();
+            });           
+        @if (!string.IsNullOrEmpty(Model.BatchUpload.BatchUploadFileName))
+        {
+            <text>
+                    $('#btnDownloadBatchUploadTemplateLink')[0].click();
+            </text>
+        }
+        });
+    </script>
+}

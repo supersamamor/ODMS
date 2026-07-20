@@ -1,0 +1,226 @@
+@page
+@model IndexModel
+
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+@{
+    ViewData["Title"] = Localizer["Project List"];
+    ViewData["ActiveMainPage"] = "Project";
+    ViewData["Level1"] = "Projects";
+	IEnumerable<dynamic> breadCrumbs = [new { Title = "Project List", Url = "", IsActive = true }];
+}
+<partial name="_BreadcrumbPartial" model=@(breadCrumbs) />
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="project" class="table table-hover table-bordered table-striped responsive nowrap fills-table" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+								@Localizer["Name of the Project"]
+							</th>
+							<th>
+								@Localizer["Assigned Business Unit"]
+							</th>
+							<th>
+								@Localizer["Project Priority"]
+							</th>
+							<th>
+								@Localizer["Project Start Date"]
+							</th>
+							<th>
+								@Localizer["Target Completion Date"]
+							</th>
+							<th>
+								@Localizer["Estimated Budget in Currency"]
+							</th>
+							<th>
+								@Localizer["Assigned Project Manager"]
+							</th>
+							<th>
+								@Localizer["RAG Status (Red, Amber, Green)"]
+							</th>
+							<th>
+								@Localizer["Current Phase (e.g. Development)"]
+							</th>
+							<th>
+								@Localizer["Schedule Status (e.g. Delayed)"]
+							</th>
+							<th>
+								@Localizer["Date of Last Review"]
+							</th>
+							<th>
+								@Localizer["Date of Last Update"]
+							</th>
+							  
+							
+                            <th>
+                                @Localizer["Actions"]
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="BatchUploadPartialContainer">
+    <partial name="_BatchUpload" model="Model.BatchUpload" />
+</div>
+@section Scripts {
+    <partial name="_DataTableScripts" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            var table = $('#project').DataTable({
+                select: false,
+                serverSide: true,
+                responsive: true,
+                order: [[12, 'desc']],
+                dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DataTableDOMLayOut)',
+                ajax:
+                {
+                    url: '@Url.Page("/Project/Index", new { area = "ODMS", handler = "ListAll" })',
+                    type: "POST",
+                    headers: {
+                        RequestVerificationToken:
+                            $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                },
+                initComplete: function (settings, json) {
+                    BindTableRowCollapseEvent();
+                },
+                columns: [
+                    { data: "projectName", name: "ProjectName", responsivePriority: 1, title: '@Localizer["Name of the Project"]', searchable: true, className: "text-start" },
+				{ data: "businessUnitId", name: "BusinessUnitId", responsivePriority: 1, title: '@Localizer["Assigned Business Unit"]', searchable: false, className: "fills-text-end" },
+				{ data: "priority", name: "Priority", responsivePriority: 1, title: '@Localizer["Project Priority"]', searchable: true, className: "text-start" },
+				{ data: "startDateFormatted", name: "StartDate", responsivePriority: 2, title: '@Localizer["Project Start Date"]', searchable: false, className: "fills-text-center" },
+				{ data: "targetEndDateFormatted", name: "TargetEndDate", responsivePriority: 2, title: '@Localizer["Target Completion Date"]', searchable: false, className: "fills-text-center" },
+				{ data: "estimatedBudgetFormatted", name: "EstimatedBudget", responsivePriority: 2, title: '@Localizer["Estimated Budget in Currency"]', searchable: false, className: "fills-text-end" },
+				{ data: "projectManagerId", name: "ProjectManagerId", responsivePriority: 2, title: '@Localizer["Assigned Project Manager"]', searchable: false, className: "fills-text-end" },
+				{ data: "healthStatus", name: "HealthStatus", responsivePriority: 2, title: '@Localizer["RAG Status (Red, Amber, Green)"]', searchable: false, className: "text-start" },
+				{ data: "phase", name: "Phase", responsivePriority: 2, title: '@Localizer["Current Phase (e.g. Development)"]', searchable: false, className: "text-start" },
+				{ data: "scheduleStatus", name: "ScheduleStatus", responsivePriority: 2, title: '@Localizer["Schedule Status (e.g. Delayed)"]', searchable: false, className: "text-start" },
+				{ data: "lastReviewDateFormatted", name: "LastReviewDate", responsivePriority: 2, title: '@Localizer["Date of Last Review"]', searchable: false, className: "fills-text-center" },
+				{ data: "lastUpdatedDateFormatted", name: "LastUpdatedDate", responsivePriority: 2, title: '@Localizer["Date of Last Update"]', searchable: false, className: "fills-text-center" },
+				   
+					
+                    {
+                        data: null,
+                        searchable: false,
+                        orderable: false,
+                        responsivePriority: 1,
+                        width: "10%",
+                        className: "fills-text-center",
+                        render: function (data, type, row, meta) {
+                            var url = '@Url.Page("/Project/Details", new { area = "ODMS" })' + '?id=' + row.id;
+							var button = '<a href="' + url + '" class="btn btnFills btn-outline-success btnInfoIcon btnViewProject" aria-label="@Localizer["View"]" title="@Localizer["View"]"></a>';
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Edit)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/Project/Edit", new { area = "ODMS" })' + '?id=' + row.id;
+											button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-primary btnEditIcon btnEditProject" aria-label="@Localizer["Edit"]" title="@Localizer["Edit"]"></a>';
+							</text>
+						}
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Delete)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/Project/Delete", new { area = "ODMS" })' + '?id=' + row.id;
+												button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-danger btnDeleteIcon btnDeleteProject" aria-label="@Localizer["Delete"]" title="@Localizer["Delete"]"></a>';
+							</text>
+						}
+						
+						@if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.History)).Succeeded)
+						{
+							<text>
+											url = '@Url.Page("/Project/History", new { area = "ODMS" })' + '?id=' + row.id;
+											button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-primary btnHistoryIcon" aria-label="@Localizer["History"]" title="@Localizer["History"]"></a>';
+							</text>
+						}
+							return button;
+                        },
+                    },
+                    { data: "lastModifiedDate", name: "LastModifiedDate", title: '@Localizer["Last Modified Date"]', visible: false, searchable: false },
+                    { data: "id", name: "Id", visible: false },
+                ],
+                buttons: [
+        @* Add Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Create)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-plus"></i>',
+                        className: 'btn btn-success btnAddProject text-light',
+                        titleAttr: '@Localizer["Add"]',
+                        action: function (e, dt, node, config) {
+                            window.location.href = '@Url.Page("/Project/Add", new { area = "ODMS" })';
+                        }
+                    },
+            </text>
+        }
+
+        @* Download Template Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Upload)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-download"></i>',
+                        className: 'btn btn-primary',
+                        titleAttr: '@Localizer["Download Template"]',
+                        action: function (e, dt, node, config) {
+                            $('#download-template-form').submit();
+                        }
+                    },
+            </text>
+        }
+
+        @* Upload Button *@
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Upload)).Succeeded)
+        {
+            <text>
+                    {
+                        text: '<i class="fas fa-upload"></i>',
+                        className: 'btn btn-primary',
+                        titleAttr: '@Localizer["Upload"]',
+                        action: function (e, dt, node, config) {
+                            $('#btnBatchUpload').click();
+                        }
+                    },
+            </text>
+        }
+
+        @* Page Length Button *@
+            {
+                extend: 'pageLength',
+                className: 'btn btn-primary',
+                titleAttr: '@Localizer["Rows per page"]'
+            }
+        ],
+            });
+            var debounce = new $.fn.dataTable.Debounce(table); // Add delay to search
+
+            $('.btn-table_filter').on('click', function (e) {
+                table.ajax.reload(null, false);
+            });
+            function BindTableRowCollapseEvent() {
+                $('#project tbody').on('click', 'td.dtr-control', function () {
+                    $.showAjaxLoaderOnClick([".btnAddProject", ".btnEditProject", ".btnViewProject", ".btnDeleteProject"]);
+                });
+            }
+            $.showAjaxLoaderOnClick([".btnAddProject", ".btnEditProject", ".btnViewProject", ".btnDeleteProject"]);
+            $.InitializeSearchKeyCookies(table);
+            $('#btnBatchUpload').on('change', function (e) {
+                $('#batch-upload-form').submit();
+            });           
+        @if (!string.IsNullOrEmpty(Model.BatchUpload.BatchUploadFileName))
+        {
+            <text>
+                    $('#btnDownloadBatchUploadTemplateLink')[0].click();
+            </text>
+        }
+        });
+    </script>
+}

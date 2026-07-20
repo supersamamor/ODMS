@@ -99,18 +99,73 @@ namespace FBSC.ODMS.Scheduler.Jobs
 					{
 						exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<DataSourceState>(dataSourceImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
 					}
-					break;		
-                case nameof(SampleTableState): //Sample Only For Custom Processing
-					var unitImportResult = await excelService.ImportAsync<SampleTableState>(path);
-					if (unitImportResult.IsSuccess)
-					{
-						await SampleTableCustomProcessor.Process(context, unitImportResult.SuccessRecords, processedByUserId);
-					}
-					else
-					{
-						exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<SampleTableState>(unitImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
-					}
-					break;
+					break;	
+                case nameof(BusinessUnitState):
+                    var businessUnitImportResult = await excelService.ImportAsync<BusinessUnitState>(path);
+                    if (businessUnitImportResult.IsSuccess)
+                    {
+                        await context.AddRangeAsync(businessUnitImportResult.SuccessRecords);
+                    }
+                    else
+                    {
+                        exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<BusinessUnitState>(businessUnitImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
+                    }
+                    break;
+                case nameof(ProjectState):
+                    var projectImportResult = await excelService.ImportAsync<ProjectState>(path);
+                    if (projectImportResult.IsSuccess)
+                    {
+                        await context.AddRangeAsync(projectImportResult.SuccessRecords);
+                    }
+                    else
+                    {
+                        exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<ProjectState>(projectImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
+                    }
+                    break;
+                case nameof(TeamMembersState):
+                    var teamMembersImportResult = await excelService.ImportAsync<TeamMembersState>(path);
+                    if (teamMembersImportResult.IsSuccess)
+                    {
+                        await context.AddRangeAsync(teamMembersImportResult.SuccessRecords);
+                    }
+                    else
+                    {
+                        exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<TeamMembersState>(teamMembersImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
+                    }
+                    break;
+                case nameof(ProjectHistoryState):
+                    var projectHistoryImportResult = await excelService.ImportAsync<ProjectHistoryState>(path);
+                    if (projectHistoryImportResult.IsSuccess)
+                    {
+                        await context.AddRangeAsync(projectHistoryImportResult.SuccessRecords);
+                    }
+                    else
+                    {
+                        exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<ProjectHistoryState>(projectHistoryImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
+                    }
+                    break;
+                case nameof(TeamMembersHistoryState):
+                    var teamMembersHistoryImportResult = await excelService.ImportAsync<TeamMembersHistoryState>(path);
+                    if (teamMembersHistoryImportResult.IsSuccess)
+                    {
+                        await context.AddRangeAsync(teamMembersHistoryImportResult.SuccessRecords);
+                    }
+                    else
+                    {
+                        exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<TeamMembersHistoryState>(teamMembersHistoryImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
+                    }
+                    break;
+                case nameof(EmployeeState):
+                    var employeeImportResult = await excelService.ImportAsync<EmployeeState>(path);
+                    if (employeeImportResult.IsSuccess)
+                    {
+                        await context.AddRangeAsync(employeeImportResult.SuccessRecords);
+                    }
+                    else
+                    {
+                        exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<EmployeeState>(employeeImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
+                    }
+                    break;
                 default: break;
             }           
             return exceptionFilePath;

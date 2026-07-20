@@ -1,0 +1,83 @@
+@page
+@model AddModel
+@{
+    ViewData["Title"] = Localizer["Add Project"];
+    ViewData["ActiveMainPage"] = "Project";
+	ViewData["Level1"] = "Projects";
+	var breadcrumbs = new[] {
+		new { Title = "Project List", Url = "/ODMS/Project/Index", IsActive = false },
+		new { Title = "Add Project", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<form id="project-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+	<div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.Project" />
+    </div> 	
+	<div id="toolbar-container" class="btn-group" role="group">     
+		<a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
+		<button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" aria-label="@Localizer["Save changes"]" title="@Localizer["Save changes"]"></button>
+	</div>   	
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<partial name="_TeamMembersListValidationPartial" model="@Model.Project" />
+
+<script asp-add-nonce>
+    $(document).ready(function () {
+		$.bindSaveConfirmationModal('Save', '#btnConfirmationModal','#project-form');
+		$.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal','#project-form', 'Do you want to cancel the changes?');
+		function InitializeForm()
+		{			
+
+			$('.DisableSelectDropdown').on('mousedown', function(e) {
+				e.preventDefault();
+				this.blur();
+				window.focus();
+			});
+			
+			$.InitializeTeamMembersFieldValidations($('#TeamMembersCount').val());
+			$('.RemoveTeamMembersButton ').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveTeamMembers');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#project-form', InitializeForm, true);
+			});
+
+			$('#btnAddTeamMembers').on( 'click', function () {
+				$('#AsyncAction').val('AddTeamMembers');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#project-form', InitializeForm, true);
+			});
+
+			$.fn.employeeSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2EmployeeData" })',
+						}
+					});
+				});
+				return this;
+			};
+			$("#ProjectManagerId").employeeSelect();
+
+			$.fn.businessunitSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2BusinessUnitData" })',
+						}
+					});
+				});
+				return this;
+			};
+			$("#BusinessUnitId").businessunitSelect();
+
+		}	
+		InitializeForm();
+    });
+</script>
+}

@@ -1,0 +1,46 @@
+@page
+@model AddModel
+@{
+    ViewData["Title"] = Localizer["Add Employee"];
+    ViewData["ActiveMainPage"] = "Employee";
+    ViewData["Level1"] = "Admin";
+	var breadcrumbs = new[] {
+		new { Title = "Employee List", Url = "/ODMS/Employee/Index", IsActive = false },
+		new { Title = "Add Employee", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<form id="employee-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+	<div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.Employee" />
+    </div> 	
+	<div id="toolbar-container" class="btn-group" role="group">     
+		<a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
+		<button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" aria-label="@Localizer["Save changes"]" title="@Localizer["Save changes"]"></button>
+	</div>   	
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+
+<script asp-add-nonce>
+    $(document).ready(function () {
+		$.bindSaveConfirmationModal('Save', '#btnConfirmationModal','#employee-form');
+		$.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal','#employee-form', 'Do you want to cancel the changes?');
+		function InitializeForm()
+		{			
+
+			$('.DisableSelectDropdown').on('mousedown', function(e) {
+				e.preventDefault();
+				this.blur();
+				window.focus();
+			});
+			
+		}	
+		InitializeForm();
+    });
+</script>
+}

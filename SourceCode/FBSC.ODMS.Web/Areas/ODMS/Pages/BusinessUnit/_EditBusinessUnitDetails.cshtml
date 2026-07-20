@@ -1,0 +1,14 @@
+@using Models
+@model BusinessUnitViewModel
+
+<div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
+    <div class="col">
+	<div class="mb-3">
+		<label asp-for="@Model.Name" class="form-label"><strong>@Localizer["Name"] :</strong></label>
+			<input asp-for="@Model.Name" class="form-control" maxlength="150" />
+			<span asp-validation-for="@Model.Name" class="text-danger d-block mt-1"></span>
+			
+	</div>
+</div>
+
+</div>

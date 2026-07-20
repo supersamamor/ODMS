@@ -376,7 +376,19 @@ namespace FBSC.ODMS.ExcelProcessor.Services
             switch (module)
             {
                 case nameof(DataSourceState):
-					return await DataSourceValidator.ValidatePerRecordAsync(_context, rowValue);			
+					return await DataSourceValidator.ValidatePerRecordAsync(_context, rowValue);
+                case nameof(BusinessUnitState):
+                    return await BusinessUnitValidator.ValidatePerRecordAsync(_context, rowValue);
+                case nameof(ProjectState):
+                    return await ProjectValidator.ValidatePerRecordAsync(_context, rowValue);
+                case nameof(TeamMembersState):
+                    return await TeamMembersValidator.ValidatePerRecordAsync(_context, rowValue);
+                case nameof(ProjectHistoryState):
+                    return await ProjectHistoryValidator.ValidatePerRecordAsync(_context, rowValue);
+                case nameof(TeamMembersHistoryState):
+                    return await TeamMembersHistoryValidator.ValidatePerRecordAsync(_context, rowValue);
+                case nameof(EmployeeState):
+                    return await EmployeeValidator.ValidatePerRecordAsync(_context, rowValue);
                 default: break;
             }
             return rowValue;
@@ -387,7 +399,9 @@ namespace FBSC.ODMS.ExcelProcessor.Services
             switch (module)
             {
                 case nameof(DataSourceState):
-					return DataSourceValidator.DuplicateValidation(records);			
+					return DataSourceValidator.DuplicateValidation(records);
+                case nameof(BusinessUnitState):
+                    return BusinessUnitValidator.DuplicateValidation(records);
                 default: break;
             }
             return null;

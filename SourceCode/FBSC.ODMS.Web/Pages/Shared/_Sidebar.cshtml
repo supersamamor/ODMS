@@ -24,19 +24,28 @@
             <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Dashboard")">
                 <a href="/ODMS/Dashboard" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Dashboard")">
                     <i class="nav-icon nav-icon-dashboard"></i>
-					<span>
-						@Localizer["My Dashboard"]
-					</span>
+                    <span>
+                        @Localizer["My Dashboard"]
+                    </span>
                 </a>
             </li>
-            <li class="nav-section-label"><span>@Localizer["Management"]</span></li>
+            <li class="nav-section-label"><span>@Localizer["Projects"]</span></li>
+            <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Projects")">
+                <a href="/ODMS/Project" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Projects")">
+                    <i class="nav-icon nav-icon-projects"></i>
+                    <span>
+                        @Localizer["Project Registry"]
+                    </span>
+                </a>
+            </li>
+            <li class="nav-section-label"><span>@Localizer["Administration"]</span></li>
             <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Admin")">
                 <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Admin")">
                     <i class="nav-icon nav-icon-maintenance"></i>
-					<span>
-						@Localizer["Admin"]
-						<i class="right fas level-one-nav-icon fa-angle-down"></i>
-					</span>
+                    <span>
+                        @Localizer["Settings"]
+                        <i class="right fas level-one-nav-icon fa-angle-down"></i>
+                    </span>
                 </a>
                 <ul class="nav nav-treeview">
                     @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Entities.View)).Succeeded)
@@ -87,16 +96,16 @@
                             </a>
                         </li>
                     }
-					@if((await AuthorizationService.AuthorizeAsync(User, Permission.ApproverSetup.View)).Succeeded)
-							{
-								<li class="nav-item">
-									<a href = "/ODMS/ApproverSetup" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Approval")">
-										<span>
-											@Localizer["Approval"]
-										</span>
-									</a>
-								</li>
-							}                   
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ApproverSetup.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/ODMS/ApproverSetup" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Approval")">
+                                <span>
+                                    @Localizer["Approval"]
+                                </span>
+                            </a>
+                        </li>
+                    }
                     @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ReportSetup.View)).Succeeded)
                     {
                         <li class="nav-item">
@@ -107,16 +116,16 @@
                             </a>
                         </li>
                     }
-					@if ((await AuthorizationService.AuthorizeAsync(User, FBSC.HTMLTemplate.HTMLTemplatePermission.HTMLTemplate.View)).Succeeded)
-					{
-						<li class="nav-item">
-							<a href="/HTMLTemplate/Setup" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "HTMLTemplate")">
-								<span>
-									@Localizer["HTML Template"]
-								</span>
-							</a>
-						</li>
-					}
+                    @if ((await AuthorizationService.AuthorizeAsync(User, FBSC.HTMLTemplate.HTMLTemplatePermission.HTMLTemplate.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/HTMLTemplate/Setup" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "HTMLTemplate")">
+                                <span>
+                                    @Localizer["HTML Template"]
+                                </span>
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item">
                         <a href="/Admin/BatchUploadJobs" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "BatchUploadJobs")">
                             <span>
@@ -124,28 +133,49 @@
                             </span>
                         </a>
                     </li>
-					@if ((await AuthorizationService.AuthorizeAsync(User, FBSC.ApiHub.WebhookPermission.WebhookApi.View)).Succeeded)
+                    @if ((await AuthorizationService.AuthorizeAsync(User, FBSC.ApiHub.WebhookPermission.WebhookApi.View)).Succeeded)
                     {
                         <li class="nav-item">
-                            <a href="/Webhook/WebhookApi" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "WebhookApi")">                                
+                            <a href="/Webhook/WebhookApi" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "WebhookApi")">
                                 <span>
                                     @Localizer["Api Hub"]
                                 </span>
                             </a>
                         </li>
                     }
-                    @if((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.View)).Succeeded)
-						{
-							<li class="nav-item">
-								<a href = "/ODMS/DataSource" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataSource")">
-									<span>
-										@Localizer["Data Source"]
-									</span>
-								</a>
-							</li>
-					}
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/ODMS/DataSource" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataSource")">
+                                <span>
+                                    @Localizer["Data Source"]
+                                </span>
+                            </a>
+                        </li>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.BusinessUnit.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/ODMS/BusinessUnit" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "BusinessUnit")">
+                                <span>
+                                    @Localizer["Business Unit"]
+                                </span>
+                            </a>
+                        </li>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Employee.View)).Succeeded)
+                    {
+                        <li class="nav-item">
+                            <a href="/ODMS/Employee" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Employee")">
+                                <span>
+                                    @Localizer["Employee"]
+                                </span>
+                            </a>
+                        </li>
+                    }
                 </ul>
-            </li>       
+            </li>
+
             @{
                 var reportList = await dropdownService.GetReportList();
                 if (reportList.Count > 0)
@@ -164,7 +194,7 @@
                                 @foreach (var item in reportList)
                                 {
                                     <li class="nav-item">
-                                        <a href="/ODMS/Report?Id=@item["ReportId"]" class="nav-link @ManageNavPages.PageNavClass(ViewContext, item["ReportClass"])">                                        
+                                        <a href="/ODMS/Report?Id=@item["ReportId"]" class="nav-link @ManageNavPages.PageNavClass(ViewContext, item["ReportClass"])">
                                             <span>@item["ReportName"]</span>
                                         </a>
                                     </li>

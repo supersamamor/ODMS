@@ -22,7 +22,12 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
 	public DbSet<ApprovalRecordState> ApprovalRecord { get; set; } = default!;
  
     public DbSet<DataSourceState> DataSource { get; set; } = default!;
-	
+    public DbSet<BusinessUnitState> BusinessUnit { get; set; } = default!;
+    public DbSet<ProjectState> Project { get; set; } = default!;
+    public DbSet<TeamMembersState> TeamMembers { get; set; } = default!;
+    public DbSet<ProjectHistoryState> ProjectHistory { get; set; } = default!;
+    public DbSet<TeamMembersHistoryState> TeamMembersHistory { get; set; } = default!;
+    public DbSet<EmployeeState> Employee { get; set; } = default!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         foreach (var property in modelBuilder.Model.GetEntityTypes()
@@ -110,8 +115,40 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<UploadProcessorState>().Property(e => e.Path).HasMaxLength(450);
         modelBuilder.Entity<UploadProcessorState>().Property(e => e.Status).HasMaxLength(20);
         modelBuilder.Entity<UploadProcessorState>().Property(e => e.Module).HasMaxLength(50);
-        modelBuilder.Entity<UploadProcessorState>().Property(e => e.UploadType).HasMaxLength(50);    
-		modelBuilder.ConfigureHTMLTemplateEntities();
+        modelBuilder.Entity<UploadProcessorState>().Property(e => e.UploadType).HasMaxLength(50);
+
+        modelBuilder.Entity<BusinessUnitState>().Property(e => e.Name).HasMaxLength(150);
+        modelBuilder.Entity<ProjectState>().Property(e => e.ProjectName).HasMaxLength(255);
+        modelBuilder.Entity<ProjectState>().Property(e => e.Priority).HasMaxLength(50);
+        modelBuilder.Entity<ProjectState>().Property(e => e.ProjectDescription).HasMaxLength(1000);
+        modelBuilder.Entity<ProjectState>().Property(e => e.HealthStatus).HasMaxLength(20);
+        modelBuilder.Entity<ProjectState>().Property(e => e.Phase).HasMaxLength(100);
+        modelBuilder.Entity<ProjectState>().Property(e => e.ScheduleStatus).HasMaxLength(50);
+        modelBuilder.Entity<TeamMembersState>().Property(e => e.MemberName).HasMaxLength(255);
+        modelBuilder.Entity<TeamMembersState>().Property(e => e.Role).HasMaxLength(100);
+        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.ProjectName).HasMaxLength(255);
+        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.Priority).HasMaxLength(50);
+        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.ProjectDescription).HasMaxLength(1000);
+        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.HealthStatus).HasMaxLength(20);
+        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.Phase).HasMaxLength(100);
+        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.ScheduleStatus).HasMaxLength(50);
+        modelBuilder.Entity<TeamMembersHistoryState>().Property(e => e.MemberName).HasMaxLength(255);
+        modelBuilder.Entity<TeamMembersHistoryState>().Property(e => e.Role).HasMaxLength(100);
+        modelBuilder.Entity<EmployeeState>().Property(e => e.Email).HasMaxLength(255);
+        modelBuilder.Entity<EmployeeState>().Property(e => e.EmployeeCode).HasMaxLength(450);
+        modelBuilder.Entity<EmployeeState>().Property(e => e.Name).HasMaxLength(255);
+        modelBuilder.Entity<EmployeeState>().Property(e => e.UserId).HasMaxLength(36);
+
+        modelBuilder.Entity<BusinessUnitState>().HasMany(t => t.ProjectList).WithOne(l => l.BusinessUnit).HasForeignKey(t => t.BusinessUnitId);
+        modelBuilder.Entity<EmployeeState>().HasMany(t => t.ProjectList).WithOne(l => l.Employee).HasForeignKey(t => t.ProjectManagerId);
+        modelBuilder.Entity<ProjectState>().HasMany(t => t.TeamMembersList).WithOne(l => l.Project).HasForeignKey(t => t.ProjectId);
+        modelBuilder.Entity<ProjectState>().HasMany(t => t.ProjectHistoryList).WithOne(l => l.Project).HasForeignKey(t => t.ProjectId);
+        modelBuilder.Entity<BusinessUnitState>().HasMany(t => t.ProjectHistoryList).WithOne(l => l.BusinessUnit).HasForeignKey(t => t.BusinessUnitId);
+        modelBuilder.Entity<EmployeeState>().HasMany(t => t.ProjectHistoryList).WithOne(l => l.Employee).HasForeignKey(t => t.ProjectManagerId);
+        modelBuilder.Entity<ProjectHistoryState>().HasMany(t => t.TeamMembersHistoryList).WithOne(l => l.ProjectHistory).HasForeignKey(t => t.ProjectHistoryId);
+
+
+        modelBuilder.ConfigureHTMLTemplateEntities();
 		modelBuilder.ConfigureApiHubEntities();
         base.OnModelCreating(modelBuilder);
     }
