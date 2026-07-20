@@ -1,5 +1,41 @@
 /* --- Custom Css Should Be Here --- */
 
+/* ==================== Soft status badges ====================
+   Theme-agnostic pill labels (e.g. priority/health/status). Built from the
+   app's existing semantic tokens (--color-danger/--color-warning/--color-success/
+   --color-violet), each paired with a WCAG AA-verified (>=4.5:1) light-tint
+   background + darkened same-hue text, not the raw token values directly. */
+.badge-soft {
+    display: inline-flex;
+    align-items: center;
+    padding: .2rem .6rem;
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.badge-soft-danger {
+    background-color: #fbeae8;
+    color: #b3261e;
+}
+
+.badge-soft-warning {
+    background-color: #fdf3d9;
+    color: #92400e;
+}
+
+.badge-soft-success {
+    background-color: #e2f6ee;
+    color: #0f6b47;
+}
+
+.badge-soft-info {
+    background-color: #f1ecfa;
+    color: #4c2889;
+}
+
 /* ==================== CRUD edit-form field grouping ====================
    Used by Areas/ODMS/Pages/**/_Edit{Module}Details.cshtml partials to group
    related fields under a labeled section instead of one field per full-width row. */

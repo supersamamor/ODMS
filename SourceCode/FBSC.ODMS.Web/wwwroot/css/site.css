@@ -50,6 +50,27 @@
     --icon-active-maintenance: url('/img/NavBarIcons/Light/Maintenance.png');
     --icon-active-list: url('/img/NavBarIcons/Light/List.png');
     --icon-active-report: url('/img/NavBarIcons/Light/Report.png');
+    /* Sidebar (theme-scoped; these default to today's light-sidebar look so the
+       existing 9 themes render pixel-identical — only a theme that overrides
+       them, e.g. theme-onetech, actually changes the sidebar's appearance) */
+    --sidebar-bg: #ffffff;
+    --sidebar-border-color: var(--border-color);
+    --sidebar-text: var(--text-color);
+    --sidebar-text-muted: var(--text-muted);
+    --sidebar-hover-bg: var(--bg-hover-color);
+    /* Secondary/monospace font — used for meta text, table headers, labels.
+       Defaults to the primary font so existing themes are unaffected. */
+    --font-secondary: var(--font-primary);
+    /* --sidebar-hover-text, --card-header-bg/-text, --table-header-bg/-text and
+       --logo-text-color are intentionally NOT declared here: their intended
+       "default" is another variable that already varies per active theme
+       (--text-hover-color / --custom-primary). A custom property declared once
+       at :root pointing to var(--custom-primary) does not track later per-theme
+       overrides of --custom-primary the way a fresh var() reference at the
+       point of use does — so those defaults are supplied as the fallback
+       argument of var() directly on the consuming rules instead. Only
+       theme-onetech overrides these (it needs a genuinely different value,
+       not the current theme's own accent), so no bug there. */
 }
 
 
@@ -160,6 +181,38 @@ body.theme-deep-blue {
     --text-active-hover-color: #ffffff;
     --text-color: #2c3e50;
 }
+
+/* Theme 10: OneTech (dark navy sidebar + blue accent, DM Sans/DM Mono) */
+body.theme-onetech {
+    --custom-primary: #1a56db;
+    --custom-primary-hover: #164ac2;
+    --custom-primary-active: #123a94;
+    --custom-primary-rgb: 26, 86, 219;
+    --text-active-color: #ffffff;
+    --text-hover-color: #111827;
+    --text-active-hover-color: #ffffff;
+    --text-color: #111827;
+    --font-primary: 'DM Sans', sans-serif;
+    --font-secondary: 'DM Mono', monospace;
+    --sidebar-bg: #0f1f3d;
+    --sidebar-border-color: #1e2e50;
+    --sidebar-text: #c8d4e8;
+    /* Lightened from the source design's #4b6090 to clear WCAG AA (4.5:1) on
+       this sidebar background — same hue, just brighter. */
+    --sidebar-text-muted: #8296bf;
+    --sidebar-hover-bg: #1a2d52;
+    --sidebar-hover-text: #e2eaf7;
+    --card-header-bg: #ffffff;
+    --card-header-text: var(--text-color);
+    --table-header-bg: #f8f9fb;
+    --table-header-text: #6b7280;
+}
+
+    /* Scoped to the sidebar logo instance only (not the login page's, which
+       always sits on a light background regardless of theme). */
+    body.theme-onetech .logo {
+        --logo-text-color: var(--sidebar-text);
+    }
 /* ==================== GLOBAL TYPOGRAPHY ==================== */
 body {
     font-family: var(--font-primary);
@@ -356,16 +409,16 @@ select:disabled {
     height: 100vh;
     overflow-y: auto;
     z-index: 1030;
-    background-color: #ffffff !important;
-    border-right: 1px solid var(--border-color);
+    background-color: var(--sidebar-bg) !important;
+    border-right: 1px solid var(--sidebar-border-color);
 }
 
 .logo-container {
     width: 100%;
-    background-color: var(--bg-light);
+    background-color: var(--sidebar-bg);
     text-align: center;
     padding: 1rem 0;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--sidebar-border-color);
 }
 
 .logo {
@@ -383,7 +436,7 @@ select:disabled {
     width: 12rem;
     margin: 0 2rem;
     padding: 1rem;
-    color: var(--text-color) !important;
+    color: var(--sidebar-text) !important;
     border-radius: var(--border-radius-base) !important;
     font-size: .85rem;
     text-align: left;
@@ -400,8 +453,8 @@ select:disabled {
         }
 
     .sidebar .nav-item .nav-link:hover {
-        background-color: var(--bg-hover-color);
-        color: var(--text-hover-color) !important;
+        background-color: var(--sidebar-hover-bg);
+        color: var(--sidebar-hover-text, var(--text-hover-color)) !important;
     }
 
 .nav-link.active {
@@ -501,10 +554,16 @@ footer.sticky-footer {
 
 .card-header,
 .card-header-custom {
-    background-color: var(--custom-primary);
-    color: #ffffff;
+    background-color: var(--card-header-bg, var(--custom-primary));
+    color: var(--card-header-text, #ffffff);
     font-size: var(--font-size-base);
 }
+
+    body.theme-onetech .card-header,
+    body.theme-onetech .card-header-custom {
+        border-bottom: 1px solid var(--border-color);
+        font-weight: 600;
+    }
 
     /* Fix for nested card-header elements (wins on specificity, no !important needed) */
     .card-header .card-header-custom,
@@ -574,11 +633,20 @@ footer.sticky-footer {
 /* Tables */
 .fills-table th,
 table th {
-    background-color: var(--custom-primary) !important;
-    color: #ffffff !important;
+    background-color: var(--table-header-bg, var(--custom-primary)) !important;
+    color: var(--table-header-text, #ffffff) !important;
     border-bottom: 2px solid #ccc;
     font-weight: 500;
 }
+
+    body.theme-onetech .fills-table th,
+    body.theme-onetech table th {
+        font-family: var(--font-secondary);
+        font-size: .7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+    }
 
 .fills-table.auditlogs {
     width: 100%;
