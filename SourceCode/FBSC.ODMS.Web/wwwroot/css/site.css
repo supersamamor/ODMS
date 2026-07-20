@@ -1529,6 +1529,89 @@ form.user .btn-user {
     }
 }
 
+/* Dashboard global header/filter bar (title left, filter chips right) */
+.dashboard-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.dashboard-header-title h1 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.dashboard-header-title p {
+    margin: .2rem 0 0;
+    font-size: var(--font-size-dense);
+    font-family: var(--font-secondary);
+    color: var(--text-muted);
+}
+
+.dashboard-header-controls {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+
+.dashboard-header-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    margin: 0;
+    padding: .45rem .75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    background-color: var(--bg-light);
+    color: var(--text-muted);
+    font-size: var(--font-size-dense);
+    font-family: var(--font-secondary);
+    transition: border-color var(--transition-base), background-color var(--transition-base);
+}
+
+    .dashboard-header-chip:hover,
+    .dashboard-header-chip:focus-within {
+        border-color: var(--custom-primary);
+    }
+
+    .dashboard-header-chip input,
+    .dashboard-header-chip select {
+        border: 0;
+        outline: none;
+        padding: 0;
+        background: transparent;
+        color: var(--text-color);
+        font-size: var(--font-size-dense);
+        font-family: inherit;
+    }
+
+    .dashboard-header-chip select {
+        cursor: pointer;
+        /* Global rule sets 2.5rem height on selects - keep the chip compact. */
+        height: auto !important;
+    }
+
+.dashboard-header-search input {
+    width: 11rem;
+}
+
+button.dashboard-header-chip {
+    cursor: pointer;
+}
+
+    button.dashboard-header-chip:hover {
+        background-color: var(--bg-hover-color);
+        color: var(--text-color);
+    }
+
 /* ==================== RESPONSIVE DESIGN ==================== */
 @media (min-width: 768px) {
     /* .logo-container is intentionally NOT widened here anymore: it's now a

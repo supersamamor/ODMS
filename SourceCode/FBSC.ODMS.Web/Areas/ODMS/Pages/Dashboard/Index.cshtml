@@ -4,12 +4,39 @@
     ViewData["Title"] = "Dashboard";
     ViewData["ActiveMainPage"] = "Dashboard";
     ViewData["Level1"] = "Dashboard";
-    IEnumerable<dynamic> breadCrumbs = [new { Title = "Dashboard", Url = "", IsActive = true }];
 }
-<partial name="_BreadcrumbPartial" model=@(breadCrumbs) />
 @section Styles {
     <partial name="_DataTableStyles" />
 }
+
+@* Global header/filter bar (replaces the redundant "Dashboard" breadcrumb).
+   Controls broadcast into each widget's existing filter form and trigger its
+   Apply, so they only affect widgets whose report defines a matching filter. *@
+<div class="dashboard-header-bar">
+    <div class="dashboard-header-title">
+        <h1>@Localizer["Executive Dashboard"]</h1>
+        <p>@Localizer["Real-time view of all project portfolio"]</p>
+    </div>
+    <div class="dashboard-header-controls">
+        <label class="dashboard-header-chip" title="@Localizer["Filter widgets by date"]">
+            <i class="far fa-calendar-alt" aria-hidden="true"></i>
+            <input type="date" id="globalFilterDate" aria-label="@Localizer["Filter widgets by date"]" />
+        </label>
+        <label class="dashboard-header-chip dashboard-header-search" title="@Localizer["Search widgets"]">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input type="search" id="globalWidgetSearch" placeholder="@Localizer["Search widgets..."]" aria-label="@Localizer["Search widgets"]" />
+        </label>
+        <label class="dashboard-header-chip" title="@Localizer["Filter widgets by business unit"]">
+            <i class="fas fa-filter" aria-hidden="true"></i>
+            <select id="globalFilterBU" aria-label="@Localizer["Filter widgets by business unit"]" asp-items="@(dropdownService.GetBusinessUnitList(""))">
+                <option value="">@Localizer["BU"]</option>
+            </select>
+        </label>
+        <button type="button" id="btnDashboardExport" class="dashboard-header-chip dashboard-header-export" title="@Localizer["Export dashboard"]">
+            <i class="fas fa-download" aria-hidden="true"></i>&nbsp;@Localizer["Export"]
+        </button>
+    </div>
+</div>
 
 <!-- Keep chart-form separate so it doesn't wrap the partial -->
 <form id="chart-form" method="post">
@@ -51,6 +78,58 @@
             }
 
             RefreshChart();
+
+            // ---- Global header/filter bar ----
+
+            // Live widget search: hides widget cards whose title doesn't match.
+            $('#globalWidgetSearch').on('input', function () {
+                var term = $(this).val().toLowerCase();
+                $('.dashboard-widget-card').each(function () {
+                    var title = $(this).find('.dashboard-widget-title-text').text().toLowerCase();
+                    $(this).closest('[class*="col-"]').toggle(title.indexOf(term) > -1);
+                });
+            });
+
+            // Pushes a value into every widget filter the matcher accepts,
+            // then reuses that widget's own Apply (ajax refresh + spinner).
+            function broadcastGlobalFilter(matcher, value) {
+                $('.dashboard-filter-form').each(function () {
+                    var form = $(this);
+                    var touched = false;
+                    form.find('input[type="hidden"][name$=".FieldName"]').each(function () {
+                        var idxMatch = $(this).attr('name').match(/Filters\[(\d+)\]/);
+                        if (!idxMatch) { return; }
+                        var valueEl = form.find('[name="Filters[' + idxMatch[1] + '].FieldValue"]');
+                        if (matcher($(this).val() || '', valueEl)) {
+                            valueEl.val(value);
+                            touched = true;
+                        }
+                    });
+                    if (touched) {
+                        form.find('.btn-apply-filter').trigger('click');
+                    }
+                });
+            }
+
+            // BU: targets widget filters whose field name mentions BusinessUnit.
+            $('#globalFilterBU').on('change', function () {
+                var value = $(this).val();
+                broadcastGlobalFilter(function (fieldName) {
+                    return fieldName.toLowerCase().indexOf('businessunit') > -1;
+                }, value);
+            });
+
+            // Date: targets every Date-type widget filter.
+            $('#globalFilterDate').on('change', function () {
+                var value = $(this).val();
+                broadcastGlobalFilter(function (fieldName, valueEl) {
+                    return valueEl.attr('type') === 'date';
+                }, value);
+            });
+
+            $('#btnDashboardExport').on('click', function () {
+                window.print();
+            });
 
             $('.dashboard-filter-form .btn-apply-filter').on('click', function(e) {            
                 e.preventDefault(); // Prevents any default button behavior
