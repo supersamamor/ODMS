@@ -11,17 +11,14 @@
         <ul class="navbar-nav text-light flex-grow-1 overflow-auto" id="accordionSidebar">
             <li class="sidebar-top-row">
                 <div class="logo-container">
-                    <div class="logo">
+                    <button type="button" id="sidebarToggleTop" class="logo" aria-label="Toggle sidebar" title="Toggle sidebar">
                         <partial name="~/Pages/Shared/_LogoIcon.cshtml" />
-                    </div>
+                    </button>
                     <div class="logo-text">
                         <p class="logo-title">OneTech | DMS</p>
                         <p class="logo-subtitle">Delivery Management System</p>
                     </div>
                 </div>
-                <button type="button" id="sidebarToggleTop" class="sidebar-collapse-btn" aria-label="Collapse sidebar" title="Collapse sidebar">
-                    <i class="fas fa-bars"></i>
-                </button>
             </li>
             <li class="nav-section-label"><span>@Localizer["Navigation"]</span></li>
             <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Dashboard")">

@@ -458,11 +458,27 @@ select:disabled {
     border-bottom: 1px solid var(--sidebar-border-color);
 }
 
+/* Also the sidebar collapse/expand toggle (id="sidebarToggleTop", picked up
+   by the existing click handler in site.js) - a plain button reset so it
+   still looks like the logo mark, just clickable. */
 .logo {
     display: inline-flex;
     flex-shrink: 0;
+    border: 0;
+    padding: .25rem;
+    margin: -.25rem;
+    border-radius: var(--border-radius-base);
+    background: transparent;
     color: var(--custom-primary);
+    cursor: pointer;
+    transition: background-color var(--transition-base);
 }
+
+    .logo:hover,
+    .logo:focus-visible {
+        background-color: var(--sidebar-hover-bg);
+        outline: none;
+    }
 
     .logo .app-logo-svg {
         width: 130px;
@@ -528,36 +544,10 @@ select:disabled {
         padding-top: .5rem;
     }
 
-/* Sidebar collapse toggle (reuses the existing #sidebarToggleTop handler
-   already wired up in site.js, previously dormant with no matching button
-   or CSS). Collapsing hides the wordmark/labels down to an icon-only rail. */
 .sidebar-top-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
 }
-
-.sidebar-collapse-btn {
-    flex-shrink: 0;
-    width: 2rem;
-    height: 2rem;
-    margin-right: 1rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 0;
-    border-radius: var(--border-radius-base);
-    background: transparent;
-    color: var(--sidebar-text-muted);
-    transition: background-color var(--transition-base), color var(--transition-base);
-}
-
-    .sidebar-collapse-btn:hover,
-    .sidebar-collapse-btn:focus-visible {
-        background-color: var(--sidebar-hover-bg);
-        color: var(--sidebar-hover-text, var(--sidebar-text));
-        outline: none;
-    }
 
 .sidebar,
 #wrapper #content-wrapper {
