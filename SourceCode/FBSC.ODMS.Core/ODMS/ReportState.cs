@@ -21,6 +21,7 @@ public record ReportState : BaseEntity
     public int MarginRight { get; init; }
     public int SpanWidth { get; init; }
     public string? DrillDownReportId { get; set; }
+    public string? DataSourceId { get; init; }
     public IList<ReportQueryFilterState>? ReportQueryFilterList { get; set; }
     public IList<ReportRoleAssignmentState>? ReportRoleAssignmentList { get; set; }
     public IList<ReportAIIntegrationState>? ReportAIIntegrationList { get; set; }

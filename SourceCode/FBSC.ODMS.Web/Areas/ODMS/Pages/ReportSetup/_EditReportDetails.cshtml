@@ -53,6 +53,16 @@
                 </div>
             </div>
         }
+        <div class="col-12 col-md-6">
+            <div class="mb-3">
+                <label asp-for="@Model.DataSourceId" class="form-label"><strong>@Localizer["Data Source"] :</strong></label>
+                <select asp-for="@Model.DataSourceId" class="form-control" asp-items="@(await dropdownService.DataSourceList())">
+                    <option value="">- Use Default Data Source -</option>
+                </select>
+                <span class="form-label margin-top-10"><i>@Localizer["When set, this report's query executes against the selected data source instead of the default reporting database."]</i></span>
+                <span asp-validation-for="@Model.DataSourceId" class="text-danger"></span>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -1,16 +1,161 @@
 using FBSC.ODMS.Application.DTOs;
 using FBSC.ODMS.Core.Constants;
 using FBSC.ODMS.Core.ODMS;
+using FBSC.ODMS.Infrastructure.Data;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Data;
 using FBSC.Common.Identity.Abstractions;
+using FBSC.Common.Utility.Helpers;
 
 
 namespace FBSC.ODMS.Application.Helpers
 {
     public static class ReportDataHelper
     {
+        private const string DefaultConnectionStringKey = "ReportContext";
+
+        /// <summary>
+        /// Resolves the connection string a single report should execute against: the
+        /// <see cref="DataSourceState"/> referenced by <paramref name="dataSourceId"/> when set,
+        /// otherwise the default "ReportContext" connection string.
+        /// </summary>
+        public static async Task<string> ResolveConnectionStringAsync(
+            ApplicationContext context,
+            IConfiguration configuration,
+            string? dataSourceId,
+            CancellationToken cancellationToken = default)
+        {
+            var defaultConnectionString = configuration.GetConnectionString(DefaultConnectionStringKey)!;
+            if (string.IsNullOrWhiteSpace(dataSourceId))
+            {
+                return defaultConnectionString;
+            }
+
+            var dataSource = await context.DataSource
+                .AsNoTracking()
+                .Where(d => d.Id == dataSourceId && d.IsActive)
+                .Select(d => new DataSourceConnectionInfo(
+                    d.Id, d.ServerAddress, d.DatabaseName, d.AuthenticationType,
+                    d.Username, d.PasswordEncrypted, d.ConnectionStringEncrypted))
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return BuildConnectionString(dataSource, configuration, defaultConnectionString);
+        }
+
+        /// <summary>
+        /// Batch-resolves connection strings for many reports (e.g. a dashboard render) in a single
+        /// round-trip against the DataSource table, avoiding one query per report when scaling to
+        /// many concurrently-rendered widgets.
+        /// </summary>
+        public static async Task<IReadOnlyDictionary<string, string>> ResolveConnectionStringsAsync(
+            ApplicationContext context,
+            IConfiguration configuration,
+            IEnumerable<string?> dataSourceIds,
+            CancellationToken cancellationToken = default)
+        {
+            var defaultConnectionString = configuration.GetConnectionString(DefaultConnectionStringKey)!;
+            var distinctIds = dataSourceIds
+                .Where(id => !string.IsNullOrWhiteSpace(id))
+                .Select(id => id!)
+                .Distinct(StringComparer.Ordinal)
+                .ToArray();
+
+            var map = new Dictionary<string, string>(distinctIds.Length, StringComparer.Ordinal);
+            if (distinctIds.Length == 0)
+            {
+                return map;
+            }
+
+            var dataSources = await context.DataSource
+                .AsNoTracking()
+                .Where(d => distinctIds.Contains(d.Id) && d.IsActive)
+                .Select(d => new DataSourceConnectionInfo(
+                    d.Id, d.ServerAddress, d.DatabaseName, d.AuthenticationType,
+                    d.Username, d.PasswordEncrypted, d.ConnectionStringEncrypted))
+                .ToDictionaryAsync(d => d.Id, StringComparer.Ordinal, cancellationToken);
+
+            foreach (var id in distinctIds)
+            {
+                dataSources.TryGetValue(id, out var dataSource);
+                map[id] = BuildConnectionString(dataSource, configuration, defaultConnectionString);
+            }
+
+            return map;
+        }
+
+        private static string BuildConnectionString(
+            DataSourceConnectionInfo? dataSource,
+            IConfiguration configuration,
+            string defaultConnectionString)
+        {
+            if (dataSource is not { } ds)
+            {
+                return defaultConnectionString;
+            }
+
+            var decryptionKey = $"{configuration["EncryptionDecryptionKeyPrefix"]}{ds.Id}";
+
+            if (!string.IsNullOrWhiteSpace(ds.ConnectionStringEncrypted))
+            {
+                var decrypted = EncryptionHelper.DecryptPassword(ds.ConnectionStringEncrypted, decryptionKey);
+                return string.IsNullOrWhiteSpace(decrypted) ? defaultConnectionString : decrypted;
+            }
+
+            if (string.IsNullOrWhiteSpace(ds.ServerAddress) || string.IsNullOrWhiteSpace(ds.DatabaseName))
+            {
+                return defaultConnectionString;
+            }
+
+            SqlConnectionStringBuilder builder = new()
+            {
+                DataSource = ds.ServerAddress,
+                InitialCatalog = ds.DatabaseName,
+                TrustServerCertificate = true,
+                ConnectTimeout = 15
+            };
+
+            if (string.Equals(ds.AuthenticationType, "WindowsIntegrated", StringComparison.OrdinalIgnoreCase))
+            {
+                builder.IntegratedSecurity = true;
+            }
+            else if (string.Equals(ds.AuthenticationType, "AzureAD", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!string.IsNullOrWhiteSpace(ds.Username))
+                {
+                    builder.UserID = ds.Username;
+                    builder.Password = string.IsNullOrWhiteSpace(ds.PasswordEncrypted)
+                        ? ""
+                        : EncryptionHelper.DecryptPassword(ds.PasswordEncrypted, decryptionKey);
+                    builder.Authentication = SqlAuthenticationMethod.ActiveDirectoryPassword;
+                }
+                else
+                {
+                    builder.Authentication = SqlAuthenticationMethod.ActiveDirectoryDefault;
+                }
+            }
+            else
+            {
+                builder.UserID = ds.Username ?? "";
+                builder.Password = string.IsNullOrWhiteSpace(ds.PasswordEncrypted)
+                    ? ""
+                    : EncryptionHelper.DecryptPassword(ds.PasswordEncrypted, decryptionKey);
+            }
+
+            return builder.ConnectionString;
+        }
+
+        private readonly record struct DataSourceConnectionInfo(
+            string Id,
+            string? ServerAddress,
+            string? DatabaseName,
+            string? AuthenticationType,
+            string? Username,
+            string? PasswordEncrypted,
+            string? ConnectionStringEncrypted);
+
         public static async Task<LabelResultAndStyle> ConvertSQLQueryToJsonAsync(
             IAuthenticatedUser authenticatedUser,
             string connectionString,

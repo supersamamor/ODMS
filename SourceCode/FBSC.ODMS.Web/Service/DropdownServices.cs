@@ -3,6 +3,7 @@ using FBSC.ODMS.Web.Areas.Admin.Queries.Users;
 using MediatR;
 using FBSC.ODMS.Web.Areas.Admin.Queries.Roles;
 using FBSC.ODMS.Application.Features.ODMS.Report.Queries;
+using FBSC.ODMS.Application.Features.ODMS.DataSource.Queries;
 using System.Globalization;
 using FBSC.ODMS.Application.Constants;
 using FBSC.ODMS.Core.ODMS;
@@ -144,7 +145,17 @@ namespace FBSC.ODMS.Web.Service
 			};
 			return (await _mediaTr.Send(query)).Data.Select(l => new SelectListItem() { Value = l.Id, Text = l.ReportName });
 		}
-        
+		public async Task<IEnumerable<SelectListItem>> DataSourceList()
+		{
+			var query = new GetDataSourceQuery()
+			{
+				PageSize = -1
+			};
+			return (await _mediaTr.Send(query)).Data
+				.Where(l => l.IsActive)
+				.Select(l => new SelectListItem() { Value = l.Id, Text = l.Name });
+		}
+
         public async Task<IEnumerable<SelectListItem>> GetUserList(string currentSelectedApprover, IList<string> allSelectedApprovers)
 		{
 			return (await _mediaTr.Send(new GetApproversQuery(currentSelectedApprover, allSelectedApprovers) { PageSize = -1 })).Data.Select(l => new SelectListItem { Value = l.Id, Text = l.Name });

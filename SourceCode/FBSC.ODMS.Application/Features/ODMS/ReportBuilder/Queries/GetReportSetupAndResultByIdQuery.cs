@@ -47,9 +47,12 @@ public class GetReportBuilderByIdQueryHandler(ApplicationContext context, IConfi
 				}
 			}
 		}
+		var connectionString = await Helpers.ReportDataHelper.ResolveConnectionStringAsync(
+			  context, configuration, report?.DataSourceId, cancellationToken);
+
 		var resultsAndLabels = await Helpers.ReportDataHelper.ConvertSQLQueryToJsonAsync(
 			  authenticatedUser,
-			  configuration.GetConnectionString("ReportContext")!,
+			  connectionString,
 			  report!,
 			  request.Filters);
 		return new ReportResultModel()

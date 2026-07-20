@@ -27,6 +27,10 @@ public class GetDashboardReportsQueryHandler(ApplicationContext context, IConfig
 
         IList<ReportResultModel> reportResult = [];
 
+        var connectionStringsByDataSourceId = await Helpers.ReportDataHelper.ResolveConnectionStringsAsync(
+            context, configuration, reportList.Select(r => r.DataSourceId), cancellationToken);
+        var defaultConnectionString = configuration.GetConnectionString("ReportContext")!;
+
         foreach (var report in reportList)
         {
             var filters = new List<ReportQueryFilterModel>();
@@ -49,7 +53,12 @@ public class GetDashboardReportsQueryHandler(ApplicationContext context, IConfig
                 }
             }
 
-            var resultsAndLabels = await Helpers.ReportDataHelper.ConvertSQLQueryToJsonAsync(authenticatedUser, configuration.GetConnectionString("ReportContext")!, report!, filters);
+            var connectionString = !string.IsNullOrWhiteSpace(report?.DataSourceId)
+                && connectionStringsByDataSourceId.TryGetValue(report.DataSourceId, out var resolvedConnectionString)
+                    ? resolvedConnectionString
+                    : defaultConnectionString;
+
+            var resultsAndLabels = await Helpers.ReportDataHelper.ConvertSQLQueryToJsonAsync(authenticatedUser, connectionString, report!, filters);
 
             reportResult.Add(new ReportResultModel()
             {

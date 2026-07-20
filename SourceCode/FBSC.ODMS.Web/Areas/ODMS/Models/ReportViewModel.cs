@@ -58,6 +58,8 @@ public record ReportViewModel : BaseViewModel
     public bool DisplayOnReportModule { get; set; } = false;
     [Display(Name = "Drill-Down Report")]
     public string? DrillDownReportId { get; init; }
+    [Display(Name = "Data Source")]
+    public string? DataSourceId { get; init; }
     public DateTime LastModifiedDate { get; set; }   
     public IList<ReportQueryFilterViewModel>? ReportQueryFilterList { get; set; }
     [Display(Name = "Role")]

@@ -66,6 +66,8 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         // NOTE: DO NOT CREATE EXTENSION METHOD FOR QUERY FILTER!!!
         // It causes filter to be evaluated before user has signed in
         //Template:[InsertNewEFFluentAttributesTextHere]
+        modelBuilder.Entity<ReportState>().Property(e => e.DataSourceId).HasMaxLength(36);
+        modelBuilder.Entity<ReportState>().HasIndex(e => e.DataSourceId);
         modelBuilder.Entity<DataSourceState>().HasIndex(p => p.Name).IsUnique();
 		modelBuilder.Entity<DataUploadState>().HasIndex(p => p.Description).IsUnique();
 		
