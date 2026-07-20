@@ -207,6 +207,13 @@ body.theme-onetech {
     --card-header-text: var(--text-color);
     --table-header-bg: #f8f9fb;
     --table-header-text: #6b7280;
+    /* The "Dark" nav-icon PNGs were made for a light sidebar - on this dark
+       one they're near-invisible for every item except the active one
+       (which already swaps to the "Light" set). Use "Light" always here. */
+    --icon-dashboard: var(--icon-active-dashboard);
+    --icon-maintenance: var(--icon-active-maintenance);
+    --icon-list: var(--icon-active-list);
+    --icon-report: var(--icon-active-report);
 }
 
     /* Scoped to .logo-container (not .logo) so the custom property reaches
@@ -241,6 +248,12 @@ body.theme-deepslate {
     --card-header-text: var(--text-color);
     --table-header-bg: #f8f9fb;
     --table-header-text: #6b7280;
+    /* Same reasoning as theme-onetech above - "Dark" nav-icons are
+       near-invisible against a dark sidebar for non-active items. */
+    --icon-dashboard: var(--icon-active-dashboard);
+    --icon-maintenance: var(--icon-active-maintenance);
+    --icon-list: var(--icon-active-list);
+    --icon-report: var(--icon-active-report);
 }
 
     body.theme-deepslate .logo-container {
@@ -442,6 +455,10 @@ select:disabled {
     width: var(--sidebar-width-sm);
     height: 100vh;
     overflow-y: auto;
+    /* Without this, overflow-x computes to 'auto' too (per spec, when only
+       one axis is set to non-visible) - any few px of horizontal overflow
+       then draws a scrollbar, most visible on the narrow collapsed rail. */
+    overflow-x: hidden;
     z-index: 1030;
     background-color: var(--sidebar-bg) !important;
     border-right: 1px solid var(--sidebar-border-color);
@@ -652,6 +669,13 @@ body.sidebar-toggled .sidebar-user-footer {
 }
 
 body.sidebar-toggled .sidebar-user-name {
+    display: none;
+}
+
+/* Bootstrap's .dropdown-toggle adds its caret via ::after regardless of
+   the name text next to it - with the name hidden, the caret was left
+   floating on its own above the avatar. */
+body.sidebar-toggled .sidebar-user-toggle::after {
     display: none;
 }
 
@@ -1496,9 +1520,19 @@ form.user .btn-user {
 
 /* ==================== RESPONSIVE DESIGN ==================== */
 @media (min-width: 768px) {
-    .logo-container,
+    /* .logo-container is intentionally NOT widened here anymore: it's now a
+       flex child of .sidebar-top-row that sizes itself, and the old
+       width !important kept forcing it to 16rem inside the 4.5rem collapsed
+       rail, distorting the whole top row. */
+
+    /* No !important here - the base .sidebar rule doesn't use one either,
+       so plain cascade/source-order already lets this win at >=768px.
+       That leaves body.sidebar-toggled .sidebar's !important (needed to
+       beat this rule when collapsed) as the only !important on .sidebar's
+       width, instead of two competing on specificity - which worked, but
+       was fragile to depend on. */
     .sidebar {
-        width: var(--sidebar-width-md) !important;
+        width: var(--sidebar-width-md);
     }
 
     #wrapper #content-wrapper {

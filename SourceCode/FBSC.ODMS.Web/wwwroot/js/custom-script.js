@@ -1,37 +1,26 @@
-﻿/* --- Custom JS Should Be Here --- */
+/* --- Custom JS Should Be Here --- */
 
 $(document).ready(function () {
 
-    // Responsive sidebar: start collapsed (icon rail) below the tablet
-    // breakpoint so it doesn't eat most of a narrow viewport, expanded on
-    // desktop as before. Reuses the existing #sidebarToggleTop/body.sidebar-toggled
-    // mechanism from site.js - manual toggling still works at any width;
-    // this only re-applies the "natural" state when a resize actually
-    // crosses the breakpoint, so it never fights a deliberate manual choice
-    // made without resizing.
-    var sidebarBreakpoint = 992;
-    var body = document.body;
+    // Responsive sidebar: collapsed (icon rail) below the tablet breakpoint,
+    // expanded on desktop. Reuses the existing #sidebarToggleTop/
+    // body.sidebar-toggled mechanism from site.js. matchMedia fires only on
+    // real breakpoint crossings, so a manual toggle holds until the viewport
+    // actually crosses 992px, at which point the natural state for the new
+    // size is re-applied.
+    var sidebarMediaQuery = window.matchMedia('(max-width: 991.98px)');
 
-    function sidebarBucket() {
-        return (window.innerWidth || document.documentElement.clientWidth) < sidebarBreakpoint ? 'small' : 'large';
+    function applySidebarState(mq) {
+        document.body.classList.toggle('sidebar-toggled', mq.matches);
     }
 
-    var lastSidebarBucket = sidebarBucket();
+    applySidebarState(sidebarMediaQuery);
 
-    if (lastSidebarBucket === 'small') {
-        body.classList.add('sidebar-toggled');
+    if (typeof sidebarMediaQuery.addEventListener === 'function') {
+        sidebarMediaQuery.addEventListener('change', applySidebarState);
+    } else if (typeof sidebarMediaQuery.addListener === 'function') {
+        // Older Safari/Edge fallback
+        sidebarMediaQuery.addListener(applySidebarState);
     }
-
-    var sidebarResizeTimer;
-    window.addEventListener('resize', function () {
-        clearTimeout(sidebarResizeTimer);
-        sidebarResizeTimer = setTimeout(function () {
-            var bucket = sidebarBucket();
-            if (bucket !== lastSidebarBucket) {
-                lastSidebarBucket = bucket;
-                body.classList.toggle('sidebar-toggled', bucket === 'small');
-            }
-        }, 150);
-    });
 
 });
