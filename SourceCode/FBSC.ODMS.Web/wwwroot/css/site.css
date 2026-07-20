@@ -215,30 +215,19 @@ body.theme-onetech {
         --logo-text-color: var(--sidebar-text);
     }
 
-/* Theme 11: Deep Slate & Sapphire (full dark theme - dark sidebar AND dark
-   main content, unlike theme-onetech which only darkens the sidebar). Beyond
-   the shared tokens below, this also relies on --content-bg/--card-bg/
-   --label-text/--table-body-text/--table-body-border/--table-header-border/
-   --widget-filter-bg/--widget-body-bg/--topbar-bg/--topbar-text/--footer-bg/
-   --footer-text/--modal-bg - all declared ONLY here, consumed via
-   var(--x, existing-light-value) at each call site so every other theme is
-   pixel-identical to before. All pairs below are WCAG AA verified (>=4.5:1). */
+/* Theme 11: Deep Slate & Sapphire (dark sidebar only, same shape as
+   theme-onetech - the main content panel/cards/tables/topbar/footer stay
+   light, matching every other theme, just with the indigo/sapphire accent
+   and slate sidebar instead of navy/blue). */
 body.theme-deepslate {
     --custom-primary: #4f46e5;
     --custom-primary-hover: #4338ca;
     --custom-primary-active: #3730a3;
     --custom-primary-rgb: 79, 70, 229;
     --text-active-color: #ffffff;
-    --text-hover-color: #e2e8f0;
+    --text-hover-color: #111827;
     --text-active-hover-color: #ffffff;
-    --text-color: #e2e8f0;
-    --bs-body-color: #94a3b8;
-    --text-muted: #94a3b8;
-    --border-color: #1f2937;
-    --border-light: #1f2937;
-    --bg-light: #111827;
-    --bg-disabled: #1a2332;
-    --bg-hover-color: #161e2e;
+    --text-color: #111827;
     --font-primary: 'DM Sans', sans-serif;
     --font-secondary: 'DM Mono', monospace;
     --sidebar-bg: #0a0e1a;
@@ -247,42 +236,14 @@ body.theme-deepslate {
     --sidebar-text-muted: #94a3b8;
     --sidebar-hover-bg: #1a2035;
     --sidebar-hover-text: #e2e8f0;
-    --card-header-bg: #111827;
-    --card-header-text: #e2e8f0;
-    --table-header-bg: #1a2332;
-    --table-header-text: #94a3b8;
-    --content-bg: #0b1120;
-    --card-bg: #111827;
-    --label-text: #cbd5e1;
-    --table-body-text: #e2e8f0;
-    --table-body-border: #1f2937;
-    --table-header-border: #1f2937;
-    --widget-filter-bg: #161e2e;
-    --widget-body-bg: #111827;
-    --topbar-bg: #111827;
-    --topbar-text: #e2e8f0;
-    --footer-bg: #0a0e1a;
-    --footer-text: #94a3b8;
-    --modal-bg: #111827;
-    background-color: var(--content-bg);
+    --card-header-bg: #ffffff;
+    --card-header-text: var(--text-color);
+    --table-header-bg: #f8f9fb;
+    --table-header-text: #6b7280;
 }
 
     body.theme-deepslate .logo {
         --logo-text-color: var(--sidebar-text);
-    }
-
-    /* --custom-primary directly as TEXT (not as a button background) only
-       clears AA against light card backgrounds - on this theme's dark cards
-       it drops to ~2.7:1, so alert-primary gets its own brighter indigo. */
-    body.theme-deepslate .alert-primary {
-        background-color: rgba(var(--custom-primary-rgb), 0.15) !important;
-        border-color: rgba(var(--custom-primary-rgb), 0.35) !important;
-        color: #a5b4fc !important;
-    }
-
-    body.theme-deepslate footer.sticky-footer {
-        background-color: var(--footer-bg) !important;
-        color: var(--footer-text);
     }
 
 /* ==================== GLOBAL TYPOGRAPHY ==================== */
@@ -327,7 +288,7 @@ label,
 }
 
 label {
-    color: var(--label-text, black) !important;
+    color: black !important;
     text-align: left !important;
 }
 
@@ -465,7 +426,7 @@ select:disabled {
 
 /* Content Wrapper */
 #wrapper #content-wrapper {
-    background: var(--content-bg, #fff);
+    background: #fff;
     margin-left: var(--sidebar-width-sm) !important;
     min-height: 100vh;
     display: flex;
@@ -603,6 +564,53 @@ body.sidebar-toggled .sidebar .nav-treeview {
     display: none !important;
 }
 
+/* User profile, moved here from the removed top navbar so the sidebar is
+   the only header element on the page (nav-scroll region above grows to
+   push this to the bottom - see .flex-grow-1 on #accordionSidebar). */
+.sidebar-user-footer {
+    flex-shrink: 0;
+    padding: .65rem 1rem;
+    border-top: 1px solid var(--sidebar-border-color);
+}
+
+.sidebar-user-toggle {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    min-width: 0;
+    color: var(--sidebar-text) !important;
+    text-decoration: none;
+}
+
+    .sidebar-user-toggle:hover,
+    .sidebar-user-toggle:focus {
+        color: var(--sidebar-hover-text, var(--text-hover-color)) !important;
+    }
+
+    .sidebar-user-toggle .img-profile {
+        width: 1.75rem;
+        height: 1.75rem;
+        flex-shrink: 0;
+    }
+
+.sidebar-user-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: .8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.sidebar-toggled .sidebar-user-footer {
+    padding: .65rem .5rem;
+}
+
+body.sidebar-toggled .sidebar-user-name {
+    display: none;
+}
+
     .sidebar .nav-item .nav-link.active {
         background-color: var(--custom-primary);
         color: var(--text-active-color) !important;
@@ -639,10 +647,7 @@ body.sidebar-toggled .sidebar .nav-treeview {
 /* Topbar */
 .topbar {
     height: var(--topbar-height);
-    /* !important needed: the markup also carries Bootstrap's .bg-white
-       utility class, which is itself !important and otherwise wins. */
-    background-color: var(--topbar-bg, #fff) !important;
-    color: var(--topbar-text, inherit);
+    background-color: #fff;
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -714,7 +719,6 @@ footer.sticky-footer {
 /* Cards */
 .card {
     border: none !important;
-    background-color: var(--card-bg, #fff);
 }
 
 .card-header,
@@ -728,7 +732,6 @@ footer.sticky-footer {
     body.theme-onetech .card-header-custom,
     body.theme-deepslate .card-header,
     body.theme-deepslate .card-header-custom {
-        border-bottom: 1px solid var(--border-color);
         font-weight: 600;
     }
 
@@ -759,19 +762,6 @@ footer.sticky-footer {
 
     .modal-content p {
         color: #878a95;
-    }
-
-    /* --text-muted/--text-color are already declared at :root (not
-       intentionally-undeclared tokens like --modal-bg), so a var(--x, fallback)
-       edit to the base rules above would silently re-color every existing
-       theme's modals. Scoped override instead, same pattern as .alert-primary. */
-    body.theme-deepslate .modal-content {
-        background-color: var(--modal-bg);
-        color: var(--text-color);
-    }
-
-    body.theme-deepslate .modal-content p {
-        color: var(--text-muted);
     }
 
 .modal-header {
@@ -815,7 +805,7 @@ footer.sticky-footer {
 table th {
     background-color: var(--table-header-bg, var(--custom-primary)) !important;
     color: var(--table-header-text, #ffffff) !important;
-    border-bottom: 2px solid var(--table-header-border, #ccc);
+    border-bottom: 2px solid #ccc;
     font-weight: 500;
 }
 
@@ -836,8 +826,8 @@ table th {
 }
 
 table tbody td {
-    border-bottom: 1px solid var(--table-body-border, #e0e0e0);
-    color: var(--table-body-text, black) !important;
+    border-bottom: 1px solid #e0e0e0;
+    color: black !important;
     font-weight: 100 !important;
     vertical-align: middle;
 }
@@ -1308,7 +1298,6 @@ form.user .btn-user {
     border-radius: 50%;
     border: 0;
     background-color: transparent;
-    color: #fff !important;
     opacity: 0.9;
     transition: background-color var(--transition-base), opacity var(--transition-base), transform var(--transition-base);
 }
@@ -1328,7 +1317,7 @@ form.user .btn-user {
 /* Widget Filter Panel */
 .dashboard-widget-filters {
     border-bottom-color: var(--border-color) !important;
-    background-color: var(--widget-filter-bg, #fafbfd) !important;
+    background-color: #fafbfd !important;
 }
 
 .dashboard-widget-filters-body {
@@ -1356,7 +1345,7 @@ form.user .btn-user {
     flex: 1 1 auto;
     padding: 1.1rem !important;
     min-height: 19rem;
-    background-color: var(--widget-body-bg, #fdfdfe);
+    background-color: #fdfdfe;
 }
 
     .dashboard-widget-body .default-graph-canvas,
@@ -1384,7 +1373,7 @@ form.user .btn-user {
     padding: 5rem 1.5rem;
     text-align: center;
     color: var(--text-muted);
-    background-color: var(--card-bg, #fff);
+    background-color: #fff;
     border: 1px dashed var(--border-light);
     border-radius: var(--border-radius-base);
 }

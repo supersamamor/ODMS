@@ -5,7 +5,6 @@
     var customerSupportEmail = Configuration.GetValue<string>("CustomerSupportEmail");
     var companyName = Configuration.GetValue<string>("CompanyName");
     var privacyPolicyUrl = Configuration.GetValue<string>("PrivacyPolicyUrl");
-    var user = await UserManager.GetUserAsync(User);
     var backgroundClass = Configuration.GetValue<string>("BackgroundClass");
 }
 <!DOCTYPE html>
@@ -26,10 +25,9 @@
         <div class="loader-section"></div>
     </div>
 
-    <partial name="_Navbar" />
     <div id="wrapper">
         <partial name="_Sidebar" />
-        <div class="d-flex flex-column margin-top-20" id="content-wrapper">
+        <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <div class="content-container">
                     <partial name="_CookieConsentPartial" />

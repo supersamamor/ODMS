@@ -6,9 +6,9 @@
 
 }
 <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion p-0">
-    <div class="container-fluid d-flex flex-column p-0">
+    <div class="container-fluid d-flex flex-column h-100 p-0">
         <hr class="sidebar-divider my-0">
-        <ul class="navbar-nav text-light" id="accordionSidebar">
+        <ul class="navbar-nav text-light flex-grow-1 overflow-auto" id="accordionSidebar">
             <li class="sidebar-top-row">
                 <div class="logo-container">
                     <div class="logo">
@@ -174,5 +174,19 @@
                 }
             }
         </ul>
+
+        <div class="sidebar-user-footer mt-auto">
+            <div class="dropdown dropup">
+                <a href="#" class="sidebar-user-toggle dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img class="rounded-circle img-profile" src="https://ui-avatars.com/api/?background=random&rounded=true&name=@user?.Name">
+                    <span class="sidebar-user-name">@user?.Name</span>
+                </a>
+                <div class="dropdown-menu shadow animated--grow-in">
+                    <a class="dropdown-item" href="/Identity/Account/Manage/Index"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/Identity/Account/Logout"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>
+                </div>
+            </div>
+        </div>
     </div>
 </nav>
