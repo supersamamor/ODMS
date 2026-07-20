@@ -28,6 +28,7 @@
     /* Layout */
     --sidebar-width-sm: 12.5rem;
     --sidebar-width-md: 16rem;
+    --sidebar-width-collapsed: 4.5rem;
     --topbar-height: 4.375rem;
     /* Typography */
     --font-primary: Poppins, 'Mulish', sans-serif;
@@ -213,6 +214,77 @@ body.theme-onetech {
     body.theme-onetech .logo {
         --logo-text-color: var(--sidebar-text);
     }
+
+/* Theme 11: Deep Slate & Sapphire (full dark theme - dark sidebar AND dark
+   main content, unlike theme-onetech which only darkens the sidebar). Beyond
+   the shared tokens below, this also relies on --content-bg/--card-bg/
+   --label-text/--table-body-text/--table-body-border/--table-header-border/
+   --widget-filter-bg/--widget-body-bg/--topbar-bg/--topbar-text/--footer-bg/
+   --footer-text/--modal-bg - all declared ONLY here, consumed via
+   var(--x, existing-light-value) at each call site so every other theme is
+   pixel-identical to before. All pairs below are WCAG AA verified (>=4.5:1). */
+body.theme-deepslate {
+    --custom-primary: #4f46e5;
+    --custom-primary-hover: #4338ca;
+    --custom-primary-active: #3730a3;
+    --custom-primary-rgb: 79, 70, 229;
+    --text-active-color: #ffffff;
+    --text-hover-color: #e2e8f0;
+    --text-active-hover-color: #ffffff;
+    --text-color: #e2e8f0;
+    --bs-body-color: #94a3b8;
+    --text-muted: #94a3b8;
+    --border-color: #1f2937;
+    --border-light: #1f2937;
+    --bg-light: #111827;
+    --bg-disabled: #1a2332;
+    --bg-hover-color: #161e2e;
+    --font-primary: 'DM Sans', sans-serif;
+    --font-secondary: 'DM Mono', monospace;
+    --sidebar-bg: #0a0e1a;
+    --sidebar-border-color: #1c2333;
+    --sidebar-text: #94a3b8;
+    --sidebar-text-muted: #94a3b8;
+    --sidebar-hover-bg: #1a2035;
+    --sidebar-hover-text: #e2e8f0;
+    --card-header-bg: #111827;
+    --card-header-text: #e2e8f0;
+    --table-header-bg: #1a2332;
+    --table-header-text: #94a3b8;
+    --content-bg: #0b1120;
+    --card-bg: #111827;
+    --label-text: #cbd5e1;
+    --table-body-text: #e2e8f0;
+    --table-body-border: #1f2937;
+    --table-header-border: #1f2937;
+    --widget-filter-bg: #161e2e;
+    --widget-body-bg: #111827;
+    --topbar-bg: #111827;
+    --topbar-text: #e2e8f0;
+    --footer-bg: #0a0e1a;
+    --footer-text: #94a3b8;
+    --modal-bg: #111827;
+    background-color: var(--content-bg);
+}
+
+    body.theme-deepslate .logo {
+        --logo-text-color: var(--sidebar-text);
+    }
+
+    /* --custom-primary directly as TEXT (not as a button background) only
+       clears AA against light card backgrounds - on this theme's dark cards
+       it drops to ~2.7:1, so alert-primary gets its own brighter indigo. */
+    body.theme-deepslate .alert-primary {
+        background-color: rgba(var(--custom-primary-rgb), 0.15) !important;
+        border-color: rgba(var(--custom-primary-rgb), 0.35) !important;
+        color: #a5b4fc !important;
+    }
+
+    body.theme-deepslate footer.sticky-footer {
+        background-color: var(--footer-bg) !important;
+        color: var(--footer-text);
+    }
+
 /* ==================== GLOBAL TYPOGRAPHY ==================== */
 body {
     font-family: var(--font-primary);
@@ -255,7 +327,7 @@ label,
 }
 
 label {
-    color: black !important;
+    color: var(--label-text, black) !important;
     text-align: left !important;
 }
 
@@ -393,7 +465,7 @@ select:disabled {
 
 /* Content Wrapper */
 #wrapper #content-wrapper {
-    background: #fff;
+    background: var(--content-bg, #fff);
     margin-left: var(--sidebar-width-sm) !important;
     min-height: 100vh;
     display: flex;
@@ -442,6 +514,95 @@ select:disabled {
     text-align: left;
 }
 
+/* Section group labels (e.g. "Navigation"/"Management") above the existing
+   real nav items - purely a grouping affordance, no new pages/links. */
+.nav-section-label {
+    padding: .85rem 2rem .35rem;
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--sidebar-text-muted);
+    font-family: var(--font-secondary);
+}
+
+    .nav-section-label:first-of-type {
+        padding-top: .5rem;
+    }
+
+/* Sidebar collapse toggle (reuses the existing #sidebarToggleTop handler
+   already wired up in site.js, previously dormant with no matching button
+   or CSS). Collapsing hides the wordmark/labels down to an icon-only rail. */
+.sidebar-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-collapse-btn {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: var(--border-radius-base);
+    background: transparent;
+    color: var(--sidebar-text-muted);
+    transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+    .sidebar-collapse-btn:hover,
+    .sidebar-collapse-btn:focus-visible {
+        background-color: var(--sidebar-hover-bg);
+        color: var(--sidebar-hover-text, var(--sidebar-text));
+        outline: none;
+    }
+
+.sidebar,
+#wrapper #content-wrapper {
+    transition: width var(--transition-base), margin-left var(--transition-base);
+}
+
+body.sidebar-toggled .sidebar,
+body.sidebar-toggled .logo-container {
+    width: var(--sidebar-width-collapsed) !important;
+}
+
+body.sidebar-toggled .logo-container {
+    display: none;
+}
+
+body.sidebar-toggled .sidebar-top-row {
+    justify-content: center;
+}
+
+body.sidebar-toggled #wrapper #content-wrapper {
+    margin-left: var(--sidebar-width-collapsed) !important;
+}
+
+body.sidebar-toggled .sidebar .nav-item .nav-link {
+    width: auto;
+    margin: 0 .75rem;
+    padding: .75rem .5rem;
+    text-align: center;
+}
+
+body.sidebar-toggled .sidebar .nav-item .nav-link span,
+body.sidebar-toggled .nav-section-label {
+    display: none;
+}
+
+body.sidebar-toggled .sidebar .nav-icon {
+    margin-right: 0;
+}
+
+body.sidebar-toggled .sidebar .nav-treeview {
+    display: none !important;
+}
+
     .sidebar .nav-item .nav-link.active {
         background-color: var(--custom-primary);
         color: var(--text-active-color) !important;
@@ -478,7 +639,10 @@ select:disabled {
 /* Topbar */
 .topbar {
     height: var(--topbar-height);
-    background-color: #fff;
+    /* !important needed: the markup also carries Bootstrap's .bg-white
+       utility class, which is itself !important and otherwise wins. */
+    background-color: var(--topbar-bg, #fff) !important;
+    color: var(--topbar-text, inherit);
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -550,6 +714,7 @@ footer.sticky-footer {
 /* Cards */
 .card {
     border: none !important;
+    background-color: var(--card-bg, #fff);
 }
 
 .card-header,
@@ -560,7 +725,9 @@ footer.sticky-footer {
 }
 
     body.theme-onetech .card-header,
-    body.theme-onetech .card-header-custom {
+    body.theme-onetech .card-header-custom,
+    body.theme-deepslate .card-header,
+    body.theme-deepslate .card-header-custom {
         border-bottom: 1px solid var(--border-color);
         font-weight: 600;
     }
@@ -592,6 +759,19 @@ footer.sticky-footer {
 
     .modal-content p {
         color: #878a95;
+    }
+
+    /* --text-muted/--text-color are already declared at :root (not
+       intentionally-undeclared tokens like --modal-bg), so a var(--x, fallback)
+       edit to the base rules above would silently re-color every existing
+       theme's modals. Scoped override instead, same pattern as .alert-primary. */
+    body.theme-deepslate .modal-content {
+        background-color: var(--modal-bg);
+        color: var(--text-color);
+    }
+
+    body.theme-deepslate .modal-content p {
+        color: var(--text-muted);
     }
 
 .modal-header {
@@ -635,12 +815,14 @@ footer.sticky-footer {
 table th {
     background-color: var(--table-header-bg, var(--custom-primary)) !important;
     color: var(--table-header-text, #ffffff) !important;
-    border-bottom: 2px solid #ccc;
+    border-bottom: 2px solid var(--table-header-border, #ccc);
     font-weight: 500;
 }
 
     body.theme-onetech .fills-table th,
-    body.theme-onetech table th {
+    body.theme-onetech table th,
+    body.theme-deepslate .fills-table th,
+    body.theme-deepslate table th {
         font-family: var(--font-secondary);
         font-size: .7rem;
         font-weight: 600;
@@ -654,8 +836,8 @@ table th {
 }
 
 table tbody td {
-    border-bottom: 1px solid #e0e0e0;
-    color: black !important;
+    border-bottom: 1px solid var(--table-body-border, #e0e0e0);
+    color: var(--table-body-text, black) !important;
     font-weight: 100 !important;
     vertical-align: middle;
 }
@@ -1146,7 +1328,7 @@ form.user .btn-user {
 /* Widget Filter Panel */
 .dashboard-widget-filters {
     border-bottom-color: var(--border-color) !important;
-    background-color: #fafbfd !important;
+    background-color: var(--widget-filter-bg, #fafbfd) !important;
 }
 
 .dashboard-widget-filters-body {
@@ -1174,7 +1356,7 @@ form.user .btn-user {
     flex: 1 1 auto;
     padding: 1.1rem !important;
     min-height: 19rem;
-    background-color: #fdfdfe;
+    background-color: var(--widget-body-bg, #fdfdfe);
 }
 
     .dashboard-widget-body .default-graph-canvas,
@@ -1202,7 +1384,7 @@ form.user .btn-user {
     padding: 5rem 1.5rem;
     text-align: center;
     color: var(--text-muted);
-    background-color: #fff;
+    background-color: var(--card-bg, #fff);
     border: 1px dashed var(--border-light);
     border-radius: var(--border-radius-base);
 }

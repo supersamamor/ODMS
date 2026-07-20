@@ -9,13 +9,17 @@
     <div class="container-fluid d-flex flex-column p-0">
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
-            <li class="">
+            <li class="sidebar-top-row">
                 <div class="logo-container">
                     <div class="logo">
                         <partial name="~/Pages/Shared/_Logo.cshtml" />
                     </div>
                 </div>
+                <button type="button" id="sidebarToggleTop" class="sidebar-collapse-btn" aria-label="Collapse sidebar" title="Collapse sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
             </li>
+            <li class="nav-section-label"><span>@Localizer["Navigation"]</span></li>
             <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Dashboard")">
                 <a href="/ODMS/Dashboard" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Dashboard")">
                     <i class="nav-icon nav-icon-dashboard"></i>
@@ -24,6 +28,7 @@
 					</span>
                 </a>
             </li>
+            <li class="nav-section-label"><span>@Localizer["Management"]</span></li>
             <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "Admin")">
                 <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "Admin")">
                     <i class="nav-icon nav-icon-maintenance"></i>
