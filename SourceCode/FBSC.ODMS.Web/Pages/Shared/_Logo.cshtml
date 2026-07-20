@@ -1,5 +1,5 @@
 <svg class="app-logo-svg" viewBox="0 0 220 56" role="img" aria-labelledby="odmsLogoTitle" xmlns="http://www.w3.org/2000/svg">
-    <title id="odmsLogoTitle">ODMS - One Delivery Management System</title>
+    <title id="odmsLogoTitle">OneTech | DMS - Delivery Management System</title>
     <rect x="0" y="0" width="56" height="56" rx="14" fill="currentColor" />
     <path d="M28 7
              C 33 13 35 21 35 29
@@ -13,5 +13,8 @@
     <path d="M21 30 L12.5 40 L21 37 Z" fill="#ffffff" />
     <path d="M35 30 L43.5 40 L35 37 Z" fill="#ffffff" />
     <path d="M24.5 38.5 Q28 47 28 49.5 Q28 47 31.5 38.5 Z" fill="#ffffff" />
-    <text x="68" y="37" font-family="var(--font-primary)" font-size="26" font-weight="700" fill="var(--logo-text-color, var(--custom-primary))">ODMS</text>
+    <!-- textLength/lengthAdjust force this longer label to fit the same
+         68-to-viewBox-edge span "ODMS" used, without touching the viewBox
+         or the icon - so nothing about the login page layout shifts. -->
+    <text x="68" y="34" font-family="var(--font-primary)" font-size="15" font-weight="700" textLength="146" lengthAdjust="spacingAndGlyphs" fill="var(--logo-text-color, var(--custom-primary))">OneTech | DMS</text>
 </svg>
