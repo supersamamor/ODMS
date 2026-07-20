@@ -42,7 +42,7 @@ public class AddModel(AIReportQueryGenerationServices aiReportQueryGenerationSer
                     NotyfService.Warning(Localizer["Report description is required if you want to generate query via AI."]);
                     return Page();
                 }
-                var sqlQuery = await aiReportQueryGenerationServices.SQLReportQueryGeneration(Report.ReportDescription, Report.ReportOrChartType, token: new CancellationToken());
+                var sqlQuery = await aiReportQueryGenerationServices.SQLReportQueryGeneration(Report.ReportDescription, Report.ReportOrChartType, Report.DataSourceId, token: new CancellationToken());
                 var htmlTemplate = await aiReportQueryGenerationServices.GenerateHTMLTemplate(Report.ReportDescription, Report.ReportOrChartType, sqlQuery, token: new CancellationToken());
                 var command = Mapper.Map<AddReportWithSQLQueryFromAICommand>(Report);
                 command.SQLQuery = sqlQuery ?? "";

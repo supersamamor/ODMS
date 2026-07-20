@@ -94,7 +94,7 @@ else if (Model.DataSourceType == FBSC.ODMS.Core.Constants.DataSourceTypes.FileUp
             <div class="col-12 col-md-6">
                 <div class="mb-3">
                     <label asp-for="@Model.UploadedFileForm" class="form-label"><strong>@Localizer["Excel File (.xlsx)"] :</strong></label>
-                    <input asp-for="@Model.UploadedFileForm" type="file" class="form-control" accept=".xlsx" />
+                    <input asp-for="@Model.UploadedFileForm" class="file-upload-control" />
                     <span class="form-label margin-top-10"><i>@Localizer["Uploading a new file replaces the current data. Existing reports pointed at this data source keep working once processing finishes."]</i></span>
                     <span asp-validation-for="@Model.UploadedFileForm" class="text-danger d-block mt-1"></span>
                 </div>

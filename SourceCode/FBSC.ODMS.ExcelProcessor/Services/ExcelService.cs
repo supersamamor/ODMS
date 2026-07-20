@@ -376,10 +376,7 @@ namespace FBSC.ODMS.ExcelProcessor.Services
             switch (module)
             {
                 case nameof(DataSourceState):
-					return await DataSourceValidator.ValidatePerRecordAsync(_context, rowValue);
-				case nameof(DataUploadState):
-					return await DataUploadValidator.ValidatePerRecordAsync(_context, rowValue);
-				
+					return await DataSourceValidator.ValidatePerRecordAsync(_context, rowValue);			
                 default: break;
             }
             return rowValue;
@@ -390,10 +387,7 @@ namespace FBSC.ODMS.ExcelProcessor.Services
             switch (module)
             {
                 case nameof(DataSourceState):
-					return DataSourceValidator.DuplicateValidation(records);
-				case nameof(DataUploadState):
-					return DataUploadValidator.DuplicateValidation(records);
-				
+					return DataSourceValidator.DuplicateValidation(records);			
                 default: break;
             }
             return null;

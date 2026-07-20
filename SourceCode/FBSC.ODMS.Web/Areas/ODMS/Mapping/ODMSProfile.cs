@@ -5,8 +5,6 @@ using FBSC.ODMS.Application.Features.ODMS.Report.Commands;
 using FBSC.ODMS.Application.DTOs;
 using FBSC.ODMS.Application.Features.ODMS.Approval.Commands;
 using FBSC.ODMS.Application.Features.ODMS.DataSource.Commands;
-using FBSC.ODMS.Application.Features.ODMS.DataUpload.Commands;
-
 
 namespace FBSC.ODMS.Web.Areas.ODMS.Mapping;
 
@@ -31,10 +29,7 @@ public class ODMSProfile : Profile
         CreateMap<DataSourceViewModel, AddDataSourceCommand>();
 		CreateMap<DataSourceViewModel, EditDataSourceCommand>();
 		CreateMap<DataSourceState, DataSourceViewModel>().ReverseMap();
-		CreateMap<DataUploadViewModel, AddDataUploadCommand>().ForPath(e => e.FilePath, o => o.MapFrom(s => s.GeneratedFilePathPath));
-		CreateMap<DataUploadViewModel, EditDataUploadCommand>().ForPath(e => e.FilePath, o => o.MapFrom(s => s.GeneratedFilePathPath));
-		CreateMap<DataUploadState, DataUploadViewModel>().ReverseMap();
-		
+
 		CreateMap<ApproverAssignmentState, ApproverAssignmentViewModel>().ReverseMap();
 		CreateMap<ApproverSetupViewModel, EditApproverSetupCommand>();
 		CreateMap<ApproverSetupViewModel, AddApproverSetupCommand>();

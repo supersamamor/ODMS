@@ -99,19 +99,7 @@ namespace FBSC.ODMS.Scheduler.Jobs
 					{
 						exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<DataSourceState>(dataSourceImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
 					}
-					break;
-				case nameof(DataUploadState):
-					var dataUploadImportResult = await excelService.ImportAsync<DataUploadState>(path);
-					if (dataUploadImportResult.IsSuccess)
-					{
-						await context.AddRangeAsync(dataUploadImportResult.SuccessRecords);
-					}
-					else
-					{
-						exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<DataUploadState>(dataUploadImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
-					}
-					break;
-				
+					break;		
                 case nameof(SampleTableState): //Sample Only For Custom Processing
 					var unitImportResult = await excelService.ImportAsync<SampleTableState>(path);
 					if (unitImportResult.IsSuccess)

@@ -2,14 +2,17 @@ using FBSC.ApiHub.Services;
 using FBSC.GenAI.Services.AI.Providers;
 using FBSC.HTMLTemplate.ViewModels;
 using FBSC.ODMS.Application.Constants;
+using FBSC.ODMS.Application.Helpers;
 using FBSC.ODMS.Core.ODMS;
+using FBSC.ODMS.Infrastructure.Data;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Data;
 
 namespace FBSC.ODMS.Web.Service
 {
-    public class AIReportQueryGenerationServices(WebhookExecutionService webhookExecutionService, AiResponseParserFactory aiResponseParserFactory, IConfiguration configuration)
+    public class AIReportQueryGenerationServices(WebhookExecutionService webhookExecutionService, AiResponseParserFactory aiResponseParserFactory, IConfiguration configuration, ApplicationContext context)
     {
         private static readonly List<string> ExcludedTables =
         [
@@ -43,9 +46,10 @@ namespace FBSC.ODMS.Web.Service
             }
             return input;
         }
-        public async Task<string?> SQLReportQueryGeneration(string reportDescription, string reportOrChartType, CancellationToken token = new CancellationToken())
+        public async Task<string?> SQLReportQueryGeneration(string reportDescription, string reportOrChartType, string? dataSourceId = null, CancellationToken token = new CancellationToken())
         {
-            string minifiedDatabaseStructure = MinifyJson(await GetDatabaseStructureInJsonAsync());
+            var (connectionString, onlyTableName) = await ResolveSchemaSourceAsync(dataSourceId, token);
+            string minifiedDatabaseStructure = MinifyJson(await GetDatabaseStructureInJsonAsync(connectionString, onlyTableName));
 
             // Chart-specific query shape (e.g. "needs a Label field + numeric fields"),
             // looked up instead of switched on so new chart types don't require
@@ -86,17 +90,58 @@ namespace FBSC.ODMS.Web.Service
             var parsedObject = JsonConvert.DeserializeObject(json);
             return JsonConvert.SerializeObject(parsedObject, Formatting.None);
         }
-        public async Task<string> GetDatabaseStructureInJsonAsync()
+        /// <summary>
+        /// Determines what schema the AI should see for a report: the target external SQL Server
+        /// when the report's DataSourceId points at a SqlServer-type DataSource, just the one
+        /// generated table when it points at a FileUpload-type DataSource, or the app's own default
+        /// ReportContext database (today's behavior) when no DataSourceId is set.
+        /// </summary>
+        private async Task<(string ConnectionString, string? OnlyTableName)> ResolveSchemaSourceAsync(string? dataSourceId, CancellationToken token)
         {
-            using SqlConnection connection = new(configuration.GetConnectionString("ReportContext"));
+            var defaultConnectionString = configuration.GetConnectionString("ReportContext")!;
+            if (string.IsNullOrWhiteSpace(dataSourceId))
+            {
+                return (defaultConnectionString, null);
+            }
+
+            var dataSource = await context.DataSource
+                .AsNoTracking()
+                .Where(d => d.Id == dataSourceId && d.IsActive)
+                .FirstOrDefaultAsync(token);
+
+            if (dataSource is null)
+            {
+                return (defaultConnectionString, null);
+            }
+
+            if (string.Equals(dataSource.DataSourceType, Core.Constants.DataSourceTypes.FileUpload, StringComparison.OrdinalIgnoreCase))
+            {
+                // The table lives in the same database as ReportContext; restrict the schema shown
+                // to the AI to just that one generated table so it can't hallucinate other tables.
+                return (defaultConnectionString, dataSource.GeneratedTableName);
+            }
+
+            var resolvedConnectionString = await ReportDataHelper.ResolveConnectionStringAsync(context, configuration, dataSourceId, token);
+            return (resolvedConnectionString, null);
+        }
+        public async Task<string> GetDatabaseStructureInJsonAsync(string connectionString, string? onlyTableName = null)
+        {
+            using SqlConnection connection = new(connectionString);
             connection.Open();
             DataTable tables = connection.GetSchema("Tables");
             List<object> databaseSchema = [];
             foreach (DataRow row in tables.Rows)
             {
                 string tableName = (string)row["TABLE_NAME"];
-                //ignore case sensitivity   
-                if (ExcludedTables.Contains(tableName))
+                //ignore case sensitivity
+                if (onlyTableName != null)
+                {
+                    if (!string.Equals(tableName, onlyTableName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+                }
+                else if (ExcludedTables.Contains(tableName))
                 {
                     continue;
                 }

@@ -79,3 +79,55 @@
         justify-content: flex-end;
     }
 }
+
+/* ==================== File upload control ====================
+   Used by any <input type="file"> bound to an IFormFile (e.g. DataUpload's and
+   DataSource's file fields). Overrides the global `input[type="file"] { height:
+   2.5rem !important; }` rule in site.css, which otherwise clips the native
+   choose-file button/filename layout — scoped to this class only so it doesn't
+   change the height of any other file input in the app. */
+input[type="file"].file-upload-control {
+    height: auto !important;
+    display: block;
+    width: 100%;
+    padding: .5rem .75rem;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    color: var(--text-muted);
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+    input[type="file"].file-upload-control:hover {
+        border-color: var(--custom-primary);
+    }
+
+    input[type="file"].file-upload-control:focus {
+        outline: none;
+        border-color: var(--custom-primary);
+        box-shadow: 0 0 0 .2rem rgba(var(--custom-primary-rgb), .15);
+    }
+
+    input[type="file"].file-upload-control::file-selector-button,
+    input[type="file"].file-upload-control::-webkit-file-upload-button {
+        padding: .4rem .9rem;
+        margin: -.5rem .75rem -.5rem -.75rem;
+        border: none;
+        border-right: 1px solid var(--border-color);
+        border-radius: var(--border-radius-base) 0 0 var(--border-radius-base);
+        background-color: var(--bg-hover-color);
+        color: var(--custom-primary);
+        font-family: var(--font-primary);
+        font-weight: 600;
+        font-size: var(--font-size-base);
+        cursor: pointer;
+        transition: background-color var(--transition-base), color var(--transition-base);
+    }
+
+    input[type="file"].file-upload-control:hover::file-selector-button,
+    input[type="file"].file-upload-control:hover::-webkit-file-upload-button {
+        background-color: var(--custom-primary);
+        color: #ffffff;
+    }

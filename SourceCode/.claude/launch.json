@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "odms-web",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "FBSC.ODMS.Web/FBSC.ODMS.Web.csproj", "--urls", "https://localhost:49178;http://localhost:49180", "--UseInMemoryDatabase", "true"],
+      "port": 49180
+    }
+  ]
+}

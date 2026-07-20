@@ -128,19 +128,7 @@
                             </a>
                         </li>
                     }
-                </ul>
-            </li>
-
-            <li class="nav-item level-one-nav @ManageNavPages.Level1Class(ViewContext, "ODMS")">
-                <a href="#" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "ODMS")">
-                    <i class="nav-icon nav-icon-list"></i>
-                    <span>
-                        @Localizer["One Delivery Management System"]
-                        <i class="right fas level-one-nav-icon fa-angle-down"></i>
-                    </span>
-                </a>
-                <ul class="nav nav-treeview">
-					@if((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.View)).Succeeded)
+                    @if((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.View)).Succeeded)
 						{
 							<li class="nav-item">
 								<a href = "/ODMS/DataSource" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataSource")">
@@ -149,20 +137,9 @@
 									</span>
 								</a>
 							</li>
-						}
-						@if((await AuthorizationService.AuthorizeAsync(User, Permission.DataUpload.View)).Succeeded)
-						{
-							<li class="nav-item">
-								<a href = "/ODMS/DataUpload" class="nav-link @ManageNavPages.PageNavClass(ViewContext, "DataUpload")">
-									<span>
-										@Localizer["Data Upload"]
-									</span>
-								</a>
-							</li>
-						}
-						                    
+					}
                 </ul>
-            </li>
+            </li>       
             @{
                 var reportList = await dropdownService.GetReportList();
                 if (reportList.Count > 0)

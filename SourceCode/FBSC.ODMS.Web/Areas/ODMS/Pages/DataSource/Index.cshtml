@@ -7,7 +7,7 @@
 @{
     ViewData["Title"] = Localizer["Data Source List"];
     ViewData["ActiveMainPage"] = "DataSource";
-    ViewData["Level1"] = "ODMS";
+    ViewData["Level1"] = "Admin";
 	IEnumerable<dynamic> breadCrumbs = [new { Title = "Data Source List", Url = "", IsActive = true }];
 }
 <partial name="_BreadcrumbPartial" model=@(breadCrumbs) />
@@ -148,37 +148,7 @@
                         }
                     },
             </text>
-        }
-
-        @* Download Template Button *@
-        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.Upload)).Succeeded)
-        {
-            <text>
-                    {
-                        text: '<i class="fas fa-download"></i>',
-                        className: 'btn btn-primary',
-                        titleAttr: '@Localizer["Download Template"]',
-                        action: function (e, dt, node, config) {
-                            $('#download-template-form').submit();
-                        }
-                    },
-            </text>
-        }
-
-        @* Upload Button *@
-        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.DataSource.Upload)).Succeeded)
-        {
-            <text>
-                    {
-                        text: '<i class="fas fa-upload"></i>',
-                        className: 'btn btn-primary',
-                        titleAttr: '@Localizer["Upload"]',
-                        action: function (e, dt, node, config) {
-                            $('#btnBatchUpload').click();
-                        }
-                    },
-            </text>
-        }
+        }     
 
         @* Page Length Button *@
             {

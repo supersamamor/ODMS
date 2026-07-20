@@ -4,9 +4,6 @@ using FBSC.ODMS.Application.Features.ODMS.Approval.Commands;
 using FBSC.ODMS.Core.ODMS;
 using FBSC.ODMS.Application.Features.ODMS.Report.Commands;
 using FBSC.ODMS.Application.Features.ODMS.DataSource.Commands;
-using FBSC.ODMS.Application.Features.ODMS.DataUpload.Commands;
-
-
 
 namespace FBSC.ODMS.Application.Features.ODMS;
 
@@ -27,9 +24,7 @@ public class ODMSProfile : Profile
 			.ForMember(dest => dest.ImportStatus, opt => opt.Ignore())
 			.ForMember(dest => dest.ImportErrorMessage, opt => opt.Ignore())
 			.ForMember(dest => dest.LastImportedDate, opt => opt.Ignore());
-		CreateMap<AddDataUploadCommand, DataUploadState>();
-		CreateMap <EditDataUploadCommand, DataUploadState>().IgnoreBaseEntityProperties();
-		
+
 		CreateMap<EditApproverSetupCommand, ApproverSetupState>().IgnoreBaseEntityProperties();
 		CreateMap<AddApproverSetupCommand, ApproverSetupState>().IgnoreBaseEntityProperties();
 		CreateMap<ApproverAssignmentState, ApproverAssignmentState>().IgnoreBaseEntityProperties();

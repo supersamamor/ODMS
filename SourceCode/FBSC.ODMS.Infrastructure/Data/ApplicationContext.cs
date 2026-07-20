@@ -22,7 +22,6 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
 	public DbSet<ApprovalRecordState> ApprovalRecord { get; set; } = default!;
  
     public DbSet<DataSourceState> DataSource { get; set; } = default!;
-	public DbSet<DataUploadState> DataUpload { get; set; } = default!;
 	
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -69,7 +68,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<ReportState>().Property(e => e.DataSourceId).HasMaxLength(36);
         modelBuilder.Entity<ReportState>().HasIndex(e => e.DataSourceId);
         modelBuilder.Entity<DataSourceState>().HasIndex(p => p.Name).IsUnique();
-		modelBuilder.Entity<DataUploadState>().HasIndex(p => p.Description).IsUnique();
+
 		
         modelBuilder.Entity<DataSourceState>().Property(e => e.Name).HasMaxLength(150);
 		modelBuilder.Entity<DataSourceState>().Property(e => e.ServerAddress).HasMaxLength(200);
@@ -85,8 +84,6 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
 		modelBuilder.Entity<DataSourceState>().Property(e => e.ImportStatus).HasMaxLength(20);
 		modelBuilder.Entity<DataSourceState>().Property(e => e.ImportErrorMessage).HasMaxLength(450);
 		modelBuilder.Entity<UploadProcessorState>().Property(e => e.TargetEntityId).HasMaxLength(36);
-		modelBuilder.Entity<DataUploadState>().Property(e => e.Description).HasMaxLength(450);
-		modelBuilder.Entity<DataUploadState>().Property(e => e.FileType).HasMaxLength(20);
 		
         
 		modelBuilder.Entity<ApprovalRecordState>().HasIndex(l => l.DataId);
