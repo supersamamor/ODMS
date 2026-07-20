@@ -1286,6 +1286,17 @@ form.user .btn-user {
     background-image: var(--icon-active-list);
 }
 
+/* Project Registry - no dedicated PNG exists in img/NavBarIcons, so reuse
+   the List icon (closest fit) instead of leaving the class unmatched,
+   which rendered an empty gap where the icon should be. */
+.nav-icon-projects {
+    background-image: var(--icon-list);
+}
+
+.nav-link.active .nav-icon-projects {
+    background-image: var(--icon-active-list);
+}
+
 .nav-icon-report {
     background-image: var(--icon-report);
 }

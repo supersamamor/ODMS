@@ -2,58 +2,42 @@
 @model ProjectViewModel
 <input type="hidden" id="TeamMembersCount" value="@Model?.TeamMembersList?.Count" />
 <div class="card">
-    <h5 class="card-header">
-        <span  class="card-header-custom">@Localizer["Team Members"]</span>
-        <a id="btnAddTeamMembers" class="btn btnMaterial btn-flat primary semicircle cancel btnAddRemoveSubDetailList text-light" title="@Localizer["Add"]"><i class="fas fa-plus"></i></a>
+    <h5 class="card-header d-flex align-items-center justify-content-between">
+        <span class="card-header-custom">@Localizer["Team Members"]</span>
+        @* No text-light here (unlike the old icon button) - on the white
+           card headers of the dark-sidebar themes it rendered white-on-white. *@
+        <a id="btnAddTeamMembers" class="btn btnMaterial btn-flat primary semicircle cancel btnAddRemoveSubDetailList" title="@Localizer["Add Member"]"><i class="fas fa-plus"></i>&nbsp;@Localizer["Add Member"]</a>
         <button class="cancel d-none" type="button" id="btnRemoveTeamMembers" value="RemoveTeamMembers"></button>
     </h5>
-    <div class="card-body overflow-auto">
-        <table id="subDetailList" class="table table-hover table-striped responsive nowrap fills-table" width="100%">
-            <thead>
-                <tr>
-                    <th class="d-none"></th>
-                    <th class="text-center">
-								@Localizer["Full Name of the Member"]
-							</th>
-							<th class="text-center">
-								@Localizer["Role of the Member in Project"]
-							</th>
-							
-                    <th class="text-center">
-                        @Localizer["Action"]
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model?.TeamMembersList != null)
+    <div class="card-body">
+        <div class="sub-collection-list">
+            @if (Model?.TeamMembersList != null)
+            {
+                int counter = 0;
+                foreach (var item in Model.TeamMembersList)
                 {
-                    int counter = 0;
-                    foreach (var item in Model.TeamMembersList)
-                    {
-                        <tr>
-                            <td class="d-none">
-                                <input type="hidden" name="TeamMembersList[@counter].Id" value="@item.Id" />
-                                <input type="hidden" name="TeamMembersList[@counter].ProjectId" value="@item.ProjectId" />
-                            </td>
-                            <td>
-										<input  asp-for="@item.MemberName" name="TeamMembersList[@counter].MemberName" class="form-control" maxlength="255" />
-										<span data-valmsg-for="TeamMembersList[@counter].MemberName" asp-validation-for="@item.MemberName" class="text-danger"></span>
-										
-									</td>
-									<td>
-										<input  asp-for="@item.Role" name="TeamMembersList[@counter].Role" class="form-control" maxlength="100" />
-										<span data-valmsg-for="TeamMembersList[@counter].Role" asp-validation-for="@item.Role" class="text-danger"></span>
-										
-									</td>
-									
-                            <td class="text-center">
-                                <a class="btn btnFills btn-outline-danger btnDeleteIcon cancel RemoveTeamMembersButton btnAddRemoveSubDetailList" aria-label="@Localizer["Remove TeamMembers"]" title="@Localizer["Remove TeamMembers"]" removeId="@(item.Id)"></a>
-                            </td>
-                        </tr>
-                        counter++;
-                    }
+                    <div class="sub-collection-row">
+                        <input type="hidden" name="TeamMembersList[@counter].Id" value="@item.Id" />
+                        <input type="hidden" name="TeamMembersList[@counter].ProjectId" value="@item.ProjectId" />
+                        <div class="sub-collection-fields">
+                            <div class="sub-collection-field">
+                                <label name="Label.TeamMembersList[@counter].MemberName">@Localizer["Full Name"]</label>
+                                <input asp-for="@item.MemberName" name="TeamMembersList[@counter].MemberName" class="form-control" maxlength="255" placeholder="@Localizer["Full name"]" />
+                                <span data-valmsg-for="TeamMembersList[@counter].MemberName" asp-validation-for="@item.MemberName" class="text-danger"></span>
+                            </div>
+                            <div class="sub-collection-field">
+                                <label name="Label.TeamMembersList[@counter].Role">@Localizer["Role"]</label>
+                                <input asp-for="@item.Role" name="TeamMembersList[@counter].Role" class="form-control" maxlength="100" placeholder="@Localizer["e.g. Developer"]" />
+                                <span data-valmsg-for="TeamMembersList[@counter].Role" asp-validation-for="@item.Role" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="sub-collection-actions">
+                            <a class="btn btnFills btn-outline-danger btnDeleteIcon cancel RemoveTeamMembersButton btnAddRemoveSubDetailList" aria-label="@Localizer["Remove TeamMembers"]" title="@Localizer["Remove TeamMembers"]" removeId="@(item.Id)"></a>
+                        </div>
+                    </div>
+                    counter++;
                 }
-            </tbody>
-        </table>
+            }
+        </div>
     </div>
 </div>

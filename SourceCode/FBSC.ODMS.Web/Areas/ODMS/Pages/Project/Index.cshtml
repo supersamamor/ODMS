@@ -6,7 +6,7 @@
 }
 @{
     ViewData["Title"] = Localizer["Project List"];
-    ViewData["ActiveMainPage"] = "Project";
+    ViewData["ActiveMainPage"] = "Projects";
     ViewData["Level1"] = "Projects";
 	IEnumerable<dynamic> breadCrumbs = [new { Title = "Project List", Url = "", IsActive = true }];
 }
@@ -19,43 +19,29 @@
                     <thead>
                         <tr>
                             <th>
-								@Localizer["Name of the Project"]
+								@Localizer["Project"]
 							</th>
 							<th>
-								@Localizer["Assigned Business Unit"]
+								@Localizer["BU"]
+							</th>
+                            <th>
+                                @Localizer["Project Manager"]
+                            </th>
+							<th>
+								@Localizer["Priority"]
+							</th>
+                            <th>
+                                @Localizer["Status"]
+                            </th>
+							<th>
+								@Localizer["Start Date"]
 							</th>
 							<th>
-								@Localizer["Project Priority"]
+								@Localizer["End Date"]
 							</th>
 							<th>
-								@Localizer["Project Start Date"]
-							</th>
-							<th>
-								@Localizer["Target Completion Date"]
-							</th>
-							<th>
-								@Localizer["Estimated Budget in Currency"]
-							</th>
-							<th>
-								@Localizer["Assigned Project Manager"]
-							</th>
-							<th>
-								@Localizer["RAG Status (Red, Amber, Green)"]
-							</th>
-							<th>
-								@Localizer["Current Phase (e.g. Development)"]
-							</th>
-							<th>
-								@Localizer["Schedule Status (e.g. Delayed)"]
-							</th>
-							<th>
-								@Localizer["Date of Last Review"]
-							</th>
-							<th>
-								@Localizer["Date of Last Update"]
-							</th>
-							  
-							
+								@Localizer["Budget"]
+							</th>	
                             <th>
                                 @Localizer["Actions"]
                             </th>
@@ -79,7 +65,10 @@
                 select: false,
                 serverSide: true,
                 responsive: true,
-                order: [[12, 'desc']],
+                @* LastModifiedDate's column index - was 12, which is out of
+                   range for this 11-column table (0-10) and killed the whole
+                   DataTables init, taking the Add/Upload toolbar with it. *@
+                order: [[9, 'desc']],
                 dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DataTableDOMLayOut)',
                 ajax:
                 {
@@ -94,20 +83,15 @@
                     BindTableRowCollapseEvent();
                 },
                 columns: [
-                    { data: "projectName", name: "ProjectName", responsivePriority: 1, title: '@Localizer["Name of the Project"]', searchable: true, className: "text-start" },
-				{ data: "businessUnitId", name: "BusinessUnitId", responsivePriority: 1, title: '@Localizer["Assigned Business Unit"]', searchable: false, className: "fills-text-end" },
-				{ data: "priority", name: "Priority", responsivePriority: 1, title: '@Localizer["Project Priority"]', searchable: true, className: "text-start" },
-				{ data: "startDateFormatted", name: "StartDate", responsivePriority: 2, title: '@Localizer["Project Start Date"]', searchable: false, className: "fills-text-center" },
-				{ data: "targetEndDateFormatted", name: "TargetEndDate", responsivePriority: 2, title: '@Localizer["Target Completion Date"]', searchable: false, className: "fills-text-center" },
-				{ data: "estimatedBudgetFormatted", name: "EstimatedBudget", responsivePriority: 2, title: '@Localizer["Estimated Budget in Currency"]', searchable: false, className: "fills-text-end" },
-				{ data: "projectManagerId", name: "ProjectManagerId", responsivePriority: 2, title: '@Localizer["Assigned Project Manager"]', searchable: false, className: "fills-text-end" },
-				{ data: "healthStatus", name: "HealthStatus", responsivePriority: 2, title: '@Localizer["RAG Status (Red, Amber, Green)"]', searchable: false, className: "text-start" },
-				{ data: "phase", name: "Phase", responsivePriority: 2, title: '@Localizer["Current Phase (e.g. Development)"]', searchable: false, className: "text-start" },
-				{ data: "scheduleStatus", name: "ScheduleStatus", responsivePriority: 2, title: '@Localizer["Schedule Status (e.g. Delayed)"]', searchable: false, className: "text-start" },
-				{ data: "lastReviewDateFormatted", name: "LastReviewDate", responsivePriority: 2, title: '@Localizer["Date of Last Review"]', searchable: false, className: "fills-text-center" },
-				{ data: "lastUpdatedDateFormatted", name: "LastUpdatedDate", responsivePriority: 2, title: '@Localizer["Date of Last Update"]', searchable: false, className: "fills-text-center" },
-				   
-					
+                    { data: "projectName", name: "ProjectName", responsivePriority: 1, title: '@Localizer["Project"]', searchable: true, className: "text-start" },
+				{ data: "businessUnitId", name: "BusinessUnitId", responsivePriority: 1, title: '@Localizer["BU"]', searchable: false, className: "fills-text-end" },
+                    { data: "projectManagerId", name: "ProjectManagerId", responsivePriority: 2, title: '@Localizer["Project Manager"]', searchable: false, className: "fills-text-end" },
+                { data: "priority", name: "Priority", responsivePriority: 1, title: '@Localizer["Priority"]', searchable: true, className: "text-start" },
+                    { data: "healthStatus", name: "HealthStatus", responsivePriority: 2, title: '@Localizer["Status"]', searchable: false, className: "text-start" },
+                { data: "startDateFormatted", name: "StartDate", responsivePriority: 2, title: '@Localizer["Start Date"]', searchable: false, className: "fills-text-center" },
+				{ data: "targetEndDateFormatted", name: "TargetEndDate", responsivePriority: 2, title: '@Localizer["End Date"]', searchable: false, className: "fills-text-center" },
+				{ data: "estimatedBudgetFormatted", name: "EstimatedBudget", responsivePriority: 2, title: '@Localizer["Budget"]', searchable: false, className: "fills-text-end" },
+									
                     {
                         data: null,
                         searchable: false,

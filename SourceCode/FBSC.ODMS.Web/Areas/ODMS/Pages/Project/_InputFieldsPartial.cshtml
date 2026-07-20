@@ -1,8 +1,9 @@
 @using Models
 @model ProjectViewModel
 
+@* No card-header here - the first form-section title ("Project Information")
+   is the card's visible heading, matching the reference design. *@
 <div class="card">
-    <h5 class="card-header"><span class="card-header-custom">@Localizer["Project"]</span><br></h5>
     <div class="card-body">
         <input type="hidden" asp-for="@Model.Id" name="Id" />
         <partial name="_EditProjectDetails" model="Model" />        
