@@ -10,7 +10,7 @@
 	};
 }
 <partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
-<form id="dataSource-form" method="post">
+<form enctype="multipart/form-data" id="dataSource-form" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
     <input type="hidden" asp-for="@Model.AsyncAction" />
@@ -42,7 +42,9 @@
                 this.blur();
                 window.focus();
             });
-            
+            $('#DataSourceType').on('change', function () {
+                $.triggerPageForm('ChangeFormValue', '#PartialLoaderContainer', '#dataSource-form', InitializeForm);
+            });
 
         }
         InitializeForm();

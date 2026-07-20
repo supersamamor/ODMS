@@ -14,9 +14,10 @@ using FBSC.ODMS.ExcelProcessor.CustomProcessor;
 namespace FBSC.ODMS.Scheduler.Jobs
 {
     [DisallowConcurrentExecution]
-    public class BatchUploadJob(ApplicationContext context, ILogger<BatchUploadJob> logger, IConfiguration configuration, IMailService emailSender, ExcelService excelService, IdentityContext identityContext) : IJob
+    public class BatchUploadJob(ApplicationContext context, ILogger<BatchUploadJob> logger, IConfiguration configuration, IMailService emailSender, ExcelService excelService, DynamicTableImportService dynamicTableImportService, IdentityContext identityContext) : IJob
     {
         private readonly string? _uploadPath = configuration.GetValue<string>("UsersUpload:SecureUploadFilePath");
+        private readonly string? _applicationConnectionString = configuration.GetConnectionString("ApplicationContext");
 
         public async Task Execute(IJobExecutionContext context)
         {
@@ -36,7 +37,7 @@ namespace FBSC.ODMS.Scheduler.Jobs
                     context.Update(item);
                     await context.UpdateBatchRecordAsync(item.CreatedBy, item);
                     //Start Processing
-                    exceptionFilePath = await ValidateBatchUpload(item.Module, item.Path, item.CreatedBy!);
+                    exceptionFilePath = await ValidateBatchUpload(item.Module, item.Path, item.CreatedBy!, item.TargetEntityId);
                     if (string.IsNullOrEmpty(exceptionFilePath))
                     {
                         item.SetDone();
@@ -70,11 +71,24 @@ namespace FBSC.ODMS.Scheduler.Jobs
                 }              
             }
         }
-		private async Task<string?> ValidateBatchUpload(string module, string path, string processedByUserId)
+		private async Task<string?> ValidateBatchUpload(string module, string path, string processedByUserId, string? targetEntityId)
         {
-            string? exceptionFilePath = null;   
+            string? exceptionFilePath = null;
             switch (module)
             {
+                case Core.Constants.UploadModules.DataSourceFileImport:
+					var dataSource = await context.DataSource.FirstOrDefaultAsync(d => d.Id == targetEntityId)
+						?? throw new Exception($"DataSource with id {targetEntityId} does not exist.");
+					var tableName = $"Upload_{dataSource.Id.Replace("-", "")}";
+					var importResult = await dynamicTableImportService.ImportAsDynamicTableAsync(path, tableName, _applicationConnectionString!);
+					if (!importResult.Success)
+					{
+						throw new Exception(importResult.ErrorMessage);
+					}
+					dataSource.SetImportResult(tableName, true, null);
+					context.Update(dataSource);
+					await context.UpdateBatchRecordAsync(processedByUserId, dataSource);
+					break;
                 case nameof(DataSourceState):
 					var dataSourceImportResult = await excelService.ImportAsync<DataSourceState>(path);
 					if (dataSourceImportResult.IsSuccess)

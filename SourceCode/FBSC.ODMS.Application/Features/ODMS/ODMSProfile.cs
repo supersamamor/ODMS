@@ -22,7 +22,11 @@ public class ODMSProfile : Profile
         CreateMap<AddDataSourceCommand, DataSourceState>();
 		CreateMap<EditDataSourceCommand, DataSourceState>()
 			.IgnoreBaseEntityProperties()
-			.ForMember(dest => dest.PasswordEncrypted, opt => opt.Ignore());
+			.ForMember(dest => dest.PasswordEncrypted, opt => opt.Ignore())
+			.ForMember(dest => dest.GeneratedTableName, opt => opt.Ignore())
+			.ForMember(dest => dest.ImportStatus, opt => opt.Ignore())
+			.ForMember(dest => dest.ImportErrorMessage, opt => opt.Ignore())
+			.ForMember(dest => dest.LastImportedDate, opt => opt.Ignore());
 		CreateMap<AddDataUploadCommand, DataUploadState>();
 		CreateMap <EditDataUploadCommand, DataUploadState>().IgnoreBaseEntityProperties();
 		

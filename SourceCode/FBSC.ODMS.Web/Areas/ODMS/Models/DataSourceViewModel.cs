@@ -7,11 +7,25 @@ using FBSC.Common.Web.Utility.Annotations;
 namespace FBSC.ODMS.Web.Areas.ODMS.Models;
 
 public record DataSourceViewModel : BaseViewModel
-{	
+{
 	[Display(Name = "Connection Name")]
 	[Required]
 	[StringLength(150, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string Name { get; init; } = "";
+	[Display(Name = "Data Source Type")]
+	[Required]
+	public string DataSourceType { get; init; } = FBSC.ODMS.Core.Constants.DataSourceTypes.SqlServer;
+	[Display(Name = "Uploaded File")]
+	public IFormFile? UploadedFileForm { get; set; }
+	public string? UploadedFilePath { get; init; }
+	[Display(Name = "Generated Table Name")]
+	public string? GeneratedTableName { get; init; }
+	[Display(Name = "Import Status")]
+	public string? ImportStatus { get; init; }
+	[Display(Name = "Import Error")]
+	public string? ImportErrorMessage { get; init; }
+	[Display(Name = "Last Imported")]
+	public DateTime? LastImportedDate { get; init; }
 	[Display(Name = "MS SQL Server Host Or Instance")]
 	[StringLength(200, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string? ServerAddress { get; init; }

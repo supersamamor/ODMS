@@ -63,6 +63,15 @@ namespace FBSC.ODMS.Web.Service
             ];
             return items;
         }
+        public IEnumerable<SelectListItem> DataSourceTypeList()
+        {
+            IList<SelectListItem> items =
+            [
+                new() { Text = "SQL Server", Value = Core.Constants.DataSourceTypes.SqlServer, },
+                new() { Text = "File Upload", Value = Core.Constants.DataSourceTypes.FileUpload, },
+            ];
+            return items;
+        }
         public IEnumerable<SelectListItem> DataTypeList()
         {
             IList<SelectListItem> items =

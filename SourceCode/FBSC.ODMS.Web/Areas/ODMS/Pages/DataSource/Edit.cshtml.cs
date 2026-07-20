@@ -1,5 +1,6 @@
 using FBSC.ODMS.Application.Features.ODMS.DataSource.Commands;
 using FBSC.ODMS.Application.Features.ODMS.DataSource.Queries;
+using FBSC.ODMS.Application.Features.ODMS.UploadProcessor.Commands;
 using FBSC.ODMS.Web.Areas.ODMS.Models;
 using FBSC.ODMS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -26,14 +27,36 @@ public class EditModel : BasePageModel<EditModel>
     }
 
     public async Task<IActionResult> OnPost()
-    {		
+    {
         if (!ModelState.IsValid)
         {
             return Page();
         }
-		
-        return await TryThenRedirectToPage(async () => await Mediatr.Send(Mapper.Map<EditDataSourceCommand>(DataSource)), "Details", true);
-    }	
+		var newFileUploaded = false;
+		if (DataSource.DataSourceType == Core.Constants.DataSourceTypes.FileUpload && DataSource.UploadedFileForm != null)
+		{
+			var uploadedFilePath = await UploadFile<DataSourceViewModel>(WebConstants.DataSource, nameof(DataSource.UploadedFilePath), DataSource.Id, DataSource.UploadedFileForm);
+			if (uploadedFilePath == "") { return Page(); }
+			DataSource = DataSource with { UploadedFilePath = uploadedFilePath };
+			newFileUploaded = true;
+		}
+
+		var result = await TryThenRedirectToPage(async () => await Mediatr.Send(Mapper.Map<EditDataSourceCommand>(DataSource)), "Details", true);
+
+		if (result is RedirectToPageResult && newFileUploaded && !string.IsNullOrEmpty(DataSource.UploadedFilePath))
+		{
+			await Mediatr.Send(new UploadProcessorCommand
+			{
+				FilePath = DataSource.UploadedFilePath,
+				FileType = Core.Constants.FileType.Excel,
+				Module = Core.Constants.UploadModules.DataSourceFileImport,
+				UploadType = Core.Constants.UploadProcessingType.PerFile,
+				TargetEntityId = DataSource.Id
+			});
+		}
+
+		return result;
+    }
 	public PartialViewResult OnPostChangeFormValue()
     {
         ModelState.Clear();

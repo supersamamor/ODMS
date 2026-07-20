@@ -11,6 +11,7 @@ public record UploadProcessorState : BaseEntity
     public DateTime? EndDateTime { get; private set; }
     public string Module { get; init; } = "";
     public string UploadType { get; init; } = "";
+    public string? TargetEntityId { get; init; }
     public string Remarks { get; private set; } = "";
     public string ExceptionFilePath { get; private set; } = "";
     public void SetStart()

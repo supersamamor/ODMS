@@ -18,53 +18,11 @@
                 <span asp-validation-for="@Model.Description" class="text-danger d-block mt-1"></span>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="form-section">
-    <h6 class="form-section-title">@Localizer["Connection"]</h6>
-    <div class="row g-3">
         <div class="col-12 col-md-6">
             <div class="mb-3">
-                <label asp-for="@Model.ServerAddress" class="form-label"><strong>@Localizer["MS SQL Server Host Or Instance"] :</strong></label>
-                <input asp-for="@Model.ServerAddress" class="form-control" maxlength="200" />
-                <span asp-validation-for="@Model.ServerAddress" class="text-danger d-block mt-1"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="mb-3">
-                <label asp-for="@Model.DatabaseName" class="form-label"><strong>@Localizer["Target Database Name"] :</strong></label>
-                <input asp-for="@Model.DatabaseName" class="form-control" maxlength="150" />
-                <span asp-validation-for="@Model.DatabaseName" class="text-danger d-block mt-1"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="mb-3">
-                <label asp-for="@Model.AuthenticationType" class="form-label"><strong>@Localizer["Authentication Type"] :</strong></label>
-                <select asp-for="@Model.AuthenticationType" class="form-control" asp-items="@(dropdownService.AuthenticationTypeList())">
-                    <option value="">- Select Authentication Type -</option>
-                </select>
-                <span asp-validation-for="@Model.AuthenticationType" class="text-danger d-block mt-1"></span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="form-section">
-    <h6 class="form-section-title">@Localizer["Credentials & Status"]</h6>
-    <div class="row g-3">
-        <div class="col-12 col-md-6">
-            <div class="mb-3">
-                <label asp-for="@Model.Username" class="form-label"><strong>@Localizer["Connection Username"] :</strong></label>
-                <input asp-for="@Model.Username" class="form-control" maxlength="100" />
-                <span asp-validation-for="@Model.Username" class="text-danger d-block mt-1"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="mb-3">
-                <label asp-for="@Model.Password" class="form-label"><strong>@Localizer["Password"] :</strong></label>
-                <input asp-for="@Model.Password" type="password" class="form-control" maxlength="100" autocomplete="new-password" placeholder="@Localizer["Leave blank to keep the existing password"]" />
-                <span asp-validation-for="@Model.Password" class="text-danger d-block mt-1"></span>
+                <label asp-for="@Model.DataSourceType" class="form-label fieldrequired"><strong>@Localizer["Data Source Type"] :</strong></label>
+                <select asp-for="@Model.DataSourceType" class="form-control" asp-items="@(dropdownService.DataSourceTypeList())"></select>
+                <span asp-validation-for="@Model.DataSourceType" class="text-danger d-block mt-1"></span>
             </div>
         </div>
         <div class="col-12 col-md-6">
@@ -76,3 +34,114 @@
         </div>
     </div>
 </div>
+
+@if (Model.DataSourceType == FBSC.ODMS.Core.Constants.DataSourceTypes.SqlServer)
+{
+    <div class="form-section">
+        <h6 class="form-section-title">@Localizer["Connection"]</h6>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="@Model.ServerAddress" class="form-label"><strong>@Localizer["MS SQL Server Host Or Instance"] :</strong></label>
+                    <input asp-for="@Model.ServerAddress" class="form-control" maxlength="200" />
+                    <span asp-validation-for="@Model.ServerAddress" class="text-danger d-block mt-1"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="@Model.DatabaseName" class="form-label"><strong>@Localizer["Target Database Name"] :</strong></label>
+                    <input asp-for="@Model.DatabaseName" class="form-control" maxlength="150" />
+                    <span asp-validation-for="@Model.DatabaseName" class="text-danger d-block mt-1"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="@Model.AuthenticationType" class="form-label"><strong>@Localizer["Authentication Type"] :</strong></label>
+                    <select asp-for="@Model.AuthenticationType" class="form-control" asp-items="@(dropdownService.AuthenticationTypeList())">
+                        <option value="">- Select Authentication Type -</option>
+                    </select>
+                    <span asp-validation-for="@Model.AuthenticationType" class="text-danger d-block mt-1"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h6 class="form-section-title">@Localizer["Credentials"]</h6>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="@Model.Username" class="form-label"><strong>@Localizer["Connection Username"] :</strong></label>
+                    <input asp-for="@Model.Username" class="form-control" maxlength="100" />
+                    <span asp-validation-for="@Model.Username" class="text-danger d-block mt-1"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="@Model.Password" class="form-label"><strong>@Localizer["Password"] :</strong></label>
+                    <input asp-for="@Model.Password" type="password" class="form-control" maxlength="100" autocomplete="new-password" placeholder="@Localizer["Leave blank to keep the existing password"]" />
+                    <span asp-validation-for="@Model.Password" class="text-danger d-block mt-1"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (Model.DataSourceType == FBSC.ODMS.Core.Constants.DataSourceTypes.FileUpload)
+{
+    <div class="form-section">
+        <h6 class="form-section-title">@Localizer["File Upload"]</h6>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="@Model.UploadedFileForm" class="form-label"><strong>@Localizer["Excel File (.xlsx)"] :</strong></label>
+                    <input asp-for="@Model.UploadedFileForm" type="file" class="form-control" accept=".xlsx" />
+                    <span class="form-label margin-top-10"><i>@Localizer["Uploading a new file replaces the current data. Existing reports pointed at this data source keep working once processing finishes."]</i></span>
+                    <span asp-validation-for="@Model.UploadedFileForm" class="text-danger d-block mt-1"></span>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.UploadedFilePath))
+            {
+                <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>@Localizer["Current File"] :</strong></label>
+                        <input asp-for="@Model.UploadedFilePath" class="form-control" readonly />
+                    </div>
+                </div>
+            }
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label class="form-label"><strong>@Localizer["Import Status"] :</strong></label>
+                    <input value="@(Model.ImportStatus ?? "Not yet imported")" class="form-control" readonly disabled />
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.GeneratedTableName))
+            {
+                <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>@Localizer["Generated Table Name"] :</strong></label>
+                        <input value="[dbo].[@Model.GeneratedTableName]" class="form-control" readonly disabled />
+                        <span class="form-label margin-top-10"><i>@Localizer["Reference this table name in a report's Query String to read this data."]</i></span>
+                    </div>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.ImportErrorMessage))
+            {
+                <div class="col-12">
+                    <div class="mb-3">
+                        <label class="form-label text-danger"><strong>@Localizer["Import Error"] :</strong></label>
+                        <input value="@Model.ImportErrorMessage" class="form-control text-danger" readonly disabled />
+                    </div>
+                </div>
+            }
+            @if (Model.LastImportedDate.HasValue)
+            {
+                <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>@Localizer["Last Imported"] :</strong></label>
+                        <input value="@Model.LastImportedDate?.ToString("yyyy-MM-dd HH:mm")" class="form-control" readonly disabled />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

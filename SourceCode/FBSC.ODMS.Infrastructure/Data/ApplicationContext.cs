@@ -79,6 +79,12 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
 		modelBuilder.Entity<DataSourceState>().Property(e => e.PasswordEncrypted).HasMaxLength(450);
 		modelBuilder.Entity<DataSourceState>().Property(e => e.ConnectionStringEncrypted).HasMaxLength(450);
 		modelBuilder.Entity<DataSourceState>().Property(e => e.Description).HasMaxLength(450);
+		modelBuilder.Entity<DataSourceState>().Property(e => e.DataSourceType).HasMaxLength(20);
+		modelBuilder.Entity<DataSourceState>().Property(e => e.UploadedFilePath).HasMaxLength(450);
+		modelBuilder.Entity<DataSourceState>().Property(e => e.GeneratedTableName).HasMaxLength(128);
+		modelBuilder.Entity<DataSourceState>().Property(e => e.ImportStatus).HasMaxLength(20);
+		modelBuilder.Entity<DataSourceState>().Property(e => e.ImportErrorMessage).HasMaxLength(450);
+		modelBuilder.Entity<UploadProcessorState>().Property(e => e.TargetEntityId).HasMaxLength(36);
 		modelBuilder.Entity<DataUploadState>().Property(e => e.Description).HasMaxLength(450);
 		modelBuilder.Entity<DataUploadState>().Property(e => e.FileType).HasMaxLength(20);
 		

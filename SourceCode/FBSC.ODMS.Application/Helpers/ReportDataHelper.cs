@@ -38,7 +38,7 @@ namespace FBSC.ODMS.Application.Helpers
                 .AsNoTracking()
                 .Where(d => d.Id == dataSourceId && d.IsActive)
                 .Select(d => new DataSourceConnectionInfo(
-                    d.Id, d.ServerAddress, d.DatabaseName, d.AuthenticationType,
+                    d.Id, d.DataSourceType, d.ServerAddress, d.DatabaseName, d.AuthenticationType,
                     d.Username, d.PasswordEncrypted, d.ConnectionStringEncrypted))
                 .FirstOrDefaultAsync(cancellationToken);
 
@@ -73,7 +73,7 @@ namespace FBSC.ODMS.Application.Helpers
                 .AsNoTracking()
                 .Where(d => distinctIds.Contains(d.Id) && d.IsActive)
                 .Select(d => new DataSourceConnectionInfo(
-                    d.Id, d.ServerAddress, d.DatabaseName, d.AuthenticationType,
+                    d.Id, d.DataSourceType, d.ServerAddress, d.DatabaseName, d.AuthenticationType,
                     d.Username, d.PasswordEncrypted, d.ConnectionStringEncrypted))
                 .ToDictionaryAsync(d => d.Id, StringComparer.Ordinal, cancellationToken);
 
@@ -93,6 +93,13 @@ namespace FBSC.ODMS.Application.Helpers
         {
             if (dataSource is not { } ds)
             {
+                return defaultConnectionString;
+            }
+
+            if (string.Equals(ds.DataSourceType, DataSourceTypes.FileUpload, StringComparison.OrdinalIgnoreCase))
+            {
+                // A file-upload data source has no external server to connect to: its rows live in a
+                // dynamically-created table inside the same physical database ReportContext points at.
                 return defaultConnectionString;
             }
 
@@ -149,6 +156,7 @@ namespace FBSC.ODMS.Application.Helpers
 
         private readonly record struct DataSourceConnectionInfo(
             string Id,
+            string DataSourceType,
             string? ServerAddress,
             string? DatabaseName,
             string? AuthenticationType,

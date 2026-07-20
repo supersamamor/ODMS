@@ -12,6 +12,7 @@ public record UploadProcessorCommand : IRequest<int>
     public string FileType { get; set; } = "";
     public string Module { get; set; } = "";
     public string UploadType { get; set; } = "";
+    public string? TargetEntityId { get; set; }
 }
 
 public class UploadProcessorCommandHandler(ApplicationContext context) : IRequestHandler<UploadProcessorCommand, int>
@@ -27,6 +28,7 @@ public class UploadProcessorCommandHandler(ApplicationContext context) : IReques
             Status = FileUploadStatus.Pending,
             Module = request.Module,
             UploadType = request.UploadType,
+            TargetEntityId = request.TargetEntityId,
 
         };
         await _context.AddAsync(uploadProcessor, cancellationToken);

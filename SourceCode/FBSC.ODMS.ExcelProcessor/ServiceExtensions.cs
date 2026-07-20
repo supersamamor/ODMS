@@ -8,6 +8,7 @@ namespace FBSC.ODMS.ExcelProcessor
         public static void AddExcelProcessor(this IServiceCollection services)
         {
             services.AddTransient<ExcelService>();
+            services.AddTransient<DynamicTableImportService>();
         }
     }
 }
