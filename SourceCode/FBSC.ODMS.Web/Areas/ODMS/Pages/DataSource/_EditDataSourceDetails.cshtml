@@ -40,8 +40,10 @@
         </div>
         <div class="col-12 col-md-6">
             <div class="mb-3">
-                <label asp-for="@Model.AuthenticationType" class="form-label"><strong>@Localizer["SQL, WindowsIntegrated, or AzureAD"] :</strong></label>
-                <input asp-for="@Model.AuthenticationType" class="form-control" maxlength="50" />
+                <label asp-for="@Model.AuthenticationType" class="form-label"><strong>@Localizer["Authentication Type"] :</strong></label>
+                <select asp-for="@Model.AuthenticationType" class="form-control" asp-items="@(dropdownService.AuthenticationTypeList())">
+                    <option value="">- Select Authentication Type -</option>
+                </select>
                 <span asp-validation-for="@Model.AuthenticationType" class="text-danger d-block mt-1"></span>
             </div>
         </div>

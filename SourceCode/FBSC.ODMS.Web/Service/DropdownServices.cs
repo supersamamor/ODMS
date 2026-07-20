@@ -53,6 +53,16 @@ namespace FBSC.ODMS.Web.Service
             ];
             return items;
         }
+        public IEnumerable<SelectListItem> AuthenticationTypeList()
+        {
+            IList<SelectListItem> items =
+            [
+                new() { Text = Core.Constants.AuthenticationTypes.SQL, Value = Core.Constants.AuthenticationTypes.SQL, },
+                new() { Text = Core.Constants.AuthenticationTypes.WindowsIntegrated, Value = Core.Constants.AuthenticationTypes.WindowsIntegrated, },
+                new() { Text = Core.Constants.AuthenticationTypes.AzureAD, Value = Core.Constants.AuthenticationTypes.AzureAD, },
+            ];
+            return items;
+        }
         public IEnumerable<SelectListItem> DataTypeList()
         {
             IList<SelectListItem> items =

@@ -117,11 +117,11 @@ namespace FBSC.ODMS.Application.Helpers
                 ConnectTimeout = 15
             };
 
-            if (string.Equals(ds.AuthenticationType, "WindowsIntegrated", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(ds.AuthenticationType, AuthenticationTypes.WindowsIntegrated, StringComparison.OrdinalIgnoreCase))
             {
                 builder.IntegratedSecurity = true;
             }
-            else if (string.Equals(ds.AuthenticationType, "AzureAD", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(ds.AuthenticationType, AuthenticationTypes.AzureAD, StringComparison.OrdinalIgnoreCase))
             {
                 if (!string.IsNullOrWhiteSpace(ds.Username))
                 {
