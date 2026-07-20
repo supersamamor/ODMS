@@ -11,5 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FBSC.Common.Core.Base\FBSC.Common.Core.Base.csproj" />
+    <ProjectReference Include="..\FBSC.Common.Utility\FBSC.Common.Utility.csproj" />
   </ItemGroup>
 </Project>

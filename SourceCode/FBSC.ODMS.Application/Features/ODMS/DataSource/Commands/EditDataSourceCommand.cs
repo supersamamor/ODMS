@@ -9,21 +9,38 @@ using LanguageExt;
 using LanguageExt.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using static LanguageExt.Prelude;
 
 namespace FBSC.ODMS.Application.Features.ODMS.DataSource.Commands;
 
-public record EditDataSourceCommand : DataSourceState, IRequest<Validation<Error, DataSourceState>>;
+public record EditDataSourceCommand : DataSourceState, IRequest<Validation<Error, DataSourceState>>
+{
+	public string? Password { get; init; }
+}
 
 public class EditDataSourceCommandHandler(ApplicationContext context,
                                  IMapper mapper,
-                                 CompositeValidator<EditDataSourceCommand> validator) : BaseCommandHandler<ApplicationContext, DataSourceState, EditDataSourceCommand>(context, mapper, validator), IRequestHandler<EditDataSourceCommand, Validation<Error, DataSourceState>>
-{ 
-    
-public async Task<Validation<Error, DataSourceState>> Handle(EditDataSourceCommand request, CancellationToken cancellationToken) =>
+                                 CompositeValidator<EditDataSourceCommand> validator,
+                                 IConfiguration configuration) : BaseCommandHandler<ApplicationContext, DataSourceState, EditDataSourceCommand>(context, mapper, validator), IRequestHandler<EditDataSourceCommand, Validation<Error, DataSourceState>>
+{
+
+	public async Task<Validation<Error, DataSourceState>> Handle(EditDataSourceCommand request, CancellationToken cancellationToken) =>
 		await Validators.ValidateTAsync(request, cancellationToken).BindT(
-			async request => await Edit(request, cancellationToken));
-	
+			async request => await EditDataSource(request, cancellationToken));
+
+	public async Task<Validation<Error, DataSourceState>> EditDataSource(EditDataSourceCommand request, CancellationToken cancellationToken)
+	{
+		var entity = await Context.DataSource.Where(l => l.Id == request.Id).SingleAsync(cancellationToken: cancellationToken);
+		Mapper.Map(request, entity);
+		if (!string.IsNullOrWhiteSpace(request.Password))
+		{
+			entity.SetPassword(request.Password, configuration.GetValue<string>("EncryptionDecryptionKeyPrefix")!);
+		}
+		Context.Update(entity);
+		_ = await Context.SaveChangesAsync(cancellationToken);
+		return Success<Error, DataSourceState>(entity);
+	}
 }
 
 public class EditDataSourceCommandValidator : AbstractValidator<EditDataSourceCommand>

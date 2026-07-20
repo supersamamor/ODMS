@@ -20,7 +20,9 @@ public class ODMSProfile : Profile
 		CreateMap<AddReportWithSQLQueryFromAICommand, ReportState>();
 		
         CreateMap<AddDataSourceCommand, DataSourceState>();
-		CreateMap <EditDataSourceCommand, DataSourceState>().IgnoreBaseEntityProperties();
+		CreateMap<EditDataSourceCommand, DataSourceState>()
+			.IgnoreBaseEntityProperties()
+			.ForMember(dest => dest.PasswordEncrypted, opt => opt.Ignore());
 		CreateMap<AddDataUploadCommand, DataUploadState>();
 		CreateMap <EditDataUploadCommand, DataUploadState>().IgnoreBaseEntityProperties();
 		

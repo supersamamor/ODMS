@@ -9,15 +9,21 @@ using LanguageExt;
 using LanguageExt.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using static LanguageExt.Prelude;
 
 namespace FBSC.ODMS.Application.Features.ODMS.DataSource.Commands;
 
-public record AddDataSourceCommand : DataSourceState, IRequest<Validation<Error, DataSourceState>>;
+public record AddDataSourceCommand : DataSourceState, IRequest<Validation<Error, DataSourceState>>
+{
+	public string? Password { get; init; }
+}
 
 public class AddDataSourceCommandHandler(ApplicationContext context,
                                 IMapper mapper,
-                                CompositeValidator<AddDataSourceCommand> validator,IdentityContext identityContext) : BaseCommandHandler<ApplicationContext, DataSourceState, AddDataSourceCommand>(context, mapper, validator), IRequestHandler<AddDataSourceCommand, Validation<Error, DataSourceState>>
+                                CompositeValidator<AddDataSourceCommand> validator,
+                                IdentityContext identityContext,
+                                IConfiguration configuration) : BaseCommandHandler<ApplicationContext, DataSourceState, AddDataSourceCommand>(context, mapper, validator), IRequestHandler<AddDataSourceCommand, Validation<Error, DataSourceState>>
 {
     public async Task<Validation<Error, DataSourceState>> Handle(AddDataSourceCommand request, CancellationToken cancellationToken) =>
 		await Validators.ValidateTAsync(request, cancellationToken).BindT(
@@ -27,12 +33,16 @@ public class AddDataSourceCommandHandler(ApplicationContext context,
 	public async Task<Validation<Error, DataSourceState>> AddDataSource(AddDataSourceCommand request, CancellationToken cancellationToken)
 	{
 		DataSourceState entity = Mapper.Map<DataSourceState>(request);
+		if (!string.IsNullOrWhiteSpace(request.Password))
+		{
+			entity.SetPassword(request.Password, configuration.GetValue<string>("EncryptionDecryptionKeyPrefix")!);
+		}
 		_ = await Context.AddAsync(entity, cancellationToken);
 		await Helpers.ApprovalHelper.AddApprovers(Context, identityContext, ApprovalModule.DataSource, entity.Id, cancellationToken);
 		_ = await Context.SaveChangesAsync(cancellationToken);
 		return Success<Error, DataSourceState>(entity);
 	}
-	
+
 }
 
 public class AddDataSourceCommandValidator : AbstractValidator<AddDataSourceCommand>
