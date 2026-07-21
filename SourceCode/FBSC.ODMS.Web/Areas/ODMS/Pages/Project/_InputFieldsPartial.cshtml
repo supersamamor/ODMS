@@ -15,10 +15,10 @@
         <h6 class="form-section-title fieldrequired" id="sowSectionTitle">@Localizer["Statement of Work"]</h6>
         <p class="sow-hint">@Localizer["Attach the required document"]</p>
         <div class="sow-dropzone" id="sowDropzone">
-            <input type="file" id="SOWForm" name="SOWForm" accept=".pdf,.doc,.docx" class="sow-dropzone-input" />
+            <input type="file" id="SOWForm" name="SOWForm" accept=".pdf,.docx,.jpg,.jpeg,.png,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg" class="sow-dropzone-input" />
             <span class="sow-dropzone-icon"><i class="fas fa-upload" aria-hidden="true"></i></span>
             <span class="sow-dropzone-text"><span class="sow-dropzone-link">@Localizer["Click to upload"]</span> @Localizer["or drag and drop"]</span>
-            <span class="sow-dropzone-types">PDF, DOC, DOCX</span>
+            <span class="sow-dropzone-types">PDF, DOCX, JPG, PNG, XLSX</span>
             <span class="sow-dropzone-filename" id="sowSelectedFile">@(string.IsNullOrEmpty(Model.SOWFileName) ? "" : System.IO.Path.GetFileName(Model.SOWFileName))</span>
         </div>
         <span asp-validation-for="@Model.SOWForm" class="text-danger d-block mt-1"></span>

@@ -19,10 +19,11 @@
                     <thead>
                         <tr>
                             <th>
+                                @Localizer["Code"]
+                            </th>
+                            <th>
 								@Localizer["Name"]
 							</th>
-							  
-							
                             <th>
                                 @Localizer["Actions"]
                             </th>
@@ -46,7 +47,8 @@
                 select: false,
                 serverSide: true,
                 responsive: true,
-                order: [[1, 'desc']],
+                @* lastModifiedDate hidden column index (code, name, actions, lastModifiedDate, id => 3). *@
+                order: [[3, 'desc']],
                 dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DataTableDOMLayOut)',
                 ajax:
                 {
@@ -61,9 +63,9 @@
                     BindTableRowCollapseEvent();
                 },
                 columns: [
+                    { data: "code", name: "Code", responsivePriority: 1, title: '@Localizer["Code"]', searchable: true, className: "text-start" },
                     { data: "name", name: "Name", responsivePriority: 1, title: '@Localizer["Name"]', searchable: true, className: "text-start" },
-				   
-					
+
                     {
                         data: null,
                         searchable: false,

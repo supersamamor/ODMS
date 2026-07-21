@@ -130,12 +130,16 @@ public class BasePageModel<T> : PageModel where T : class
                 return Page();
             });
     #endregion
-    protected async Task<string> UploadFile<TUploadModel>(string moduleName, string fieldName, string id, IFormFile? formFile, string? fileName = null)
+    protected async Task<string> UploadFile<TUploadModel>(string moduleName, string fieldName, string id, IFormFile? formFile, string? fileName = null, string[]? permittedExtensionsOverride = null)
     {
         string filePath = "";
         if (formFile != null)
         {
-            var permittedExtensions = Configuration.GetValue<string>("UsersUpload:DocumentPermitedExtensions")?.Split(',').ToArray();
+            // Per-field allow-list wins over the global config so a field can
+            // permit types (e.g. SOW: pdf/docx) the global list omits, without
+            // widening every other upload in the app.
+            var permittedExtensions = permittedExtensionsOverride
+                ?? Configuration.GetValue<string>("UsersUpload:DocumentPermitedExtensions")?.Split(',').ToArray();
             var fileSizeLimit = Configuration.GetValue<long>("UsersUpload:FileSizeLimit");
             var targetFilePath = Configuration.GetValue<string>("UsersUpload:SecureUploadFilePath") + "\\" + moduleName
                 + (string.IsNullOrEmpty(id) ? "" : "\\" + id)

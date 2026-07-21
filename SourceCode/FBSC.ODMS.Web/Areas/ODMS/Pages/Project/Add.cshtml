@@ -36,6 +36,7 @@
 @section Scripts {
 <partial name="_ValidationScriptsPartial" />
 <partial name="_TeamMembersListValidationPartial" model="@Model.Project" />
+<partial name="_SowDropzoneScript" />
 
 <script asp-add-nonce>
     $(document).ready(function () {
@@ -95,20 +96,7 @@
 			};
 			$("#BusinessUnitId").businessunitSelect();
 
-			// SOW dropzone: show the chosen file, and let "No SOW yet"
-			// disable the zone (server enforces the same rule).
-			$('#SOWForm').on('change', function () {
-				var name = this.files && this.files.length ? this.files[0].name : '';
-				$('#sowSelectedFile').text(name);
-			});
-			function toggleSowZone() {
-				var noSow = $('#NoSOW').is(':checked');
-				$('#sowDropzone').toggleClass('sow-disabled', noSow);
-			}
-			$('#NoSOW').on('change', toggleSowZone);
-			toggleSowZone();
-			$('#sowDropzone').on('dragover dragenter', function () { $(this).addClass('dragover'); })
-				.on('dragleave drop', function () { $(this).removeClass('dragover'); });
+			initSowDropzone();
 
 		}
 		InitializeForm();

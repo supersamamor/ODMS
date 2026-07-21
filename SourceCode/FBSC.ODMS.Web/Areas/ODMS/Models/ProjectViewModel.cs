@@ -5,10 +5,10 @@ namespace FBSC.ODMS.Web.Areas.ODMS.Models;
 
 public record ProjectViewModel : BaseViewModel
 {
+	// Auto-generated ({BU.Code}{0000001}) and read-only - never user-supplied,
+	// so no [Required]/uniqueness here; the Add command stamps it server-side.
 	[Display(Name = "Project ID")]
-	[Required]
-	[StringLength(12, ErrorMessage = "{0} length can't be more than {1}.")]
-	public string ProjectCode { get; init; } = "";
+	public string? ProjectCode { get; init; } = "";
 	[Display(Name = "Project Name")]
 	[Required]
 	[StringLength(255, ErrorMessage = "{0} length can't be more than {1}.")]

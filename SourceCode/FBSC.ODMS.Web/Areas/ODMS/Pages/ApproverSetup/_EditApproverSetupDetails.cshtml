@@ -22,6 +22,17 @@
                 <span asp-validation-for="@Model.ApprovalType" class="text-danger"></span>
             </div>
         </div>
+        @* Delivery Tower routing applies to the Project module only. Leave blank
+           to make this setup the fallback for all towers. *@
+        <div class="col-12 col-md-6">
+            <div class="mb-3">
+                <label asp-for="@Model.DeliveryTower" class="form-label"><strong>@Localizer["Delivery Tower"] :</strong></label>
+                <select asp-for="@Model.DeliveryTower" class="form-control" asp-items="@(dropdownService.DeliveryTowerList())">
+                    <option value="">@Localizer["All Delivery Towers"]</option>
+                </select>
+                <span asp-validation-for="@Model.DeliveryTower" class="text-danger"></span>
+            </div>
+        </div>
     </div>
 </div>
 

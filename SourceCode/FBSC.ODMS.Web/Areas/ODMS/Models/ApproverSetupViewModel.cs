@@ -9,6 +9,10 @@ public record ApproverSetupViewModel : BaseViewModel
     [Required]
     [StringLength(450, ErrorMessage = "{0} length can't be more than {1}.")]
     public string TableName { get; init; } = "";
+    // Optional routing discriminator for the Project module: blank = all towers.
+    [Display(Name = "Delivery Tower")]
+    [StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
+    public string? DeliveryTower { get; init; }
     [Display(Name = "Approval Type")]
     [Required]
     [StringLength(450, ErrorMessage = "{0} length can't be more than {1}.")]

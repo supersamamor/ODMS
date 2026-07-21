@@ -38,6 +38,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
     public DbSet<StatusReportRiskIssueState> StatusReportRiskIssue { get; set; } = default!;
     public DbSet<AccomplishmentState> Accomplishment { get; set; } = default!;
     public DbSet<NextStepState> NextStep { get; set; } = default!;
+    public DbSet<SequenceCounterState> SequenceCounter { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -115,6 +116,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<ApprovalState>().Property(e => e.Status).HasMaxLength(450);
         modelBuilder.Entity<ApprovalState>().Property(e => e.EmailSendingStatus).HasMaxLength(450);
         modelBuilder.Entity<ApproverSetupState>().Property(e => e.TableName).HasMaxLength(450);
+        modelBuilder.Entity<ApproverSetupState>().Property(e => e.DeliveryTower).HasMaxLength(50);
         modelBuilder.Entity<ApproverSetupState>().Property(e => e.ApprovalType).HasMaxLength(450);
         modelBuilder.Entity<ApproverSetupState>().Property(e => e.EmailSubject).HasMaxLength(450);
         modelBuilder.Entity<ApproverSetupState>().Property(e => e.WorkflowName).HasMaxLength(450);
@@ -129,6 +131,17 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<UploadProcessorState>().Property(e => e.UploadType).HasMaxLength(50);
 
         modelBuilder.Entity<BusinessUnitState>().Property(e => e.Name).HasMaxLength(150);
+        modelBuilder.Entity<BusinessUnitState>().Property(e => e.Code).HasMaxLength(20);
+        modelBuilder.Entity<BusinessUnitState>().HasIndex(e => e.Code).IsUnique();
+
+        // Sequence counter: Key/Value only (no BaseEntity), Key is the PK.
+        modelBuilder.Entity<SequenceCounterState>().HasKey(e => e.Key);
+        modelBuilder.Entity<SequenceCounterState>().Property(e => e.Key).HasMaxLength(100);
+        modelBuilder.Entity<SequenceCounterState>().ToTable("SequenceCounter");
+
+        // RiskIssue code: unique per the auto-generated R-/I- sequence.
+        modelBuilder.Entity<RiskIssueState>().Property(e => e.Code).HasMaxLength(20);
+        modelBuilder.Entity<RiskIssueState>().HasIndex(e => e.Code).IsUnique();
         // Project + ProjectHistory share ProjectBase - lengths per the ODMS
         // DatabaseStructure workbook, applied to both tables identically.
         modelBuilder.Entity<ProjectState>().Property(e => e.ProjectCode).HasMaxLength(12);

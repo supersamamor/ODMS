@@ -37,6 +37,8 @@ public class AddBusinessUnitCommandValidator : AbstractValidator<AddBusinessUnit
         RuleFor(x => x.Id).MustAsync(async (id, cancellation) => await _context.NotExists<BusinessUnitState>(x => x.Id == id, cancellationToken: cancellation))
                           .WithMessage("BusinessUnit with id {PropertyValue} already exists");
         RuleFor(x => x.Name).MustAsync(async (name, cancellation) => await _context.NotExists<BusinessUnitState>(x => x.Name == name, cancellationToken: cancellation)).WithMessage("BusinessUnit with name {PropertyValue} already exists");
+        RuleFor(x => x.Code).NotEmpty().WithMessage("Code is required");
+        RuleFor(x => x.Code).MustAsync(async (code, cancellation) => await _context.NotExists<BusinessUnitState>(x => x.Code == code, cancellationToken: cancellation)).WithMessage("BusinessUnit with code {PropertyValue} already exists");
 	
     }
 }

@@ -1,0 +1,52 @@
+@* Statement-of-Work dropzone behavior, shared by Project Add + Edit.
+   Defines a global initSowDropzone() that (re)binds after each partial reload.
+   Native HTML5 drag-and-drop: preventDefault on dragover so the drop is
+   allowed, then bind DataTransfer.files onto the file input so they post with
+   the form. "No SOW yet" disables the zone (server enforces the same rule). *@
+<script asp-add-nonce>
+    window.initSowDropzone = function () {
+        var zone = document.getElementById('sowDropzone');
+        var input = document.getElementById('SOWForm');
+        if (!zone || !input) { return; }
+
+        function showSelectedFile() {
+            var name = input.files && input.files.length ? input.files[0].name : '';
+            document.getElementById('sowSelectedFile').textContent = name;
+        }
+
+        input.addEventListener('change', showSelectedFile);
+
+        ['dragenter', 'dragover'].forEach(function (evt) {
+            zone.addEventListener(evt, function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                zone.classList.add('dragover');
+            });
+        });
+        ['dragleave', 'dragend'].forEach(function (evt) {
+            zone.addEventListener(evt, function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                zone.classList.remove('dragover');
+            });
+        });
+        zone.addEventListener('drop', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            zone.classList.remove('dragover');
+            var dt = e.dataTransfer;
+            if (dt && dt.files && dt.files.length) {
+                // Bind the dropped files onto the input so they submit with the form.
+                input.files = dt.files;
+                showSelectedFile();
+            }
+        });
+
+        var noSow = document.getElementById('NoSOW');
+        function toggleZone() {
+            zone.classList.toggle('sow-disabled', noSow.checked);
+        }
+        noSow.addEventListener('change', toggleZone);
+        toggleZone();
+    };
+</script>

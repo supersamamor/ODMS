@@ -21,6 +21,7 @@ public class GetBusinessUnitQueryHandler(ApplicationContext context) : BaseQuery
 			{
 				Id = e.Id,
 				LastModifiedDate = e.LastModifiedDate,
+				Code = e.Code,
 				Name = e.Name,
 			})
 			.ToPagedResponse(request.SearchColumns, request.SearchValue,

@@ -11,7 +11,12 @@ namespace FBSC.ODMS.Web.Areas.ODMS.Pages.Project;
 /// </summary>
 public abstract class ProjectFormPageModel<T> : BasePageModel<T> where T : class
 {
-    private static readonly string[] AllowedSowExtensions = [".pdf", ".doc", ".docx"];
+    // PDF + DOCX only: these are the formats the security layer (FileUploadHelper)
+    // has registered content signatures + macro scanning for. Legacy .doc (OLE
+    // compound) has no signature/macro-scan support and is intentionally excluded.
+
+    private static readonly string[] AllowedSowExtensions = [".pdf", ".docx", ".jpg", ".jpeg", ".png", ".xlsx"];
+
 
     protected void ValidateSOW(ProjectViewModel project)
     {
@@ -20,7 +25,7 @@ public abstract class ProjectFormPageModel<T> : BasePageModel<T> where T : class
             var extension = Path.GetExtension(project.SOWForm.FileName).ToLowerInvariant();
             if (!AllowedSowExtensions.Contains(extension))
             {
-                ModelState.AddModelError("Project.SOWForm", "Statement of Work must be a PDF, DOC, or DOCX file.");
+                ModelState.AddModelError("Project.SOWForm", "Statement of Work must be a PDF, DOCX, or image file.");
             }
         }
         else if (!project.NoSOW && string.IsNullOrEmpty(project.SOWFileName))
@@ -36,7 +41,7 @@ public abstract class ProjectFormPageModel<T> : BasePageModel<T> where T : class
         {
             return project;
         }
-        var uploadedFilePath = await UploadFile<ProjectViewModel>(WebConstants.Project, nameof(project.SOWFileName), project.Id, project.SOWForm);
+        var uploadedFilePath = await UploadFile<ProjectViewModel>(WebConstants.Project, nameof(project.SOWFileName), project.Id, project.SOWForm, permittedExtensionsOverride: AllowedSowExtensions);
         if (uploadedFilePath == "")
         {
             return null;

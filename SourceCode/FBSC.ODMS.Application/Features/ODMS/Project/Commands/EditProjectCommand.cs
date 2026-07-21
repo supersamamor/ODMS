@@ -19,9 +19,19 @@ public class EditProjectCommandHandler(ApplicationContext context,
                                  IMapper mapper,
                                  CompositeValidator<EditProjectCommand> validator) : BaseCommandHandler<ApplicationContext, ProjectState, EditProjectCommand>(context, mapper, validator), IRequestHandler<EditProjectCommand, Validation<Error, ProjectState>>
 { 
-    public async Task<Validation<Error, ProjectState>> Handle(EditProjectCommand request, CancellationToken cancellationToken) =>
-		await Validators.ValidateTAsync(request, cancellationToken).BindT(
-			async request => await EditProject(request, cancellationToken));
+    public async Task<Validation<Error, ProjectState>> Handle(EditProjectCommand request, CancellationToken cancellationToken)
+	{
+		// ProjectCode is auto-generated and immutable: re-stamp the request with
+		// the stored value so an edit can never alter it (mapping-agnostic).
+		var storedCode = await Context.Project.AsNoTracking()
+			.Where(p => p.Id == request.Id).Select(p => p.ProjectCode).FirstOrDefaultAsync(cancellationToken);
+		if (storedCode != null)
+		{
+			request = request with { ProjectCode = storedCode };
+		}
+		return await Validators.ValidateTAsync(request, cancellationToken).BindT(
+			async req => await EditProject(req, cancellationToken));
+	}
 
 
 	public async Task<Validation<Error, ProjectState>> EditProject(EditProjectCommand request, CancellationToken cancellationToken)
@@ -45,8 +55,7 @@ public class EditProjectCommandValidator : AbstractValidator<EditProjectCommand>
         _context = context;
 		RuleFor(x => x.Id).MustAsync(async (id, cancellation) => await _context.Exists<ProjectState>(x => x.Id == id, cancellationToken: cancellation))
                           .WithMessage("Project with id {PropertyValue} does not exists");
-        RuleFor(x => x).MustAsync(async (cmd, cancellation) => await _context.NotExists<ProjectState>(x => x.ProjectCode == cmd.ProjectCode && x.Id != cmd.Id, cancellationToken: cancellation))
-                          .WithMessage(cmd => $"Project ID {cmd.ProjectCode} is already in use");
+        // ProjectCode is auto-generated and preserved on edit - no uniqueness rule needed.
 
     }
 }

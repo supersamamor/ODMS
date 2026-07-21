@@ -102,6 +102,12 @@ namespace FBSC.ODMS.Core.ODMS
         public string? WorkflowName { get; init; } = "";
         public string? WorkflowDescription { get; init; } = "";
         public string? TableName { get; init; } = "";
+        /// <summary>
+        /// Optional routing discriminator for the Project module: when set, this
+        /// setup applies only to projects of that Delivery Tower; null/empty means
+        /// it applies to all towers (fallback). Ignored by non-Project modules.
+        /// </summary>
+        public string? DeliveryTower { get; init; }
         public string ApprovalType { get; init; } = ApprovalTypes.InSequence;
         public string EmailSubject { get; init; } = "";
         public string EmailBody { get; init; } = "";
@@ -171,12 +177,14 @@ namespace FBSC.ODMS.Core.ODMS
         public const string Workflow = "Workflow";
     }
 	public static class ApprovalModule
-	{ 
-		
+	{
+
 		public const string DataSource = "Data Source";
+		public const string Project = "Project";
 		public static readonly List<string> ApprovalTableList =
 		[
 			DataSource,
+			Project,
 		];
 	}
 }

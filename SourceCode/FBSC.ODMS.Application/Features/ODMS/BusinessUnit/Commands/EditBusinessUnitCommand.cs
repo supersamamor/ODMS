@@ -20,10 +20,19 @@ public class EditBusinessUnitCommandHandler(ApplicationContext context,
                                  CompositeValidator<EditBusinessUnitCommand> validator) : BaseCommandHandler<ApplicationContext, BusinessUnitState, EditBusinessUnitCommand>(context, mapper, validator), IRequestHandler<EditBusinessUnitCommand, Validation<Error, BusinessUnitState>>
 { 
     
-public async Task<Validation<Error, BusinessUnitState>> Handle(EditBusinessUnitCommand request, CancellationToken cancellationToken) =>
-		await Validators.ValidateTAsync(request, cancellationToken).BindT(
-			async request => await Edit(request, cancellationToken));
-	
+public async Task<Validation<Error, BusinessUnitState>> Handle(EditBusinessUnitCommand request, CancellationToken cancellationToken)
+	{
+		// Code is immutable after creation: re-stamp the request with the stored
+		// value so a tampered payload can never change it.
+		var storedCode = await Context.BusinessUnit.AsNoTracking()
+			.Where(b => b.Id == request.Id).Select(b => b.Code).FirstOrDefaultAsync(cancellationToken);
+		if (storedCode != null)
+		{
+			request = request with { Code = storedCode };
+		}
+		return await Validators.ValidateTAsync(request, cancellationToken).BindT(
+			async req => await Edit(req, cancellationToken));
+	}
 }
 
 public class EditBusinessUnitCommandValidator : AbstractValidator<EditBusinessUnitCommand>

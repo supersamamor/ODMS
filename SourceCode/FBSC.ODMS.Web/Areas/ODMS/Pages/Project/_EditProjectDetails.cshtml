@@ -24,9 +24,9 @@
         </div>
         <div class="col-12 col-md-6">
             <div class="mb-3">
-                <label asp-for="@Model.ProjectCode" class="form-label fieldrequired"><strong>@Localizer["Project ID"] :</strong></label>
-                <input asp-for="@Model.ProjectCode" class="form-control" maxlength="12" placeholder="@Localizer["e.g. DPI-011"]" />
-                <span asp-validation-for="@Model.ProjectCode" class="text-danger d-block mt-1"></span>
+                @* Auto-generated from the BU code + a 7-digit sequence; read-only. *@
+                <label asp-for="@Model.ProjectCode" class="form-label"><strong>@Localizer["Project ID"] :</strong></label>
+                <input asp-for="@Model.ProjectCode" class="form-control" readonly placeholder="@Localizer["Auto-generated on save"]" />
             </div>
         </div>
         <div class="col-12 col-md-6">

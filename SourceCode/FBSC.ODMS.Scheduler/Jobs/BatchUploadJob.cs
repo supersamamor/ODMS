@@ -1,5 +1,6 @@
 using FBSC.Common.Services.Shared.Interfaces;
 using FBSC.Common.Services.Shared.Models.Mail;
+using FBSC.ODMS.Core.Constants;
 using FBSC.ODMS.Core.ODMS;
 using FBSC.ODMS.Infrastructure.Data;
 using FBSC.ODMS.ExcelProcessor.Services;
@@ -115,7 +116,34 @@ namespace FBSC.ODMS.Scheduler.Jobs
                     var projectImportResult = await excelService.ImportAsync<ProjectState>(path);
                     if (projectImportResult.IsSuccess)
                     {
-                        await context.AddRangeAsync(projectImportResult.SuccessRecords);
+                        var projects = projectImportResult.SuccessRecords.ToList();
+                        // Resolve each referenced BusinessUnit's code once.
+                        var buIds = projects.Select(p => p.BusinessUnitId).Distinct().ToList();
+                        var buCodes = await context.BusinessUnit.AsNoTracking()
+                            .Where(b => buIds.Contains(b.Id))
+                            .ToDictionaryAsync(b => b.Id, b => b.Code);
+
+                        // Auto-generate ProjectCode ({BU.Code}{0000001}): ONE block
+                        // reservation per BusinessUnit regardless of row count - so a
+                        // million-row import makes a handful of sequence calls, not a
+                        // million. All inside a transaction so the counters and the
+                        // rows commit together (a failure rolls both back - no gaps).
+                        await using var projectTx = await context.Database.BeginTransactionAsync();
+                        var stampedProjects = new List<ProjectState>(projects.Count);
+                        foreach (var group in projects.GroupBy(p => p.BusinessUnitId))
+                        {
+                            buCodes.TryGetValue(group.Key, out var buCode);
+                            var startValue = await SequenceGenerator.ReserveAsync(context, SequenceKeys.ProjectCode(group.Key), group.Count());
+                            long offset = 0;
+                            foreach (var project in group)
+                            {
+                                stampedProjects.Add(project with { ProjectCode = CodeFormats.Project(buCode ?? "", startValue + offset) });
+                                offset++;
+                            }
+                        }
+                        await context.AddRangeAsync(stampedProjects);
+                        await context.SaveChangesAsync();
+                        await projectTx.CommitAsync();
                     }
                     else
                     {
