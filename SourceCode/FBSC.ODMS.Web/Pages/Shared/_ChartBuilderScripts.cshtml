@@ -378,7 +378,13 @@
                     var typeOptions = ($.ChartTypeOptionsFactory[factoryKey] || function () { return {}; })(indexAxis);
 
                     var chartOptions = {
-                        responsive: false,
+                        // Fill the widget body instead of rendering at the canvas's
+                        // intrinsic 300x150 default; maintainAspectRatio:false lets
+                        // the chart take the container's full height too (radial
+                        // charts still draw their circle from the smaller dimension,
+                        // so they don't distort).
+                        responsive: true,
+                        maintainAspectRatio: false,
                         ...typeOptions,
                         plugins: {
                             legend: {

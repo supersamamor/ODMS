@@ -1430,6 +1430,9 @@ form.user .btn-user {
     padding: 1.1rem !important;
     min-height: 19rem;
     background-color: #fdfdfe;
+    /* Chart.js responsive mode measures (and observes resizes of) the
+       canvas's positioned parent - required for charts to fill the body. */
+    position: relative;
 }
 
     .dashboard-widget-body .default-graph-canvas,
