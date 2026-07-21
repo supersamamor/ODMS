@@ -33,24 +33,31 @@
                 int counter = 0;
                 foreach (var item in Model.TeamMembersList)
                 {
+                    @* Each row's controls get an index-scoped id. Without this,
+                       asp-for renders the same id ("item_EmployeeId") on every
+                       row, and Select2 - which keys its container/state off the
+                       element id - collapses all rows onto one, so only a single
+                       dropdown ever populates. Names stay collection-indexed for
+                       model binding; ids are unique for Select2 + validation. *@
                     <div class="team-grid-row">
                         <input type="hidden" name="TeamMembersList[@counter].Id" value="@item.Id" />
                         <input type="hidden" name="TeamMembersList[@counter].ProjectId" value="@item.ProjectId" />
                         <div class="team-grid-cell">
-                            <select asp-for="@item.EmployeeId" name="TeamMembersList[@counter].EmployeeId" class="form-control TeamMemberEmployeeSelect" asp-items="@(dropdownService.GetEmployeeList(item.EmployeeId))">
-                                <option value="">@Localizer["Select member"]</option>
+                            <select id="TeamMembersList_@(counter)__EmployeeId" name="TeamMembersList[@counter].EmployeeId" class="form-control TeamMemberEmployeeSelect" asp-items="@(dropdownService.GetEmployeeList(item.EmployeeId))">
+                                @* Empty value binds to null on the server, surfaced as the "(Unknown)" default via the Select2 placeholder. *@
+                                <option value="">@Localizer["(Unknown)"]</option>
                             </select>
-                            <span data-valmsg-for="TeamMembersList[@counter].EmployeeId" asp-validation-for="@item.EmployeeId" class="text-danger"></span>
+                            <span data-valmsg-for="TeamMembersList[@counter].EmployeeId" class="text-danger"></span>
                         </div>
                         <div class="team-grid-cell">
-                            <select asp-for="@item.MemberLevel" name="TeamMembersList[@counter].MemberLevel" class="form-control" asp-items="@(dropdownService.MemberLevelList())">
+                            <select asp-for="@item.MemberLevel" id="TeamMembersList_@(counter)__MemberLevel" name="TeamMembersList[@counter].MemberLevel" class="form-control" asp-items="@(dropdownService.MemberLevelList())">
                                 <option value="">@Localizer["Select level"]</option>
                             </select>
-                            <span data-valmsg-for="TeamMembersList[@counter].MemberLevel" asp-validation-for="@item.MemberLevel" class="text-danger"></span>
+                            <span data-valmsg-for="TeamMembersList[@counter].MemberLevel" class="text-danger"></span>
                         </div>
                         <div class="team-grid-cell">
-                            <input asp-for="@item.Role" name="TeamMembersList[@counter].Role" class="form-control" maxlength="100" placeholder="@Localizer["e.g. Frontend Developer"]" />
-                            <span data-valmsg-for="TeamMembersList[@counter].Role" asp-validation-for="@item.Role" class="text-danger"></span>
+                            <input id="TeamMembersList_@(counter)__Role" name="TeamMembersList[@counter].Role" value="@item.Role" class="form-control" maxlength="100" placeholder="@Localizer["e.g. Frontend Developer"]" />
+                            <span data-valmsg-for="TeamMembersList[@counter].Role" class="text-danger"></span>
                         </div>
                         <div class="team-grid-cell team-grid-remove">
                             <button type="button" class="team-remove-btn cancel RemoveTeamMembersButton" aria-label="@Localizer["Remove member"]" title="@Localizer["Remove member"]" removeId="@(item.Id)">&mdash;</button>

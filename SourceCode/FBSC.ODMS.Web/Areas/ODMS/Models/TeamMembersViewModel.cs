@@ -5,9 +5,9 @@ namespace FBSC.ODMS.Web.Areas.ODMS.Models;
 
 public record TeamMembersViewModel : BaseViewModel
 {
+    // Optional: the "(Unknown)" default in the Team Members grid maps to null.
     [Display(Name = "Name")]
-    [Required]
-    public string EmployeeId { get; init; } = "";
+    public string? EmployeeId { get; init; }
     [Display(Name = "Level")]
     [StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
     public string? MemberLevel { get; init; }

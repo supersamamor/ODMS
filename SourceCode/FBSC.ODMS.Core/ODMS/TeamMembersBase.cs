@@ -8,7 +8,9 @@ namespace FBSC.ODMS.Core.ODMS;
 /// </summary>
 public abstract record TeamMembersBase : BaseEntity
 {
-	public string EmployeeId { get; init; } = "";
+	// Nullable: a team member may be recorded before the person is known
+	// ("(Unknown)" in the UI), which persists as NULL.
+	public string? EmployeeId { get; init; }
 	public string Role { get; init; } = "";
 	public string? MemberLevel { get; init; }
 }

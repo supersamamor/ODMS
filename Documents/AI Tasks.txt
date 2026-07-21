@@ -39,7 +39,7 @@ Please update the frontend components, view models, and UI bindings for the foll
 
 1. Team Members Dropdown Fixes
 
-Fix the bug in the Team Members subcollection grid where only the last row's dropdown populates with employee names. Ensure the data source binds correctly to every row.
+In Project/Add and Edit Module, Fix the bug in the Team Members subcollection grid where only the last row's dropdown populates with employee names. Ensure the data source binds correctly to every row.
 
 Add a default selection labeled (Unknown) to the employee dropdown in the Project -> Team Members module. This should display as (Unknown) in the UI but map to a null value in the database.
 
@@ -71,17 +71,7 @@ Create a new page called "My Projects" under the "Project" Level 1 menu.
 
 Set its InitialPage to mirror Project\Index for now.
 
-2. Workflow & Routing Integration
-
-Inject the dynamic approval workflow into the pipeline, ensuring routing logic evaluates the updated DeliveryCategory property on the project.
-
-Role-Based Filtering Stub: Refactor the backend API endpoint serving the Employee dropdowns to accept an optional Role filter parameter. Leave the filter logic extensible so upcoming feature implementations can pass role constraints cleanly.
-
-
-
-
-
-
+The permission is "Project Status Report" not "Project"
 
 --------------------------------
 
@@ -110,3 +100,9 @@ Include a [+] button to add a new item and a [-] button to remove an item, seria
 6. ApproverSetup with tableName Project already exists validation is appearing, even if there is still no record with that delivery category / tablename combination
 
 Delivery/Portfolio Lead has no approval yet
+
+No error message if team member fields are null
+
+
+
+Role-Based Filtering Stub: Refactor the backend API endpoint serving the Employee dropdowns to accept an optional Role filter parameter. Leave the filter logic extensible so upcoming feature implementations can pass role constraints cleanly. - No requirement yet

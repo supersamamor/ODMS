@@ -169,7 +169,8 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         // restriction - the PM FK above already owns the cascade from Employee.
         modelBuilder.Entity<ProjectState>().HasOne(t => t.DeputyProjectManager).WithMany().HasForeignKey(t => t.DeputyProjectManagerId).OnDelete(DeleteBehavior.NoAction);
         modelBuilder.Entity<ProjectState>().HasOne(t => t.TechnologyBusinessPartner).WithMany().HasForeignKey(t => t.TechnologyBusinessPartnerId).OnDelete(DeleteBehavior.NoAction);
-        modelBuilder.Entity<TeamMembersState>().HasOne(t => t.Employee).WithMany().HasForeignKey(t => t.EmployeeId).OnDelete(DeleteBehavior.NoAction);
+        // Optional employee: a member row may be "(Unknown)" (null EmployeeId).
+        modelBuilder.Entity<TeamMembersState>().HasOne(t => t.Employee).WithMany().HasForeignKey(t => t.EmployeeId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
 
         // BusinessUnit <-> Technology Business Partner (Employee) mapping table.
         modelBuilder.Entity<BusinessUnitState>().HasMany(t => t.TechnologyBusinessPartnerList).WithOne(l => l.BusinessUnit).HasForeignKey(t => t.BusinessUnitId);

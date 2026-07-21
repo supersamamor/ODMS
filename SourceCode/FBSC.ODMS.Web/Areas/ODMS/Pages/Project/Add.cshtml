@@ -82,7 +82,20 @@
 			$("#ProjectManagerId").employeeSelect();
 			$("#DeputyProjectManagerId").employeeSelect();
 			$("#TechnologyBusinessPartnerId").employeeSelect();
-			$(".TeamMemberEmployeeSelect").employeeSelect();
+
+			// Team-member employee selects: each row is initialized on its own
+			// (unique id, set in _TeamMembersList.cshtml) so every dropdown
+			// populates. "(Unknown)" is the clearable default and maps to a
+			// null EmployeeId on save.
+			$(".TeamMemberEmployeeSelect").filter("select").each(function () {
+				$(this).ajaxSelect({
+					placeholder: '@Localizer["(Unknown)"]',
+					allowClear: true,
+					ajax: {
+						url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2EmployeeData" })',
+					}
+				});
+			});
 
 			$.fn.businessunitSelect = function() {
 				this.filter("select").each(function() {
