@@ -40,7 +40,16 @@ public static class ServiceCollectionExtensions
         {
             configuration.RegisterServicesFromAssemblies([Assembly.GetExecutingAssembly()]);
         });
-        services.AddWebOptimizer();
+        // Minify first-party assets only. The parameterless AddWebOptimizer()
+        // re-minifies EVERY .js/.css on serve - including the pre-minified
+        // vendor bundles under lib/, which corrupts modern ES2015+ code
+        // (NUglify mangled Chart.js v4's class bindings, crashing stacked
+        // charts with "Cannot access 'l' before initialization").
+        services.AddWebOptimizer(pipeline =>
+        {
+            pipeline.MinifyCssFiles("css/**/*.css");
+            pipeline.MinifyJsFiles("js/**/*.js");
+        });
         services.AddNotyf(config =>
         {
             config.DurationInSeconds = 10;
