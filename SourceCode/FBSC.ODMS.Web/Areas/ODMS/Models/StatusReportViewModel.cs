@@ -62,12 +62,15 @@ public record StatusReportViewModel : BaseViewModel
 	[Required(ErrorMessage = "'Reporting Week' is required.")]
 	public int? SelectedWeekNumber { get; init; }
 
-	// Read-only header context for the Create Report page.
+	// Read-only header context for the Create Report / View Report pages.
 	public string? ProjectName { get; set; }
+	public string? ProjectCode { get; set; }
 	public string? BusinessUnitName { get; set; }
 	public string? ProjectManagerName { get; set; }
 	public string? PriorWeekHealth { get; set; }
 	public decimal? BaselineBudget { get; set; }
+	// e.g. "Jul 7 - Jul 13, 2026" (from the ReportingWeek row).
+	public string? ReportWeekDisplay { get; set; }
 
 	public DateTime LastModifiedDate { get; set; }
 	public ProjectViewModel? Project { get; init; }

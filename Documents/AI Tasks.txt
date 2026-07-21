@@ -1,47 +1,4 @@
 --------------------------------
-Act as a Senior Software Engineer. I need to implement a new "My Projects" page, build out the Status Report module based on an uploaded design, and fix a validation bug. The solution must be enterprise-grade, written in modern C#, and optimized for performance.
-
-Please generate the necessary backend logic, routing, schema updates, and UI components for the following requirements:
-
-1. "My Projects" Page & Routing
-
-Menu Location: Create a new page called "My Projects" under the "Project" Level 1 menu.
-
-Routing & UI: The path should be MyProjects\Index. Set its initial page layout and data fetching to mirror the existing Project\Index.
-
-Permissioning: This page must strictly use the Project Status Report permission to grant access, not the base Project permission.
-
-2. Status Report Navigation & Page Creation
-
-Action Button: On the MyProjects\Index listing grid, add a new action button for each project item.
-
-Button Permission: The button should only be visible/accessible if the user has the Project Status Report \ Add permission.
-
-Redirection: Clicking the button should redirect to a new Status Report page.
-
-Page Implementation: Build this new page according to the attached/uploaded UI design file. Use the StatusReport table as the main entity, including any necessary related tables for the view model.
-
-3. Schema Refactoring (Accomplishments & Next Steps)
-
-Drop Tables: Remove the standalone Accomplishments and Next Steps tables from the database.
-
-JSON Fields: Add Accomplishments and Next Steps as fields directly on the StatusReport table.
-
-EF Core Mapping: Store these fields as JSON strings in the database. Use EF Core Value Conversions to automatically map the JSON strings to List<string> properties in the C# domain entity.
-
-4. Dynamic UI List Component
-
-Component Design: On the new Status Report page, build a dynamic UI list component for the Accomplishments and Next Steps fields.
-
-Interactivity: Include a [+] button to add a new text item to the list and a [-] button to remove an item.
-
-Data Binding: Ensure the component cleanly serializes/deserializes the input back to the underlying List<string> properties on form submission.
-
-5. Team Member Validation Bug
-
-Fix Missing Validation: Fix the validation bug in the Team Members subcollection where null values are currently slipping through.
-
-Specific Fields: Ensure that if a team member's Rank/Level or Role are submitted as null, a clear validation error is thrown on both the backend API and displayed on the frontend UI.
 --------------------------------
 
 
@@ -55,3 +12,6 @@ Delivery/Portfolio Lead has no approval yet
 Role-Based Filtering Stub: Refactor the backend API endpoint serving the Employee dropdowns to accept an optional Role filter parameter. Leave the filter logic extensible so upcoming feature implementations can pass role constraints cleanly. - No requirement yet
 
 Scan for delete cascade, check if needs to disable
+-----
+if there is a validation error, will scroll up and will display the summary of error (jquery-validation)
+create svg icon for "Create Status Report" in page /ODMS/MyProjects. use other icons as template for size and theme

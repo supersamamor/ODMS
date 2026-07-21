@@ -19,6 +19,17 @@
     ViewData["PageHeaderAddClass"] = "btnAddProject";
 }
 <partial name="_PageHeaderPartial"  />
+@* Delivery Tower/Category pill filter (design parity): All + one pill per
+   category, with the filtered project count on the right. *@
+<div class="dt-pill-filter-bar">
+    <span class="dt-pill-filter-label">@Localizer["Delivery Tower"]</span>
+    <button type="button" class="dt-pill active" data-value="">@Localizer["All"]</button>
+    @foreach (var category in FBSC.ODMS.Core.Constants.DeliveryCategories.List)
+    {
+        <button type="button" class="dt-pill" data-value="@category">@Localizer[category]</button>
+    }
+    <span class="dt-pill-filter-count" id="projectCountLabel"></span>
+</div>
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -75,6 +86,7 @@
     <partial name="_DataTableScripts" />
     <script asp-add-nonce>
         $(document).ready(function () {
+            var deliveryCategoryFilter = '';
             var table = $('#project').DataTable({
                 select: false,
                 serverSide: true,
@@ -90,6 +102,14 @@
                         RequestVerificationToken:
                             $('input:hidden[name="__RequestVerificationToken"]').val()
                     },
+                    @* Send the active Delivery Tower pill with every draw. *@
+                    data: function (d) {
+                        d.deliveryCategory = deliveryCategoryFilter;
+                    },
+                },
+                drawCallback: function (settings) {
+                    var count = settings.json ? settings.json.recordsFiltered : new $.fn.dataTable.Api(settings).page.info().recordsDisplay;
+                    $('#projectCountLabel').text(count + ' ' + (count === 1 ? '@Localizer["project"]' : '@Localizer["projects"]'));
                 },
                 initComplete: function (settings, json) {
                     BindTableRowCollapseEvent();
@@ -190,6 +210,12 @@
 
             $('.btn-table_filter').on('click', function (e) {
                 table.ajax.reload(null, false);
+            });
+            $('.dt-pill').on('click', function () {
+                $('.dt-pill').removeClass('active');
+                $(this).addClass('active');
+                deliveryCategoryFilter = $(this).data('value') || '';
+                table.ajax.reload();
             });
             function BindTableRowCollapseEvent() {
                 $('#project tbody').on('click', 'td.dtr-control', function () {

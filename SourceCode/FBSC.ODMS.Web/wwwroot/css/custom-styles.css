@@ -535,3 +535,197 @@ input[type="file"].file-upload-control {
         padding: .6rem 0;
     }
 }
+
+/* ==================== View Status Report (StatusReport/Details) ==================== */
+.sr-view-grid {
+    display: grid;
+    gap: 1rem 1.5rem;
+}
+
+.sr-view-grid-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.sr-view-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.sr-view-label {
+    display: block;
+    font-family: var(--font-secondary);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: .3rem;
+}
+
+.sr-view-value {
+    display: block;
+    font-size: var(--font-size-base);
+    color: #1e293b;
+}
+
+.sr-view-divider {
+    margin: 1rem 0;
+    border-color: #eef1f6;
+}
+
+.sr-view-strong {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.sr-view-code {
+    font-family: var(--font-secondary);
+    color: #475569;
+}
+
+.sr-view-table th {
+    font-family: var(--font-secondary);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.sr-view-table td {
+    vertical-align: middle;
+    font-size: var(--font-size-dense);
+    color: #334155;
+}
+
+.sr-view-bullets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+}
+
+    .sr-view-bullets li {
+        position: relative;
+        padding-left: 1.1rem;
+        font-size: var(--font-size-base);
+        color: #334155;
+    }
+
+        .sr-view-bullets li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: .45em;
+            width: .45rem;
+            height: .45rem;
+            border-radius: 50%;
+        }
+
+.sr-view-bullets-green li::before {
+    background: #16a34a;
+}
+
+.sr-view-bullets-blue li::before {
+    background: #2563eb;
+}
+
+.sr-view-stat {
+    border: 1px solid #e2e8f0;
+    border-radius: var(--border-radius-base, .5rem);
+    padding: .9rem 1.1rem;
+    background: #fdfdfe;
+}
+
+.sr-view-stat-value {
+    display: block;
+    font-family: var(--font-secondary);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: .15rem;
+}
+
+@media (max-width: 991.98px) {
+    .sr-view-grid-5 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .sr-view-grid-5,
+    .sr-view-grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Download = print: strip the app shell so only the report body prints. */
+@media print {
+    .page-header-form-actions,
+    .main-sidebar,
+    aside,
+    nav.navbar,
+    .sticky-footer,
+    footer {
+        display: none !important;
+    }
+
+    .card {
+        break-inside: avoid;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: none !important;
+    }
+}
+
+/* ==================== DataTable pill filter bar (Project/Index Delivery Tower) ==================== */
+.dt-pill-filter-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: .9rem;
+}
+
+.dt-pill-filter-label {
+    font-family: var(--font-secondary);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-right: .35rem;
+}
+
+.dt-pill {
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    border-radius: 999px;
+    padding: .3rem .9rem;
+    font-size: var(--font-size-dense);
+    font-weight: 500;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base);
+}
+
+    .dt-pill:hover {
+        border-color: #94a3b8;
+        color: #1e293b;
+    }
+
+    .dt-pill.active {
+        background: #2563eb;
+        border-color: #2563eb;
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+.dt-pill-filter-count {
+    margin-left: auto;
+    font-family: var(--font-secondary);
+    font-size: var(--font-size-dense);
+    color: #64748b;
+}

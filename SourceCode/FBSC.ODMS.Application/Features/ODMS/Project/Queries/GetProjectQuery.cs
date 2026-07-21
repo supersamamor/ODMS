@@ -10,14 +10,24 @@ using LanguageExt;
 
 namespace FBSC.ODMS.Application.Features.ODMS.Project.Queries;
 
-public record GetProjectQuery : BaseQuery, IRequest<PagedListResponse<ProjectListDto>>;
+public record GetProjectQuery : BaseQuery, IRequest<PagedListResponse<ProjectListDto>>
+{
+	/// <summary>Optional Delivery Tower/Category filter; null/empty = all.</summary>
+	public string? DeliveryCategory { get; set; }
+}
 
 public class GetProjectQueryHandler(ApplicationContext context) : BaseQueryHandler<ApplicationContext, ProjectListDto, GetProjectQuery>(context), IRequestHandler<GetProjectQuery, PagedListResponse<ProjectListDto>>
 {
 	public override Task<PagedListResponse<ProjectListDto>> Handle(GetProjectQuery request, CancellationToken cancellationToken = default)
 	{
-		return Task.FromResult(Context.Set<ProjectState>().Include(l=>l.Employee).Include(l=>l.BusinessUnit)
-			.AsNoTracking().Select(e => new ProjectListDto()
+		var projects = Context.Set<ProjectState>().Include(l=>l.Employee).Include(l=>l.BusinessUnit)
+			.AsNoTracking();
+		if (!string.IsNullOrEmpty(request.DeliveryCategory))
+		{
+			projects = projects.Where(e => e.DeliveryCategory == request.DeliveryCategory);
+		}
+		return Task.FromResult(projects
+			.Select(e => new ProjectListDto()
 			{
 				Id = e.Id,
 				LastModifiedDate = e.LastModifiedDate,

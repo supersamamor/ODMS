@@ -16,6 +16,9 @@ public class IndexModel(IConfiguration configuration) : BasePageModel<IndexModel
     public DataTablesRequest? DataRequest { get; set; }
 	[BindProperty]
     public BatchUploadModel BatchUpload { get; set; } = new();
+    // Delivery Tower/Category pill filter, posted alongside the DataTables payload.
+    [BindProperty]
+    public string? DeliveryCategory { get; set; }
     public IActionResult OnGet()
     {
         return Page();
@@ -23,9 +26,11 @@ public class IndexModel(IConfiguration configuration) : BasePageModel<IndexModel
 
     public async Task<IActionResult> OnPostListAllAsync()
     {
-		var result = await Mediatr.Send(DataRequest!.ToQuery<GetProjectQuery>());
-		return new JsonResult(result.Data.ToDataTablesResponse(DataRequest, result.TotalCount, result.Data.TotalItemCount));	
-    } 
+		var query = DataRequest!.ToQuery<GetProjectQuery>();
+		query.DeliveryCategory = DeliveryCategory;
+		var result = await Mediatr.Send(query);
+		return new JsonResult(result.Data.ToDataTablesResponse(DataRequest, result.TotalCount, result.Data.TotalItemCount));
+    }
 
 	public async Task<IActionResult> OnPostBatchUploadAsync()
     {        

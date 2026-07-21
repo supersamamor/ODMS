@@ -71,7 +71,8 @@ public class ODMSProfile : Profile
         CreateMap<RiskIssueViewModel, RiskIssueState>().ReverseMap();
         CreateMap<ReportingWeekState, ReportingWeekViewModel>().ReverseMap();
         CreateMap<StatusReportMilestoneViewModel, StatusReportMilestoneState>().ReverseMap();
-        CreateMap<StatusReportRiskIssueViewModel, StatusReportRiskIssueState>().ReverseMap();
+        CreateMap<StatusReportRiskIssueViewModel, StatusReportRiskIssueState>();
+        CreateMap<StatusReportRiskIssueState, StatusReportRiskIssueViewModel>().ForPath(e => e.ReferenceFieldOwnerId, o => o.MapFrom(s => s.Owner!.Name));
         CreateMap<StatusReportViewModel, AddStatusReportCommand>();
     }
 }

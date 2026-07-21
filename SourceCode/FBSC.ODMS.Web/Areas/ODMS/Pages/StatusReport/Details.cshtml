@@ -1,0 +1,288 @@
+@page
+@using FBSC.ODMS.Core.Constants
+@model DetailsModel
+@{
+    ViewData["Title"] = Localizer["View Status Report"];
+    ViewData["ActiveMainPage"] = "MyProjects";
+    ViewData["Level1"] = "Projects";
+    var isPendingReview = Model.StatusReport.Status == StatusReportStatuses.PendingReview;
+    var canReview = (await AuthorizationService.AuthorizeAsync(User, Permission.PendingApprovals.Approve)).Succeeded;
+}
+@functions {
+    // Design badge palette: RAG + statuses map onto the app's soft badges.
+    static string RagBadge(string? v) => v switch
+    {
+        FBSC.ODMS.Core.Constants.HealthStatuses.Green => "badge-soft-success",
+        FBSC.ODMS.Core.Constants.HealthStatuses.Amber => "badge-soft-warning",
+        FBSC.ODMS.Core.Constants.HealthStatuses.Red => "badge-soft-danger",
+        _ => "badge-soft-muted",
+    };
+    static string ReportStatusBadge(string? v) => v switch
+    {
+        FBSC.ODMS.Core.Constants.StatusReportStatuses.Approved => "badge-soft-success",
+        FBSC.ODMS.Core.Constants.StatusReportStatuses.ChangesRequested => "badge-soft-danger",
+        _ => "badge-soft-warning",
+    };
+    static string MilestoneBadge(string? v) => v switch
+    {
+        FBSC.ODMS.Core.Constants.StatusReportMilestoneStatuses.Completed => "badge-soft-success",
+        FBSC.ODMS.Core.Constants.StatusReportMilestoneStatuses.InProgress => "badge-soft-info",
+        _ => "badge-soft-muted",
+    };
+    static string SeverityBadge(string? v) => v switch
+    {
+        FBSC.ODMS.Core.Constants.RiskIssueSeverities.High => "badge-soft-danger",
+        FBSC.ODMS.Core.Constants.RiskIssueSeverities.Medium => "badge-soft-warning",
+        _ => "badge-soft-muted",
+    };
+    static string RiskStatusBadge(string? v) => v switch
+    {
+        FBSC.ODMS.Core.Constants.RiskIssueStatuses.Open => "badge-soft-danger",
+        FBSC.ODMS.Core.Constants.RiskIssueStatuses.InProgress => "badge-soft-info",
+        _ => "badge-soft-muted",
+    };
+    static string TypeBadge(string? v) =>
+        v == FBSC.ODMS.Core.Constants.RiskIssueTypes.Issue ? "badge-soft-info" : "badge-soft-danger";
+}
+<div class="page-header-bar">
+    <nav class="page-header-backnav" aria-label="@Localizer["Back navigation"]">
+        <a href="@Url.Page("/MyProjects/Index")" class="page-header-back">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            @Localizer["Status Reports"]
+        </a>
+        <span class="page-header-crumb-sep" aria-hidden="true">/</span>
+        <span class="page-header-crumb-current">@Model.StatusReport.ProjectName</span>
+    </nav>
+    <div class="page-header-form-actions">
+        <button type="button" id="btnDownloadReport" class="btn-header-cancel"><i class="fas fa-download" aria-hidden="true"></i>&nbsp;@Localizer["Download"]</button>
+        @if (isPendingReview && canReview)
+        {
+            <button type="button" id="btnRequestChanges" class="btn-header-cancel danger" name="Handler" value="RequestChanges">@Localizer["Request Changes"]</button>
+            <button type="button" id="btnApprove" class="page-header-action-btn" name="Handler" value="Approve">@Localizer["Approve"]</button>
+        }
+    </div>
+</div>
+
+<form id="statusReportView-form" method="post">
+    <input type="hidden" asp-for="@Model.StatusReport.Id" name="StatusReport.Id" />
+
+    @* ==================== Report Information ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Report Information"]</h6>
+            <div class="sr-view-grid sr-view-grid-5">
+                <div>
+                    <span class="sr-view-label">@Localizer["Project"]</span>
+                    <span class="sr-view-value">@Model.StatusReport.ProjectName</span>
+                </div>
+                <div>
+                    <span class="sr-view-label">@Localizer["Project ID"]</span>
+                    <span class="sr-view-value">@Model.StatusReport.ProjectCode</span>
+                </div>
+                <div>
+                    <span class="sr-view-label">@Localizer["BU"]</span>
+                    <span class="sr-view-value">@Model.StatusReport.BusinessUnitName</span>
+                </div>
+                <div>
+                    <span class="sr-view-label">@Localizer["Project Manager"]</span>
+                    <span class="sr-view-value">@Model.StatusReport.ProjectManagerName</span>
+                </div>
+                <div>
+                    <span class="sr-view-label">@Localizer["Report Week"]</span>
+                    <span class="sr-view-value">@Model.StatusReport.ReportWeekDisplay</span>
+                </div>
+            </div>
+            <hr class="sr-view-divider" />
+            <div class="sr-view-grid sr-view-grid-3">
+                <div>
+                    <span class="sr-view-label">@Localizer["Submission Date"]</span>
+                    <span class="sr-view-value">@Model.StatusReport.SubmissionDate?.ToString("MMM d, yyyy")</span>
+                </div>
+                <div>
+                    <span class="sr-view-label">@Localizer["Overall Health"]</span>
+                    <span class="badge-soft @RagBadge(Model.StatusReport.OverallHealth)">&bull;&nbsp;@Model.StatusReport.OverallHealth</span>
+                </div>
+                <div>
+                    <span class="sr-view-label">@Localizer["Status"]</span>
+                    <span class="badge-soft @ReportStatusBadge(Model.StatusReport.Status)">&bull;&nbsp;@Model.StatusReport.Status</span>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.StatusReport.ReviewComments))
+            {
+                <hr class="sr-view-divider" />
+                <div>
+                    <span class="sr-view-label">@Localizer["Review Comments"]</span>
+                    <span class="sr-view-value">@Model.StatusReport.ReviewComments</span>
+                </div>
+            }
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Accomplishments & Next Steps ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Accomplishments & Next Steps"]</h6>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <span class="sr-view-label">@Localizer["Accomplishments This Week"]</span>
+                    <ul class="sr-view-bullets sr-view-bullets-green">
+                        @foreach (var item in Model.StatusReport.Accomplishments ?? [])
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-12 col-md-6">
+                    <span class="sr-view-label">@Localizer["Next Steps"]</span>
+                    <ul class="sr-view-bullets sr-view-bullets-blue">
+                        @foreach (var item in Model.StatusReport.NextSteps ?? [])
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Health Indicators ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Health Indicators"]</h6>
+            <div class="table-responsive">
+                <table class="table sr-view-table">
+                    <thead>
+                        <tr>
+                            <th>@Localizer["Area"]</th>
+                            <th>@Localizer["Status"]</th>
+                            <th>@Localizer["Comment"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var h in Model.StatusReport.StatusReportHealthIndicatorList ?? [])
+                        {
+                            <tr>
+                                <td class="sr-view-strong">@Localizer[h.Area]</td>
+                                <td><span class="badge-soft @RagBadge(h.Status)">&bull;&nbsp;@h.Status</span></td>
+                                <td>@h.Comment</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Budget & Schedule ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Budget & Schedule"]</h6>
+            <div class="sr-view-grid sr-view-grid-3">
+                <div class="sr-view-stat">
+                    <span class="sr-view-label">@Localizer["Baseline Budget"]</span>
+                    <span class="sr-view-stat-value">@(Model.StatusReport.BaselineBudget.HasValue ? "₱" + Model.StatusReport.BaselineBudget.Value.ToString("N0") : "-")</span>
+                </div>
+                <div class="sr-view-stat">
+                    <span class="sr-view-label">@Localizer["Actual Spend"]</span>
+                    <span class="sr-view-stat-value">@(Model.StatusReport.ActualSpend.HasValue ? "₱" + Model.StatusReport.ActualSpend.Value.ToString("N0") : "-")</span>
+                </div>
+                <div class="sr-view-stat">
+                    <span class="sr-view-label">@Localizer["Schedule"]</span>
+                    <span class="sr-view-stat-value">@(Model.StatusReport.ScheduleVarianceWeeks.HasValue ? $"{Model.StatusReport.ScheduleVarianceWeeks} {Localizer["weeks"]}" : "-")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Milestone Tracking ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Milestone Tracking"]</h6>
+            <div class="table-responsive">
+                <table class="table sr-view-table">
+                    <thead>
+                        <tr>
+                            <th>@Localizer["Milestone"]</th>
+                            <th>@Localizer["Start"]</th>
+                            <th>@Localizer["Target End"]</th>
+                            <th>@Localizer["Status"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in Model.StatusReport.StatusReportMilestoneList ?? [])
+                        {
+                            <tr>
+                                <td class="sr-view-strong">@m.Name</td>
+                                <td>@m.StartDate.ToString("MMM d, yyyy")</td>
+                                <td>@m.TargetEndDate.ToString("MMM d, yyyy")</td>
+                                <td><span class="badge-soft @MilestoneBadge(m.Status)">@m.Status</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Risks & Issues Register ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Risks & Issues Register"]</h6>
+            <div class="table-responsive">
+                <table class="table sr-view-table">
+                    <thead>
+                        <tr>
+                            <th>@Localizer["ID"]</th>
+                            <th>@Localizer["Type"]</th>
+                            <th>@Localizer["Title"]</th>
+                            <th>@Localizer["Severity"]</th>
+                            <th>@Localizer["Status"]</th>
+                            <th>@Localizer["Owner"]</th>
+                            <th>@Localizer["Date Raised"]</th>
+                            <th>@Localizer["Notes"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.StatusReport.StatusReportRiskIssueList ?? [])
+                        {
+                            <tr>
+                                <td class="sr-view-code">@r.Code</td>
+                                <td><span class="badge-soft @TypeBadge(r.Type)">@r.Type</span></td>
+                                <td class="sr-view-strong">@r.Title</td>
+                                <td><span class="badge-soft @SeverityBadge(r.Severity)">@r.Severity</span></td>
+                                <td><span class="badge-soft @RiskStatusBadge(r.Status)">@r.Status</span></td>
+                                <td>@r.ReferenceFieldOwnerId</td>
+                                <td>@r.DateRaised.ToString("MMM d, yyyy")</td>
+                                <td>@r.Notes</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+
+<script asp-add-nonce>
+    $(document).ready(function () {
+        @* Download = print-to-PDF of the report body (browser print dialog). *@
+        $('#btnDownloadReport').on('click', function () { window.print(); });
+
+        @if (isPendingReview && canReview)
+        {
+            <text>
+        $.bindSaveWithRemarksConfirmationModal('Approve', '#btnApprove', '#statusReportView-form', 'ReviewRemarks', 'Approve this status report?');
+        $.bindSaveWithRemarksConfirmationModal('RequestChanges', '#btnRequestChanges', '#statusReportView-form', 'ReviewRemarks', 'Request changes on this status report?');
+            </text>
+        }
+    });
+</script>
+}

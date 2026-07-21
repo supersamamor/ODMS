@@ -76,12 +76,15 @@
                         className: "fills-text-center",
                         render: function (data, type, row, meta) {
                             var button = '';
+                            @* View latest Status Report (read-only design replica). *@
+                            var viewUrl = '@Url.Page("/StatusReport/Details", new { area = "ODMS" })' + '?projectId=' + row.id;
+                            button = '<a href="' + viewUrl + '" class="btn btnFills btn-outline-success btnInfoIcon btnViewStatusReport" aria-label="@Localizer["View Status Report"]" title="@Localizer["View Status Report"]"></a>';
                         @* Create Status Report - only with the Project Status Report / Add permission. *@
                         @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ProjectStatusReport.Create)).Succeeded)
                         {
                             <text>
                                 var url = '@Url.Page("/StatusReport/Add", new { area = "ODMS" })' + '?projectId=' + row.id;
-                                button = '<a href="' + url + '" class="btn btnFills btn-outline-success btnCreateStatusReport" aria-label="@Localizer["Create Status Report"]" title="@Localizer["Create Status Report"]"><i class="fas fa-file-medical"></i></a>';
+                                button = button + '&nbsp;<a href="' + url + '" class="btn btnFills btn-outline-success btnCreateStatusReport" aria-label="@Localizer["Create Status Report"]" title="@Localizer["Create Status Report"]"><i class="fas fa-file-medical"></i></a>';
                             </text>
                         }
                             return button;
@@ -103,7 +106,7 @@
             $('.btn-table_filter').on('click', function (e) {
                 table.ajax.reload(null, false);
             });
-            $.showAjaxLoaderOnClick([".btnCreateStatusReport"]);
+            $.showAjaxLoaderOnClick([".btnCreateStatusReport", ".btnViewStatusReport"]);
             $.InitializeSearchKeyCookies(table);
         });
     </script>
