@@ -1645,6 +1645,28 @@ form.user .btn-user {
     font-weight: 600;
 }
 
+/* Primary action button in the page header (e.g. "+ New Project") */
+.page-header-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .5rem 1rem;
+    border-radius: 8px;
+    background-color: #2563eb;
+    color: #ffffff !important;
+    font-size: var(--font-size-dense);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color var(--transition-base);
+}
+
+    .page-header-action-btn:hover,
+    .page-header-action-btn:focus-visible {
+        background-color: #1d4ed8;
+        color: #ffffff;
+    }
+
 .dashboard-header-controls {
     display: flex;
     align-items: center;

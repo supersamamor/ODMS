@@ -10,6 +10,14 @@
     ViewData["ActiveMainPage"] = "Projects";
     ViewData["Level1"] = "Projects";
 }
+@if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Create)).Succeeded)
+{
+    // Renders as the "+ New Project" button in the page header; the
+    // btnAddProject class keeps the existing click-loader binding.
+    ViewData["PageHeaderAddUrl"] = Url.Page("/Project/Add", new { area = "ODMS" });
+    ViewData["PageHeaderAddLabel"] = Localizer["New Project"];
+    ViewData["PageHeaderAddClass"] = "btnAddProject";
+}
 <partial name="_PageHeaderPartial"  />
 <div class="row">
     <div class="col-12">
@@ -131,20 +139,8 @@
                     { data: "id", name: "Id", visible: false },
                 ],
                 buttons: [
-        @* Add Button *@
-        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Create)).Succeeded)
-        {
-            <text>
-                    {
-                        text: '<i class="fas fa-plus"></i>',
-                        className: 'btn btn-success btnAddProject text-light',
-                        titleAttr: '@Localizer["Add"]',
-                        action: function (e, dt, node, config) {
-                            window.location.href = '@Url.Page("/Project/Add", new { area = "ODMS" })';
-                        }
-                    },
-            </text>
-        }
+        @* Add button intentionally omitted here - it lives in the page header
+           (see the PageHeaderAddUrl block at the top of this page). *@
 
         @* Download Template Button *@
         @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Upload)).Succeeded)

@@ -6,4 +6,14 @@
             <p>@ViewData["PageSubtitle"]</p>
         }
     </div>
+    @* Optional primary action (e.g. "+ New Project"). Pages opt in by setting
+       PageHeaderAddUrl (+ optional PageHeaderAddLabel) - typically inside
+       their permission check, so unauthorized users never see the button.
+       btnAddProject-style loader classes can be passed via PageHeaderAddClass. *@
+    @if (ViewData["PageHeaderAddUrl"] != null)
+    {
+        <a class="page-header-action-btn @ViewData["PageHeaderAddClass"]" href="@ViewData["PageHeaderAddUrl"]">
+            <i class="fas fa-plus" aria-hidden="true"></i>&nbsp;@(ViewData["PageHeaderAddLabel"] ?? Localizer["Add"])
+        </a>
+    }
 </div>
