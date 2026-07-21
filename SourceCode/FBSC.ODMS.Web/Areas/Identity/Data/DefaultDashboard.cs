@@ -437,6 +437,175 @@ public static class DefaultDashboard
             await context.SaveChangesAsync();
         }
 
+        // Weekly reporting compliance gauge. Custom Html with an inline SVG
+        // progress ring (Chart.js doughnuts have no center text or rounded
+        // caps). RingDash is precomputed: compliance% x ring circumference
+        // (2 x pi x r, r=41 -> 257.6). Static values; swap for real counts
+        // over ProjectHistory/status submissions once live data exists.
+        var reportingCompliance = await context.Report.FirstOrDefaultAsync(e => e.ReportName == "Weekly Reporting Compliance");
+        if (reportingCompliance == null)
+        {
+            var reportingComplianceReportId = Guid.NewGuid().ToString();
+            context.Report.Add(new ReportState()
+            {
+                Id = reportingComplianceReportId,
+                ReportName = "Weekly Reporting Compliance",
+                QueryType = Core.Constants.QueryType.TSql,
+                ReportOrChartType = Core.Constants.ReportChartType.CustomHtml,
+                IsDistinct = false,
+                QueryString = @"SELECT 82 AS [CompliancePct], '211.2 257.6' AS [RingDash], 96 AS [Submitted], 18 AS [Outstanding], 8 AS [Overdue];",
+                DisplayOnDashboard = true,
+                DisplayOnReportModule = false,
+                HtmlTemplate = """
+                <div style="display: flex; align-items: center; justify-content: center; gap: 28px; flex-wrap: wrap; padding: 12px;">
+                    <!--{#foreach Table}-->
+                    <svg viewBox="0 0 100 100" width="150" height="150" role="img" aria-label="{CompliancePct}% compliance">
+                        <circle cx="50" cy="50" r="41" fill="none" stroke="#e8ebf3" stroke-width="9"></circle>
+                        <circle cx="50" cy="50" r="41" fill="none" stroke="#10b981" stroke-width="9" stroke-linecap="round" stroke-dasharray="{RingDash}" transform="rotate(-90 50 50)"></circle>
+                        <text x="50" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="#10b981" style="font-family: var(--font-primary);">{CompliancePct}%</text>
+                        <text x="50" y="61" text-anchor="middle" font-size="7" fill="#94a3b8" style="font-family: var(--font-secondary);">compliance</text>
+                    </svg>
+                    <div style="min-width: 210px;">
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: var(--font-size-base); color: #475569;">
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #10b981;"></span>
+                            <span style="flex: 1 1 auto;">Submitted</span>
+                            <strong style="color: #0f172a;">{Submitted}</strong>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: var(--font-size-base); color: #475569;">
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #f59e0b;"></span>
+                            <span style="flex: 1 1 auto;">Outstanding</span>
+                            <strong style="color: #0f172a;">{Outstanding}</strong>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: var(--font-size-base); color: #475569;">
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #ef4444;"></span>
+                            <span style="flex: 1 1 auto;">Overdue</span>
+                            <strong style="color: #0f172a;">{Overdue}</strong>
+                        </div>
+                    </div>
+                    <!--{/foreach}-->
+                </div>
+                """,
+                Sequence = 8,
+                SpanWidth = 33,
+                ReportRoleAssignmentList = [
+                    new ReportRoleAssignmentState()
+                    {
+                        ReportId = reportingComplianceReportId,
+                        Id = Guid.NewGuid().ToString(),
+                        RoleName = Core.Constants.Roles.Admin
+                    }
+                ]
+            });
+            await context.SaveChangesAsync();
+        }
+
+        // Top Risks list (severity pill + risk + project). Custom Html; static
+        // rows - swap the VALUES block for a real risks query once the data
+        // model exists.
+        var topRisks = await context.Report.FirstOrDefaultAsync(e => e.ReportName == "Top Risks");
+        if (topRisks == null)
+        {
+            var topRisksReportId = Guid.NewGuid().ToString();
+            context.Report.Add(new ReportState()
+            {
+                Id = topRisksReportId,
+                ReportName = "Top Risks",
+                QueryType = Core.Constants.QueryType.TSql,
+                ReportOrChartType = Core.Constants.ReportChartType.CustomHtml,
+                IsDistinct = false,
+                QueryString = @"SELECT [Severity], [SeverityClass], [Risk], [Project]
+                    FROM (VALUES
+                        ('HIGH', 'badge-soft-danger', 'Integration conflict with legacy system', 'Customer Portal'),
+                        ('HIGH', 'badge-soft-danger', '300+ service disruption risk (Oct 2024)', 'ERP Upgrade'),
+                        ('HIGH', 'badge-soft-danger', 'Data migration dependency on vendor', 'Data Warehouse'),
+                        ('MEDIUM', 'badge-soft-warning', 'Data migration and quality issues', 'Mobile App Dev')
+                    ) v([Severity], [SeverityClass], [Risk], [Project]);",
+                DisplayOnDashboard = true,
+                DisplayOnReportModule = false,
+                HtmlTemplate = """
+                <div style="width: 100%;">
+                    <!--{#foreach Table}-->
+                    <div style="display: flex; gap: 12px; padding: 10px 4px; align-items: flex-start;">
+                        <span class="badge-soft {SeverityClass}" style="font-family: var(--font-secondary); flex-shrink: 0;">{Severity}</span>
+                        <div style="min-width: 0;">
+                            <div style="font-size: var(--font-size-base); font-weight: 600; color: #0f172a;">{Risk}</div>
+                            <div style="font-family: var(--font-secondary); font-size: var(--font-size-dense); color: #94a3b8; margin-top: 2px;">{Project}</div>
+                        </div>
+                    </div>
+                    <!--{/foreach}-->
+                    <div style="text-align: right; padding: 8px 4px 0;"><a href="#" style="color: #2563eb; font-family: var(--font-secondary); font-size: var(--font-size-base); text-decoration: none;">View Report</a></div>
+                </div>
+                """,
+                Sequence = 9,
+                SpanWidth = 50,
+                ReportRoleAssignmentList = [
+                    new ReportRoleAssignmentState()
+                    {
+                        ReportId = topRisksReportId,
+                        Id = Guid.NewGuid().ToString(),
+                        RoleName = Core.Constants.Roles.Admin
+                    }
+                ]
+            });
+            await context.SaveChangesAsync();
+        }
+
+        // Upcoming Milestones list (calendar date block + title + owner +
+        // days-remaining chip). Custom Html; static rows with all colors and
+        // chips precomputed - urgent (<10d) rows get the red date and chip.
+        var upcomingMilestones = await context.Report.FirstOrDefaultAsync(e => e.ReportName == "Upcoming Milestones");
+        if (upcomingMilestones == null)
+        {
+            var upcomingMilestonesReportId = Guid.NewGuid().ToString();
+            context.Report.Add(new ReportState()
+            {
+                Id = upcomingMilestonesReportId,
+                ReportName = "Upcoming Milestones",
+                QueryType = Core.Constants.QueryType.TSql,
+                ReportOrChartType = Core.Constants.ReportChartType.CustomHtml,
+                IsDistinct = false,
+                QueryString = @"SELECT [Month], [Day], [MonthColor], [DayColor], [Title], [Detail], [ChipLabel], [ChipClass]
+                    FROM (VALUES
+                        ('MAY', '20', '#ef4444', '#ef4444', 'Phase 3 Deployment', 'Customer Portal Enhancement · Emil', '3d', 'badge-soft-danger'),
+                        ('MAY', '25', '#ef4444', '#ef4444', 'Data Migration Complete', 'ERP System Upgrade · Gilbert', '8d', 'badge-soft-danger'),
+                        ('JUN', '3', '#94a3b8', '#0f172a', 'User Acceptance Testing', 'Data Warehouse Modernisation · Von', '17d', 'badge-soft-muted'),
+                        ('JUN', '5', '#94a3b8', '#0f172a', 'ERP Acceptance Sign-off', 'ERP System Upgrade · Rey', '19d', 'badge-soft-muted'),
+                        ('JUN', '10', '#94a3b8', '#0f172a', 'Mobile App Beta Release', 'Mobile App Development · Patrick', '24d', 'badge-soft-muted')
+                    ) v([Month], [Day], [MonthColor], [DayColor], [Title], [Detail], [ChipLabel], [ChipClass]);",
+                DisplayOnDashboard = true,
+                DisplayOnReportModule = false,
+                HtmlTemplate = """
+                <div style="width: 100%;">
+                    <!--{#foreach Table}-->
+                    <div style="display: flex; align-items: center; gap: 14px; padding: 12px 4px; border-bottom: 1px solid #eef1f6;">
+                        <div style="text-align: center; min-width: 38px; flex-shrink: 0;">
+                            <div style="font-family: var(--font-secondary); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; color: {MonthColor};">{Month}</div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: {DayColor}; line-height: 1.1;">{Day}</div>
+                        </div>
+                        <div style="flex: 1 1 auto; min-width: 0;">
+                            <div style="font-size: var(--font-size-base); font-weight: 600; color: #0f172a;">{Title}</div>
+                            <div style="font-size: var(--font-size-dense); color: #94a3b8; margin-top: 2px;">{Detail}</div>
+                        </div>
+                        <span class="badge-soft {ChipClass}" style="font-family: var(--font-secondary); flex-shrink: 0;">{ChipLabel}</span>
+                    </div>
+                    <!--{/foreach}-->
+                    <div style="text-align: right; padding: 10px 4px 0;"><a href="#" style="color: #2563eb; font-family: var(--font-secondary); font-size: var(--font-size-base); text-decoration: none;">View all</a></div>
+                </div>
+                """,
+                Sequence = 10,
+                SpanWidth = 50,
+                ReportRoleAssignmentList = [
+                    new ReportRoleAssignmentState()
+                    {
+                        ReportId = upcomingMilestonesReportId,
+                        Id = Guid.NewGuid().ToString(),
+                        RoleName = Core.Constants.Roles.Admin
+                    }
+                ]
+            });
+            await context.SaveChangesAsync();
+        }
+
         // Executive-attention table (Red & Amber projects). Custom Html - the
         // built-in Table chart type renders via DataTables and can't compose
         // two-line cells or status badges. All presentational values (badge
