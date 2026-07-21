@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBSC.ODMS.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20260720143907_AddBUAndProjectTable")]
-    partial class AddBUAndProjectTable
+    [Migration("20260721083448_InitialDb")]
+    partial class InitialDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -369,6 +369,54 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("HTMLTemplate", (string)null);
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.AccomplishmentState", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Entity")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("StatusReportId")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Entity");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("LastModifiedBy");
+
+                    b.HasIndex("LastModifiedDate");
+
+                    b.HasIndex("StatusReportId");
+
+                    b.ToTable("Accomplishment");
                 });
 
             modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ApprovalRecordState", b =>
@@ -858,14 +906,10 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.ToTable("Employee");
                 });
 
-            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ProjectHistoryState", b =>
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.MilestoneState", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<string>("BusinessUnitId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("CreatedBy")
@@ -879,12 +923,53 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<decimal?>("EstimatedBudget")
-                        .HasColumnType("decimal(18,6)");
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("HealthStatus")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Entity");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("LastModifiedBy");
+
+                    b.HasIndex("LastModifiedDate");
+
+                    b.ToTable("Milestone");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.NextStepState", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Entity")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasMaxLength(36)
@@ -893,20 +978,92 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("LastReviewDate")
+                    b.Property<string>("StatusReportId")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Entity");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("LastModifiedBy");
+
+                    b.HasIndex("LastModifiedDate");
+
+                    b.HasIndex("StatusReportId");
+
+                    b.ToTable("NextStep");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ProjectHistoryState", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("ActiveStatus")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal?>("ApprovedBudget")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<DateTime>("BaselineEndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("LastUpdatedDate")
+                    b.Property<DateTime>("BaselineStartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Phase")
+                    b.Property<string>("BusinessUnitId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeliveryTower")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DemandType")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DeputyProjectManagerId")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Entity")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("NoSOW")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Priority")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ProjectCode")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("ProjectDescription")
                         .HasMaxLength(1000)
@@ -925,21 +1082,20 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("ScheduleStatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("SOWFileName")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TargetEndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("TechnologyBusinessPartnerId")
+                        .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BusinessUnitId");
 
                     b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeputyProjectManagerId");
 
                     b.HasIndex("Entity");
 
@@ -953,17 +1109,15 @@ namespace FBSC.ODMS.Infrastructure.Migrations
 
                     b.HasIndex("ProjectManagerId");
 
+                    b.HasIndex("TechnologyBusinessPartnerId");
+
                     b.ToTable("ProjectHistory");
                 });
 
-            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ProjectState", b =>
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ProjectMilestoneState", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<string>("BusinessUnitId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("CreatedBy")
@@ -977,12 +1131,97 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<decimal?>("EstimatedBudget")
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MilestoneId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("TargetEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Entity");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("LastModifiedBy");
+
+                    b.HasIndex("LastModifiedDate");
+
+                    b.HasIndex("MilestoneId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectMilestone");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ProjectState", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("ActiveStatus")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal?>("ApprovedBudget")
                         .HasColumnType("decimal(18,6)");
 
-                    b.Property<string>("HealthStatus")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<DateTime>("BaselineEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("BaselineStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("BusinessUnitId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeliveryTower")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DemandType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DeputyProjectManagerId")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Entity")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasMaxLength(36)
@@ -991,20 +1230,18 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("LastReviewDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Phase")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<bool>("NoSOW")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Priority")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ProjectCode")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("ProjectDescription")
                         .HasMaxLength(1000)
@@ -1019,21 +1256,20 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("ScheduleStatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("SOWFileName")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TargetEndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("TechnologyBusinessPartnerId")
+                        .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BusinessUnitId");
 
                     b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeputyProjectManagerId");
 
                     b.HasIndex("Entity");
 
@@ -1043,7 +1279,12 @@ namespace FBSC.ODMS.Infrastructure.Migrations
 
                     b.HasIndex("LastModifiedDate");
 
+                    b.HasIndex("ProjectCode")
+                        .IsUnique();
+
                     b.HasIndex("ProjectManagerId");
+
+                    b.HasIndex("TechnologyBusinessPartnerId");
 
                     b.ToTable("Project");
                 });
@@ -1325,7 +1566,206 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.ToTable("Report");
                 });
 
-            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.TeamMembersHistoryState", b =>
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ReportingWeekState", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Entity")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("WeekNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Entity");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("LastModifiedBy");
+
+                    b.HasIndex("LastModifiedDate");
+
+                    b.HasIndex("StartDate")
+                        .IsUnique();
+
+                    b.HasIndex("WeekNumber", "Year")
+                        .IsUnique();
+
+                    b.ToTable("ReportingWeek");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.RiskIssueState", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateRaised")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Entity")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Severity")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Entity");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("LastModifiedBy");
+
+                    b.HasIndex("LastModifiedDate");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("RiskIssue");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.StatusReportHealthIndicatorState", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Area")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Entity")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("StatusReportId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Entity");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("LastModifiedBy");
+
+                    b.HasIndex("LastModifiedDate");
+
+                    b.HasIndex("StatusReportId");
+
+                    b.ToTable("StatusReportHealthIndicator");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.StatusReportMilestoneState", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
@@ -1349,10 +1789,248 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("MemberName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("StatusReportId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("TargetEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Entity");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("LastModifiedBy");
+
+                    b.HasIndex("LastModifiedDate");
+
+                    b.HasIndex("StatusReportId");
+
+                    b.ToTable("StatusReportMilestone");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.StatusReportRiskIssueState", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateRaised")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Entity")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Severity")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("StatusReportId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Entity");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("LastModifiedBy");
+
+                    b.HasIndex("LastModifiedDate");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("StatusReportId");
+
+                    b.ToTable("StatusReportRiskIssue");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.StatusReportState", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<decimal?>("ActualSpend")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<string>("BudgetStatus")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Entity")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OverallHealth")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Phase")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("ReportingWeekId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("ReviewComments")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("ReviewedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReviewedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ScheduleStatus")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("ScheduleVarianceWeeks")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("SubmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Entity");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("LastModifiedBy");
+
+                    b.HasIndex("LastModifiedDate");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("ReportingWeekId");
+
+                    b.ToTable("StatusReport");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.TeamMembersHistoryState", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Entity")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MemberLevel")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ProjectHistoryId")
                         .IsRequired()
@@ -1366,6 +2044,8 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("Entity");
 
@@ -1393,6 +2073,10 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
                     b.Property<string>("Entity")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
@@ -1404,10 +2088,9 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("MemberName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<string>("MemberLevel")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
@@ -1421,6 +2104,8 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("Entity");
 
@@ -1539,6 +2224,15 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.Navigation("WebhookEventAssignment");
                 });
 
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.AccomplishmentState", b =>
+                {
+                    b.HasOne("FBSC.ODMS.Core.ODMS.StatusReportState", "StatusReport")
+                        .WithMany("AccomplishmentList")
+                        .HasForeignKey("StatusReportId");
+
+                    b.Navigation("StatusReport");
+                });
+
             modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ApprovalRecordState", b =>
                 {
                     b.HasOne("FBSC.ODMS.Core.ODMS.ApproverSetupState", "ApproverSetup")
@@ -1572,6 +2266,15 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.Navigation("ApproverSetup");
                 });
 
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.NextStepState", b =>
+                {
+                    b.HasOne("FBSC.ODMS.Core.ODMS.StatusReportState", "StatusReport")
+                        .WithMany("NextStepList")
+                        .HasForeignKey("StatusReportId");
+
+                    b.Navigation("StatusReport");
+                });
+
             modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ProjectHistoryState", b =>
                 {
                     b.HasOne("FBSC.ODMS.Core.ODMS.BusinessUnitState", "BusinessUnit")
@@ -1579,6 +2282,11 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                         .HasForeignKey("BusinessUnitId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("FBSC.ODMS.Core.ODMS.EmployeeState", "DeputyProjectManager")
+                        .WithMany()
+                        .HasForeignKey("DeputyProjectManagerId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("FBSC.ODMS.Core.ODMS.ProjectState", "Project")
                         .WithMany("ProjectHistoryList")
@@ -1592,9 +2300,37 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FBSC.ODMS.Core.ODMS.EmployeeState", "TechnologyBusinessPartner")
+                        .WithMany()
+                        .HasForeignKey("TechnologyBusinessPartnerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("BusinessUnit");
 
+                    b.Navigation("DeputyProjectManager");
+
                     b.Navigation("Employee");
+
+                    b.Navigation("Project");
+
+                    b.Navigation("TechnologyBusinessPartner");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ProjectMilestoneState", b =>
+                {
+                    b.HasOne("FBSC.ODMS.Core.ODMS.MilestoneState", "Milestone")
+                        .WithMany("ProjectMilestoneList")
+                        .HasForeignKey("MilestoneId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FBSC.ODMS.Core.ODMS.ProjectState", "Project")
+                        .WithMany("ProjectMilestoneList")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Milestone");
 
                     b.Navigation("Project");
                 });
@@ -1607,15 +2343,29 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("FBSC.ODMS.Core.ODMS.EmployeeState", "DeputyProjectManager")
+                        .WithMany()
+                        .HasForeignKey("DeputyProjectManagerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("FBSC.ODMS.Core.ODMS.EmployeeState", "Employee")
                         .WithMany("ProjectList")
                         .HasForeignKey("ProjectManagerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FBSC.ODMS.Core.ODMS.EmployeeState", "TechnologyBusinessPartner")
+                        .WithMany()
+                        .HasForeignKey("TechnologyBusinessPartnerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("BusinessUnit");
 
+                    b.Navigation("DeputyProjectManager");
+
                     b.Navigation("Employee");
+
+                    b.Navigation("TechnologyBusinessPartner");
                 });
 
             modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ReportAIIntegrationState", b =>
@@ -1651,24 +2401,119 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.Navigation("Report");
                 });
 
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.RiskIssueState", b =>
+                {
+                    b.HasOne("FBSC.ODMS.Core.ODMS.EmployeeState", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FBSC.ODMS.Core.ODMS.ProjectState", "Project")
+                        .WithMany("RiskIssueList")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.StatusReportHealthIndicatorState", b =>
+                {
+                    b.HasOne("FBSC.ODMS.Core.ODMS.StatusReportState", "StatusReport")
+                        .WithMany("StatusReportHealthIndicatorList")
+                        .HasForeignKey("StatusReportId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("StatusReport");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.StatusReportMilestoneState", b =>
+                {
+                    b.HasOne("FBSC.ODMS.Core.ODMS.StatusReportState", "StatusReport")
+                        .WithMany("StatusReportMilestoneList")
+                        .HasForeignKey("StatusReportId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("StatusReport");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.StatusReportRiskIssueState", b =>
+                {
+                    b.HasOne("FBSC.ODMS.Core.ODMS.EmployeeState", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FBSC.ODMS.Core.ODMS.StatusReportState", "StatusReport")
+                        .WithMany("StatusReportRiskIssueList")
+                        .HasForeignKey("StatusReportId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("StatusReport");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.StatusReportState", b =>
+                {
+                    b.HasOne("FBSC.ODMS.Core.ODMS.ProjectState", "Project")
+                        .WithMany("StatusReportList")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FBSC.ODMS.Core.ODMS.ReportingWeekState", "ReportingWeek")
+                        .WithMany("StatusReportList")
+                        .HasForeignKey("ReportingWeekId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("ReportingWeek");
+                });
+
             modelBuilder.Entity("FBSC.ODMS.Core.ODMS.TeamMembersHistoryState", b =>
                 {
+                    b.HasOne("FBSC.ODMS.Core.ODMS.EmployeeState", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("FBSC.ODMS.Core.ODMS.ProjectHistoryState", "ProjectHistory")
                         .WithMany("TeamMembersHistoryList")
                         .HasForeignKey("ProjectHistoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Employee");
+
                     b.Navigation("ProjectHistory");
                 });
 
             modelBuilder.Entity("FBSC.ODMS.Core.ODMS.TeamMembersState", b =>
                 {
+                    b.HasOne("FBSC.ODMS.Core.ODMS.EmployeeState", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("FBSC.ODMS.Core.ODMS.ProjectState", "Project")
                         .WithMany("TeamMembersList")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Project");
                 });
@@ -1707,6 +2552,11 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.Navigation("ProjectList");
                 });
 
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.MilestoneState", b =>
+                {
+                    b.Navigation("ProjectMilestoneList");
+                });
+
             modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ProjectHistoryState", b =>
                 {
                     b.Navigation("TeamMembersHistoryList");
@@ -1715,6 +2565,12 @@ namespace FBSC.ODMS.Infrastructure.Migrations
             modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ProjectState", b =>
                 {
                     b.Navigation("ProjectHistoryList");
+
+                    b.Navigation("ProjectMilestoneList");
+
+                    b.Navigation("RiskIssueList");
+
+                    b.Navigation("StatusReportList");
 
                     b.Navigation("TeamMembersList");
                 });
@@ -1726,6 +2582,24 @@ namespace FBSC.ODMS.Infrastructure.Migrations
                     b.Navigation("ReportQueryFilterList");
 
                     b.Navigation("ReportRoleAssignmentList");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.ReportingWeekState", b =>
+                {
+                    b.Navigation("StatusReportList");
+                });
+
+            modelBuilder.Entity("FBSC.ODMS.Core.ODMS.StatusReportState", b =>
+                {
+                    b.Navigation("AccomplishmentList");
+
+                    b.Navigation("NextStepList");
+
+                    b.Navigation("StatusReportHealthIndicatorList");
+
+                    b.Navigation("StatusReportMilestoneList");
+
+                    b.Navigation("StatusReportRiskIssueList");
                 });
 #pragma warning restore 612, 618
         }

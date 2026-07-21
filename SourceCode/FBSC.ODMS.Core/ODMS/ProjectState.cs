@@ -9,5 +9,7 @@ public record ProjectState : ProjectBase
 
 	public IList<TeamMembersState>? TeamMembersList { get; set; }
 	public IList<ProjectHistoryState>? ProjectHistoryList { get; set; }
-
+    public IList<StatusReportState>? StatusReportList { get; set; }
+    public IList<ProjectMilestoneState>? ProjectMilestoneList { get; set; }
+    public IList<RiskIssueState>? RiskIssueList { get; set; }
 }

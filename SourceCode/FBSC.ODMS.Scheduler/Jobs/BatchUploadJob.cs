@@ -166,6 +166,17 @@ namespace FBSC.ODMS.Scheduler.Jobs
                         exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<EmployeeState>(employeeImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
                     }
                     break;
+                case nameof(MilestoneState):
+                    var milestoneImportResult = await excelService.ImportAsync<MilestoneState>(path);
+                    if (milestoneImportResult.IsSuccess)
+                    {
+                        await context.AddRangeAsync(milestoneImportResult.SuccessRecords);
+                    }
+                    else
+                    {
+                        exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<MilestoneState>(milestoneImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
+                    }
+                    break;
                 default: break;
             }           
             return exceptionFilePath;

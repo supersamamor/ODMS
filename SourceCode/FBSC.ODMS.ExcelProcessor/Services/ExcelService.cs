@@ -389,6 +389,8 @@ namespace FBSC.ODMS.ExcelProcessor.Services
                     return await TeamMembersHistoryValidator.ValidatePerRecordAsync(_context, rowValue);
                 case nameof(EmployeeState):
                     return await EmployeeValidator.ValidatePerRecordAsync(_context, rowValue);
+                case nameof(MilestoneState):
+                    return await MilestoneValidator.ValidatePerRecordAsync(_context, rowValue);
                 default: break;
             }
             return rowValue;
@@ -402,6 +404,8 @@ namespace FBSC.ODMS.ExcelProcessor.Services
 					return DataSourceValidator.DuplicateValidation(records);
                 case nameof(BusinessUnitState):
                     return BusinessUnitValidator.DuplicateValidation(records);
+                case nameof(MilestoneState):
+                    return MilestoneValidator.DuplicateValidation(records);
                 default: break;
             }
             return null;

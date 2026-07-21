@@ -11,16 +11,16 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
                           IAuthenticatedUser authenticatedUser) : AuditableDbContext<ApplicationContext>(options, authenticatedUser)
 {
     private readonly IAuthenticatedUser _authenticatedUser = authenticatedUser;
-    public DbSet<ReportState> Report { get; set; } = default!;  
+    public DbSet<ReportState> Report { get; set; } = default!;
     public DbSet<ReportQueryFilterState> ReportQueryFilter { get; set; } = default!;
     public DbSet<ReportRoleAssignmentState> ReportRoleAssignment { get; set; } = default!;
-	public DbSet<ReportAIIntegrationState> ReportAIIntegration { get; set; } = default!;
-	public DbSet<UploadProcessorState> UploadProcessor { get; set; } = default!;
-	public DbSet<ApprovalState> Approval { get; set; } = default!;
-	public DbSet<ApproverSetupState> ApproverSetup { get; set; } = default!;
-	public DbSet<ApproverAssignmentState> ApproverAssignment { get; set; } = default!;
-	public DbSet<ApprovalRecordState> ApprovalRecord { get; set; } = default!;
- 
+    public DbSet<ReportAIIntegrationState> ReportAIIntegration { get; set; } = default!;
+    public DbSet<UploadProcessorState> UploadProcessor { get; set; } = default!;
+    public DbSet<ApprovalState> Approval { get; set; } = default!;
+    public DbSet<ApproverSetupState> ApproverSetup { get; set; } = default!;
+    public DbSet<ApproverAssignmentState> ApproverAssignment { get; set; } = default!;
+    public DbSet<ApprovalRecordState> ApprovalRecord { get; set; } = default!;
+
     public DbSet<DataSourceState> DataSource { get; set; } = default!;
     public DbSet<BusinessUnitState> BusinessUnit { get; set; } = default!;
     public DbSet<ProjectState> Project { get; set; } = default!;
@@ -28,6 +28,17 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
     public DbSet<ProjectHistoryState> ProjectHistory { get; set; } = default!;
     public DbSet<TeamMembersHistoryState> TeamMembersHistory { get; set; } = default!;
     public DbSet<EmployeeState> Employee { get; set; } = default!;
+    public DbSet<StatusReportState> StatusReport { get; set; } = default!;
+    public DbSet<StatusReportHealthIndicatorState> StatusReportHealthIndicator { get; set; } = default!;
+    public DbSet<MilestoneState> Milestone { get; set; } = default!;
+    public DbSet<ProjectMilestoneState> ProjectMilestone { get; set; } = default!;
+    public DbSet<RiskIssueState> RiskIssue { get; set; } = default!;
+    public DbSet<ReportingWeekState> ReportingWeek { get; set; } = default!;
+    public DbSet<StatusReportMilestoneState> StatusReportMilestone { get; set; } = default!;
+    public DbSet<StatusReportRiskIssueState> StatusReportRiskIssue { get; set; } = default!;
+    public DbSet<AccomplishmentState> Accomplishment { get; set; } = default!;
+    public DbSet<NextStepState> NextStep { get; set; } = default!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         foreach (var property in modelBuilder.Model.GetEntityTypes()
@@ -37,7 +48,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         {
             property.SetColumnType("decimal(18,6)");
         }
-		foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             foreach (var property in entityType.GetProperties()
                                                .Where(p => p.Name.Equals("CreatedBy", StringComparison.OrdinalIgnoreCase)
@@ -64,9 +75,9 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         #endregion
         modelBuilder.Entity<Audit>().Property(e => e.PrimaryKey).HasMaxLength(120);
         modelBuilder.Entity<Audit>().HasIndex(p => p.PrimaryKey);
-		modelBuilder.Entity<Audit>().HasIndex(p => p.TraceId);
+        modelBuilder.Entity<Audit>().HasIndex(p => p.TraceId);
         modelBuilder.Entity<Audit>().HasIndex(p => p.DateTime);
-		modelBuilder.Entity<UploadProcessorState>().HasQueryFilter(e => _authenticatedUser.Entity!.Equals(Core.Constants.Entities.Default, StringComparison.CurrentCultureIgnoreCase) || e.Entity == _authenticatedUser.Entity);      
+        modelBuilder.Entity<UploadProcessorState>().HasQueryFilter(e => _authenticatedUser.Entity!.Equals(Core.Constants.Entities.Default, StringComparison.CurrentCultureIgnoreCase) || e.Entity == _authenticatedUser.Entity);
         // NOTE: DO NOT CREATE EXTENSION METHOD FOR QUERY FILTER!!!
         // It causes filter to be evaluated before user has signed in
         //Template:[InsertNewEFFluentAttributesTextHere]
@@ -74,44 +85,44 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<ReportState>().HasIndex(e => e.DataSourceId);
         modelBuilder.Entity<DataSourceState>().HasIndex(p => p.Name).IsUnique();
 
-		
+
         modelBuilder.Entity<DataSourceState>().Property(e => e.Name).HasMaxLength(150);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.ServerAddress).HasMaxLength(200);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.DatabaseName).HasMaxLength(150);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.AuthenticationType).HasMaxLength(50);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.Username).HasMaxLength(100);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.PasswordEncrypted).HasMaxLength(450);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.ConnectionStringEncrypted).HasMaxLength(450);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.Description).HasMaxLength(450);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.DataSourceType).HasMaxLength(20);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.UploadedFilePath).HasMaxLength(450);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.GeneratedTableName).HasMaxLength(128);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.ImportStatus).HasMaxLength(20);
-		modelBuilder.Entity<DataSourceState>().Property(e => e.ImportErrorMessage).HasMaxLength(450);
-		modelBuilder.Entity<UploadProcessorState>().Property(e => e.TargetEntityId).HasMaxLength(36);
-		
-        
-		modelBuilder.Entity<ApprovalRecordState>().HasIndex(l => l.DataId);
-		modelBuilder.Entity<ApprovalRecordState>().Property(e => e.DataId).HasMaxLength(36);
-		modelBuilder.Entity<ApprovalRecordState>().Property(e => e.ApproverSetupId).HasMaxLength(36);
-		modelBuilder.Entity<ApprovalRecordState>().HasIndex(l => l.ApproverSetupId);
-		modelBuilder.Entity<ApprovalRecordState>().HasIndex(l => l.Status);
-		modelBuilder.Entity<ApprovalRecordState>().Property(e => e.Status).HasMaxLength(450);
-		modelBuilder.Entity<ApprovalState>().HasIndex(l => l.ApproverUserId);
-		modelBuilder.Entity<ApprovalState>().HasIndex(l => l.Status);
-		modelBuilder.Entity<ApprovalState>().HasIndex(l => l.EmailSendingStatus);
-		modelBuilder.Entity<ApprovalState>().Property(e => e.ApproverUserId).HasMaxLength(36);
-		modelBuilder.Entity<ApprovalState>().Property(e => e.Status).HasMaxLength(450);
-		modelBuilder.Entity<ApprovalState>().Property(e => e.EmailSendingStatus).HasMaxLength(450);
-		modelBuilder.Entity<ApproverSetupState>().Property(e => e.TableName).HasMaxLength(450);
-		modelBuilder.Entity<ApproverSetupState>().Property(e => e.ApprovalType).HasMaxLength(450);
-		modelBuilder.Entity<ApproverSetupState>().Property(e => e.EmailSubject).HasMaxLength(450);
-		modelBuilder.Entity<ApproverSetupState>().Property(e => e.WorkflowName).HasMaxLength(450);
-		modelBuilder.Entity<ApproverSetupState>().HasIndex(e => new { e.WorkflowName, e.ApprovalSetupType, e.TableName, e.Entity }).IsUnique();
-		modelBuilder.Entity<ApproverAssignmentState>().Property(e => e.ApproverUserId).HasMaxLength(36);
-		modelBuilder.Entity<ApproverAssignmentState>().Property(e => e.ApproverRoleId).HasMaxLength(36);
-		modelBuilder.Entity<ApproverAssignmentState>().HasIndex(e => new { e.ApproverSetupId, e.ApproverUserId, e.ApproverRoleId }).IsUnique();
-		modelBuilder.Entity<UploadProcessorState>().Property(e => e.FileType).HasMaxLength(20);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.ServerAddress).HasMaxLength(200);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.DatabaseName).HasMaxLength(150);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.AuthenticationType).HasMaxLength(50);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.Username).HasMaxLength(100);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.PasswordEncrypted).HasMaxLength(450);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.ConnectionStringEncrypted).HasMaxLength(450);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.Description).HasMaxLength(450);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.DataSourceType).HasMaxLength(20);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.UploadedFilePath).HasMaxLength(450);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.GeneratedTableName).HasMaxLength(128);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.ImportStatus).HasMaxLength(20);
+        modelBuilder.Entity<DataSourceState>().Property(e => e.ImportErrorMessage).HasMaxLength(450);
+        modelBuilder.Entity<UploadProcessorState>().Property(e => e.TargetEntityId).HasMaxLength(36);
+
+
+        modelBuilder.Entity<ApprovalRecordState>().HasIndex(l => l.DataId);
+        modelBuilder.Entity<ApprovalRecordState>().Property(e => e.DataId).HasMaxLength(36);
+        modelBuilder.Entity<ApprovalRecordState>().Property(e => e.ApproverSetupId).HasMaxLength(36);
+        modelBuilder.Entity<ApprovalRecordState>().HasIndex(l => l.ApproverSetupId);
+        modelBuilder.Entity<ApprovalRecordState>().HasIndex(l => l.Status);
+        modelBuilder.Entity<ApprovalRecordState>().Property(e => e.Status).HasMaxLength(450);
+        modelBuilder.Entity<ApprovalState>().HasIndex(l => l.ApproverUserId);
+        modelBuilder.Entity<ApprovalState>().HasIndex(l => l.Status);
+        modelBuilder.Entity<ApprovalState>().HasIndex(l => l.EmailSendingStatus);
+        modelBuilder.Entity<ApprovalState>().Property(e => e.ApproverUserId).HasMaxLength(36);
+        modelBuilder.Entity<ApprovalState>().Property(e => e.Status).HasMaxLength(450);
+        modelBuilder.Entity<ApprovalState>().Property(e => e.EmailSendingStatus).HasMaxLength(450);
+        modelBuilder.Entity<ApproverSetupState>().Property(e => e.TableName).HasMaxLength(450);
+        modelBuilder.Entity<ApproverSetupState>().Property(e => e.ApprovalType).HasMaxLength(450);
+        modelBuilder.Entity<ApproverSetupState>().Property(e => e.EmailSubject).HasMaxLength(450);
+        modelBuilder.Entity<ApproverSetupState>().Property(e => e.WorkflowName).HasMaxLength(450);
+        modelBuilder.Entity<ApproverSetupState>().HasIndex(e => new { e.WorkflowName, e.ApprovalSetupType, e.TableName, e.Entity }).IsUnique();
+        modelBuilder.Entity<ApproverAssignmentState>().Property(e => e.ApproverUserId).HasMaxLength(36);
+        modelBuilder.Entity<ApproverAssignmentState>().Property(e => e.ApproverRoleId).HasMaxLength(36);
+        modelBuilder.Entity<ApproverAssignmentState>().HasIndex(e => new { e.ApproverSetupId, e.ApproverUserId, e.ApproverRoleId }).IsUnique();
+        modelBuilder.Entity<UploadProcessorState>().Property(e => e.FileType).HasMaxLength(20);
         modelBuilder.Entity<UploadProcessorState>().Property(e => e.Path).HasMaxLength(450);
         modelBuilder.Entity<UploadProcessorState>().Property(e => e.Status).HasMaxLength(20);
         modelBuilder.Entity<UploadProcessorState>().Property(e => e.Module).HasMaxLength(50);
@@ -163,9 +174,49 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<TeamMembersState>().HasOne(t => t.Employee).WithMany().HasForeignKey(t => t.EmployeeId).OnDelete(DeleteBehavior.NoAction);
         modelBuilder.Entity<TeamMembersHistoryState>().HasOne(t => t.Employee).WithMany().HasForeignKey(t => t.EmployeeId).OnDelete(DeleteBehavior.NoAction);
 
+        modelBuilder.Entity<StatusReportState>().Property(e => e.OverallHealth).HasMaxLength(20);
+        modelBuilder.Entity<StatusReportState>().Property(e => e.Status).HasMaxLength(50);
+        modelBuilder.Entity<StatusReportState>().Property(e => e.ScheduleStatus).HasMaxLength(50);
+        modelBuilder.Entity<StatusReportState>().Property(e => e.BudgetStatus).HasMaxLength(50);
+        modelBuilder.Entity<StatusReportState>().Property(e => e.Phase).HasMaxLength(100);
+        modelBuilder.Entity<StatusReportState>().Property(e => e.ReviewComments).HasMaxLength(1000);
+        modelBuilder.Entity<StatusReportHealthIndicatorState>().Property(e => e.Area).HasMaxLength(50);
+        modelBuilder.Entity<StatusReportHealthIndicatorState>().Property(e => e.Status).HasMaxLength(20);
+        modelBuilder.Entity<StatusReportHealthIndicatorState>().Property(e => e.Comment).HasMaxLength(500);
+        modelBuilder.Entity<MilestoneState>().Property(e => e.Name).HasMaxLength(255);
+        modelBuilder.Entity<ProjectMilestoneState>().Property(e => e.Status).HasMaxLength(50);
+        modelBuilder.Entity<RiskIssueState>().Property(e => e.Code).HasMaxLength(20);
+        modelBuilder.Entity<RiskIssueState>().Property(e => e.Type).HasMaxLength(20);
+        modelBuilder.Entity<RiskIssueState>().Property(e => e.Title).HasMaxLength(255);
+        modelBuilder.Entity<RiskIssueState>().Property(e => e.Severity).HasMaxLength(20);
+        modelBuilder.Entity<RiskIssueState>().Property(e => e.Status).HasMaxLength(50);
+        modelBuilder.Entity<RiskIssueState>().Property(e => e.Notes).HasMaxLength(1000);
+        modelBuilder.Entity<StatusReportMilestoneState>().Property(e => e.Name).HasMaxLength(255);
+        modelBuilder.Entity<StatusReportMilestoneState>().Property(e => e.Status).HasMaxLength(50);
+        modelBuilder.Entity<StatusReportRiskIssueState>().Property(e => e.Code).HasMaxLength(20);
+        modelBuilder.Entity<StatusReportRiskIssueState>().Property(e => e.Type).HasMaxLength(20);
+        modelBuilder.Entity<StatusReportRiskIssueState>().Property(e => e.Title).HasMaxLength(255);
+        modelBuilder.Entity<StatusReportRiskIssueState>().Property(e => e.Severity).HasMaxLength(20);
+        modelBuilder.Entity<StatusReportRiskIssueState>().Property(e => e.Status).HasMaxLength(50);
+        modelBuilder.Entity<StatusReportRiskIssueState>().Property(e => e.Notes).HasMaxLength(1000);
+        modelBuilder.Entity<AccomplishmentState>().Property(e => e.Description).HasMaxLength(255);
+        modelBuilder.Entity<NextStepState>().Property(e => e.Description).HasMaxLength(255);
 
+        modelBuilder.Entity<ProjectState>().HasMany(t => t.StatusReportList).WithOne(l => l.Project).HasForeignKey(t => t.ProjectId);
+        modelBuilder.Entity<ReportingWeekState>().HasMany(t => t.StatusReportList).WithOne(l => l.ReportingWeek).HasForeignKey(t => t.ReportingWeekId);
+        modelBuilder.Entity<StatusReportState>().HasMany(t => t.StatusReportHealthIndicatorList).WithOne(l => l.StatusReport).HasForeignKey(t => t.StatusReportId);
+        modelBuilder.Entity<ProjectState>().HasMany(t => t.ProjectMilestoneList).WithOne(l => l.Project).HasForeignKey(t => t.ProjectId);
+        modelBuilder.Entity<MilestoneState>().HasMany(t => t.ProjectMilestoneList).WithOne(l => l.Milestone).HasForeignKey(t => t.MilestoneId);
+        modelBuilder.Entity<ProjectState>().HasMany(t => t.RiskIssueList).WithOne(l => l.Project).HasForeignKey(t => t.ProjectId);
+        modelBuilder.Entity<StatusReportState>().HasMany(t => t.StatusReportMilestoneList).WithOne(l => l.StatusReport).HasForeignKey(t => t.StatusReportId);
+        modelBuilder.Entity<StatusReportState>().HasMany(t => t.StatusReportRiskIssueList).WithOne(l => l.StatusReport).HasForeignKey(t => t.StatusReportId);
+
+        modelBuilder.Entity<StatusReportState>().HasMany(t => t.AccomplishmentList).WithOne(l => l.StatusReport).HasForeignKey(t => t.StatusReportId);
+        modelBuilder.Entity<StatusReportState>().HasMany(t => t.NextStepList).WithOne(l => l.StatusReport).HasForeignKey(t => t.StatusReportId);
+        modelBuilder.Entity<ReportingWeekState>().HasIndex(e => new { e.WeekNumber, e.Year }).IsUnique();
+        modelBuilder.Entity<ReportingWeekState>().HasIndex(e => e.StartDate).IsUnique();
         modelBuilder.ConfigureHTMLTemplateEntities();
-		modelBuilder.ConfigureApiHubEntities();
+        modelBuilder.ConfigureApiHubEntities();
         base.OnModelCreating(modelBuilder);
     }
 }

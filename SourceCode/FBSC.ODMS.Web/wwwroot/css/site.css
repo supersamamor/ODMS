@@ -320,7 +320,9 @@ a.text-primary,
     .login-link:hover {
         color: var(--custom-primary-hover) !important;
     }
-
+.btn-flat.primary {
+    color: var(--custom-primary) !important;
+}
 .btn-primary,
 .bg-primary,
 .pagination li.active a,

@@ -205,4 +205,13 @@ public static class Permission
         public const string Upload = "P.Employee.U";
         public const string History = "P.Employee.H";
     }
+    public static class Milestone
+    {
+        public const string View = "P.Milestone.V";
+        public const string Create = "P.Milestone.C";
+        public const string Edit = "P.Milestone.E";
+        public const string Delete = "P.Milestone.D";
+        public const string Upload = "P.Milestone.U";
+        public const string History = "P.Milestone.H";
+    }
 }

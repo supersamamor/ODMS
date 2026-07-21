@@ -1,0 +1,52 @@
+@page
+@model EditModel
+@{
+    ViewData["Title"] = Localizer["Edit Milestone"];
+    ViewData["ActiveMainPage"] = "Milestone";
+    ViewData["Level1"] = "Admin";
+	var breadcrumbs = new[] {
+		new { Title = "Milestone List", Url = "/ODMS/Milestone/Index", IsActive = false },
+		new { Title = "Edit Milestone", Url = "", IsActive = true },
+	};
+}
+<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<form id="milestone-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
+    <input type="hidden" asp-for="@Model.AsyncAction" />
+    <div id="PartialLoaderContainer">
+        <partial name="_InputFieldsPartial" model="Model.Milestone" />
+    </div>
+	<div id="toolbar-container" class="btn-group" role="group">
+		<a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
+		<button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" aria-label="@Localizer["Save changes"]" title="@Localizer["Save changes"]"></button>
+		@if ((await AuthorizationService.AuthorizeAsync(User, Permission.Milestone.History)).Succeeded)
+		{
+			<a asp-page="History" id="btnHistoryConfirmationModal" asp-route-id="@Model.Milestone.Id" class="btn btnFills btn-outline-primary btnHistoryIcon" aria-label="@Localizer["History"]" title="@Localizer["History"]"></a>
+		}
+    </div>
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+
+<script asp-add-nonce>
+    $(document).ready(function () {
+		$.bindSaveConfirmationModal('Update', '#btnConfirmationModal','#milestone-form');
+		$.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal','#milestone-form', 'Do you want to cancel the changes?');
+		$.bindCancelConfirmationModal('History', '#btnHistoryConfirmationModal', '#milestone-form', 'Do you want to cancel the changes?');
+        function InitializeForm()
+        {
+            $('.DisableSelectDropdown').on('mousedown', function(e) {
+                e.preventDefault();
+                this.blur();
+                window.focus();
+            });
+            
+			
+
+        }
+        InitializeForm();
+    });
+</script>
+}

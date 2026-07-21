@@ -49,6 +49,13 @@ namespace FBSC.ODMS.Web.Service
             }
             return items;
         }
+        public SelectList GetReportingWeekList(string? id)
+        {
+            return _context.GetSingle<ReportingWeekState>(e => e.Id == id, new()).Result.Match(
+                Some: e => new SelectList(new List<SelectListItem> { new() { Value = e.Id, Text = e.Id } }, "Value", "Text", e.Id),
+                None: () => new SelectList(new List<SelectListItem>(), "Value", "Text")
+            );
+        }
         public IEnumerable<SelectListItem> QueryTypeList()
         {
             IList<SelectListItem> items =
@@ -232,6 +239,13 @@ namespace FBSC.ODMS.Web.Service
         public SelectList GetBusinessUnitList(string? id)
         {
             return _context.GetSingle<BusinessUnitState>(e => e.Id == id, new()).Result.Match(
+                Some: e => new SelectList(new List<SelectListItem> { new() { Value = e.Id, Text = e.Name } }, "Value", "Text", e.Id),
+                None: () => new SelectList(new List<SelectListItem>(), "Value", "Text")
+            );
+        }
+        public SelectList GetMilestoneList(string? id)
+        {
+            return _context.GetSingle<MilestoneState>(e => e.Id == id, new()).Result.Match(
                 Some: e => new SelectList(new List<SelectListItem> { new() { Value = e.Id, Text = e.Name } }, "Value", "Text", e.Id),
                 None: () => new SelectList(new List<SelectListItem>(), "Value", "Text")
             );

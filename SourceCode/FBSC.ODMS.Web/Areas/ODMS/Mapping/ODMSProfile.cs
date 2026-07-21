@@ -4,6 +4,7 @@ using FBSC.ODMS.Application.Features.ODMS.Approval.Commands;
 using FBSC.ODMS.Application.Features.ODMS.BusinessUnit.Commands;
 using FBSC.ODMS.Application.Features.ODMS.DataSource.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Employee.Commands;
+using FBSC.ODMS.Application.Features.ODMS.Milestone.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Project.Commands;
 using FBSC.ODMS.Application.Features.ODMS.ProjectHistory.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Report.Commands;
@@ -65,5 +66,22 @@ public class ODMSProfile : Profile
         CreateMap<EmployeeViewModel, AddEmployeeCommand>();
         CreateMap<EmployeeViewModel, EditEmployeeCommand>();
         CreateMap<EmployeeState, EmployeeViewModel>().ReverseMap();
+
+
+        CreateMap<StatusReportState, StatusReportViewModel>().ForPath(e => e.ReferenceFieldProjectId, o => o.MapFrom(s => s.Project!.ProjectCode)).ForPath(e => e.ReferenceFieldReportingWeekId, o => o.MapFrom(s => s.ReportingWeek!.Id));
+        CreateMap<StatusReportViewModel, StatusReportState>();
+
+        CreateMap<StatusReportHealthIndicatorViewModel, StatusReportHealthIndicatorState>().ReverseMap();
+        CreateMap<MilestoneViewModel, AddMilestoneCommand>();
+        CreateMap<MilestoneViewModel, EditMilestoneCommand>();
+        CreateMap<MilestoneState, MilestoneViewModel>().ReverseMap();
+        CreateMap<ProjectMilestoneViewModel, ProjectMilestoneState>().ReverseMap();
+        CreateMap<RiskIssueViewModel, RiskIssueState>().ReverseMap();
+        CreateMap<ReportingWeekState, ReportingWeekViewModel>().ReverseMap();
+        CreateMap<StatusReportMilestoneViewModel, StatusReportMilestoneState>().ReverseMap();
+        CreateMap<AccomplishmentState, AccomplishmentViewModel>().ForPath(e => e.ReferenceFieldStatusReportId, o => o.MapFrom(s => s.StatusReport!.Id));
+        CreateMap<AccomplishmentViewModel, AccomplishmentState>(); 
+        CreateMap<NextStepState, NextStepViewModel>().ForPath(e => e.ReferenceFieldStatusReportId, o => o.MapFrom(s => s.StatusReport!.Id));
+        CreateMap<NextStepViewModel, NextStepState>();
     }
 }
