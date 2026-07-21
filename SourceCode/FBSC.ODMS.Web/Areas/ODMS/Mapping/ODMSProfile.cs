@@ -6,10 +6,8 @@ using FBSC.ODMS.Application.Features.ODMS.DataSource.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Employee.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Milestone.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Project.Commands;
-using FBSC.ODMS.Application.Features.ODMS.ProjectHistory.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Report.Commands;
 using FBSC.ODMS.Application.Features.ODMS.TeamMembers.Commands;
-using FBSC.ODMS.Application.Features.ODMS.TeamMembersHistory.Commands;
 using FBSC.ODMS.Core.ODMS;
 using FBSC.ODMS.Web.Areas.ODMS.Models;
 
@@ -54,15 +52,6 @@ public class ODMSProfile : Profile
         CreateMap<TeamMembersViewModel, EditTeamMembersCommand>();
         CreateMap<TeamMembersState, TeamMembersViewModel>().ForPath(e => e.ProjectName, o => o.MapFrom(s => s.Project!.ProjectName));
         CreateMap<TeamMembersViewModel, TeamMembersState>();
-        CreateMap<ProjectHistoryViewModel, AddProjectHistoryCommand>();
-        CreateMap<ProjectHistoryViewModel, EditProjectHistoryCommand>();
-        CreateMap<ProjectHistoryState, ProjectHistoryViewModel>().ForPath(e => e.ReferenceFieldProjectManagerId, o => o.MapFrom(s => s.Employee!.Id))
-            .ForPath(e => e.ReferenceFieldBusinessUnitId, o => o.MapFrom(s => s.BusinessUnit!.Name)).ForPath(e => e.ProjectNameReference, o => o.MapFrom(s => s.Project!.ProjectName));
-        CreateMap<ProjectHistoryViewModel, ProjectHistoryState>();
-        CreateMap<TeamMembersHistoryViewModel, AddTeamMembersHistoryCommand>();
-        CreateMap<TeamMembersHistoryViewModel, EditTeamMembersHistoryCommand>();
-        CreateMap<TeamMembersHistoryState, TeamMembersHistoryViewModel>().ForPath(e => e.ProjectName, o => o.MapFrom(s => s.ProjectHistory!.Project!.ProjectName));
-        CreateMap<TeamMembersHistoryViewModel, TeamMembersHistoryState>();
         CreateMap<EmployeeViewModel, AddEmployeeCommand>();
         CreateMap<EmployeeViewModel, EditEmployeeCommand>();
         CreateMap<EmployeeState, EmployeeViewModel>().ReverseMap();

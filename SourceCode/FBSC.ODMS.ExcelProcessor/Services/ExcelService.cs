@@ -383,10 +383,6 @@ namespace FBSC.ODMS.ExcelProcessor.Services
                     return await ProjectValidator.ValidatePerRecordAsync(_context, rowValue);
                 case nameof(TeamMembersState):
                     return await TeamMembersValidator.ValidatePerRecordAsync(_context, rowValue);
-                case nameof(ProjectHistoryState):
-                    return await ProjectHistoryValidator.ValidatePerRecordAsync(_context, rowValue);
-                case nameof(TeamMembersHistoryState):
-                    return await TeamMembersHistoryValidator.ValidatePerRecordAsync(_context, rowValue);
                 case nameof(EmployeeState):
                     return await EmployeeValidator.ValidatePerRecordAsync(_context, rowValue);
                 case nameof(MilestoneState):

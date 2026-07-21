@@ -43,11 +43,7 @@ Fix the bug in the Team Members subcollection grid where only the last row's dro
 
 Add a default selection labeled (Unknown) to the employee dropdown in the Project -> Team Members module. This should display as (Unknown) in the UI but map to a null value in the database.
 
-2. Dynamic List Component (Accomplishments & Next Steps)
 
-For the JSON-backed Accomplishments and Next Steps fields in the Status Report, build a dynamic UI list component.
-
-Include a [+] button to add a new item and a [-] button to remove an item, serializing/deserializing cleanly to the underlying List<string> property.
 ------------------------------
 Phase 3: File Management
 Act as a Senior Software Engineer. I need to update the file upload architecture for the Project module to handle multiple files and proper UI rendering.
@@ -87,10 +83,30 @@ Role-Based Filtering Stub: Refactor the backend API endpoint serving the Employe
 
 
 
-
+--------------------------------
 
 
 Metrics: Implement the Metrics schema and backend models based on the provided reference file.
 2. Status Report
 
+
 JSON Storage: Add fields for "Accomplishments" and "Next Steps" to the Status Report table. Store these as JSON strings using EF Core Value Conversions to map them to a List<string> in the C# domain entity.
+
+2. Dynamic List Component (Accomplishments & Next Steps)
+
+For the JSON-backed Accomplishments and Next Steps fields in the Status Report, build a dynamic UI list component.
+
+Include a [+] button to add a new item and a [-] button to remove an item, serializing/deserializing cleanly to the underlying List<string> property.
+
+
+
+
+
+
+4. Add error when no uploaded file (error message)
+
+5. Add TechnologyBusinessPartner assignment on BusinessUnit module (can asign multiple TechnologyBusinessPartner per BU)
+
+6. ApproverSetup with tableName Project already exists validation is appearing, even if there is still no record with that delivery category / tablename combination
+
+Delivery/Portfolio Lead has no approval yet

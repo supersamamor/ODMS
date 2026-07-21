@@ -3,9 +3,8 @@ using FBSC.Common.Core.Base.Models;
 namespace FBSC.ODMS.Core.ODMS;
 
 /// <summary>
-/// Columns shared by <see cref="TeamMembersState"/> and
-/// <see cref="TeamMembersHistoryState"/>, per the final ODMS DatabaseStructure
-/// workbook. Members are Employee references (no more free-text names).
+/// Columns for a project team member. Members are Employee references (no more
+/// free-text names). Kept as a base record for shared configuration.
 /// </summary>
 public abstract record TeamMembersBase : BaseEntity
 {

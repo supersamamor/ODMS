@@ -25,8 +25,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
     public DbSet<BusinessUnitState> BusinessUnit { get; set; } = default!;
     public DbSet<ProjectState> Project { get; set; } = default!;
     public DbSet<TeamMembersState> TeamMembers { get; set; } = default!;
-    public DbSet<ProjectHistoryState> ProjectHistory { get; set; } = default!;
-    public DbSet<TeamMembersHistoryState> TeamMembersHistory { get; set; } = default!;
+    public DbSet<BusinessUnitTechnologyBusinessPartnerState> BusinessUnitTechnologyBusinessPartner { get; set; } = default!;
     public DbSet<EmployeeState> Employee { get; set; } = default!;
     public DbSet<StatusReportState> StatusReport { get; set; } = default!;
     public DbSet<StatusReportHealthIndicatorState> StatusReportHealthIndicator { get; set; } = default!;
@@ -116,11 +115,13 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<ApprovalState>().Property(e => e.Status).HasMaxLength(450);
         modelBuilder.Entity<ApprovalState>().Property(e => e.EmailSendingStatus).HasMaxLength(450);
         modelBuilder.Entity<ApproverSetupState>().Property(e => e.TableName).HasMaxLength(450);
-        modelBuilder.Entity<ApproverSetupState>().Property(e => e.DeliveryTower).HasMaxLength(50);
+        modelBuilder.Entity<ApproverSetupState>().Property(e => e.DeliveryCategory).HasMaxLength(50);
         modelBuilder.Entity<ApproverSetupState>().Property(e => e.ApprovalType).HasMaxLength(450);
         modelBuilder.Entity<ApproverSetupState>().Property(e => e.EmailSubject).HasMaxLength(450);
         modelBuilder.Entity<ApproverSetupState>().Property(e => e.WorkflowName).HasMaxLength(450);
-        modelBuilder.Entity<ApproverSetupState>().HasIndex(e => new { e.WorkflowName, e.ApprovalSetupType, e.TableName, e.Entity }).IsUnique();
+        // Composite unique so multiple setups can exist for the same table under
+        // different delivery categories (one fallback with null category per table).
+        modelBuilder.Entity<ApproverSetupState>().HasIndex(e => new { e.TableName, e.DeliveryCategory }).IsUnique();
         modelBuilder.Entity<ApproverAssignmentState>().Property(e => e.ApproverUserId).HasMaxLength(36);
         modelBuilder.Entity<ApproverAssignmentState>().Property(e => e.ApproverRoleId).HasMaxLength(36);
         modelBuilder.Entity<ApproverAssignmentState>().HasIndex(e => new { e.ApproverSetupId, e.ApproverUserId, e.ApproverRoleId }).IsUnique();
@@ -142,11 +143,10 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         // RiskIssue code: unique per the auto-generated R-/I- sequence.
         modelBuilder.Entity<RiskIssueState>().Property(e => e.Code).HasMaxLength(20);
         modelBuilder.Entity<RiskIssueState>().HasIndex(e => e.Code).IsUnique();
-        // Project + ProjectHistory share ProjectBase - lengths per the ODMS
-        // DatabaseStructure workbook, applied to both tables identically.
+        // Project column lengths per the ODMS DatabaseStructure workbook.
         modelBuilder.Entity<ProjectState>().Property(e => e.ProjectCode).HasMaxLength(12);
         modelBuilder.Entity<ProjectState>().Property(e => e.ProjectName).HasMaxLength(255);
-        modelBuilder.Entity<ProjectState>().Property(e => e.DeliveryTower).HasMaxLength(50);
+        modelBuilder.Entity<ProjectState>().Property(e => e.DeliveryCategory).HasMaxLength(50);
         modelBuilder.Entity<ProjectState>().Property(e => e.DemandType).HasMaxLength(100);
         modelBuilder.Entity<ProjectState>().Property(e => e.Priority).HasMaxLength(50);
         modelBuilder.Entity<ProjectState>().Property(e => e.ProjectDescription).HasMaxLength(1000);
@@ -155,37 +155,26 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<ProjectState>().HasIndex(e => e.ProjectCode).IsUnique();
         modelBuilder.Entity<TeamMembersState>().Property(e => e.Role).HasMaxLength(100);
         modelBuilder.Entity<TeamMembersState>().Property(e => e.MemberLevel).HasMaxLength(50);
-        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.ProjectCode).HasMaxLength(12);
-        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.ProjectName).HasMaxLength(255);
-        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.DeliveryTower).HasMaxLength(50);
-        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.DemandType).HasMaxLength(100);
-        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.Priority).HasMaxLength(50);
-        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.ProjectDescription).HasMaxLength(1000);
-        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.ActiveStatus).HasMaxLength(50);
-        modelBuilder.Entity<ProjectHistoryState>().Property(e => e.SOWFileName).HasMaxLength(450);
-        modelBuilder.Entity<TeamMembersHistoryState>().Property(e => e.Role).HasMaxLength(100);
-        modelBuilder.Entity<TeamMembersHistoryState>().Property(e => e.MemberLevel).HasMaxLength(50);
         modelBuilder.Entity<EmployeeState>().Property(e => e.Email).HasMaxLength(255);
         modelBuilder.Entity<EmployeeState>().Property(e => e.EmployeeCode).HasMaxLength(450);
         modelBuilder.Entity<EmployeeState>().Property(e => e.Name).HasMaxLength(255);
+        modelBuilder.Entity<EmployeeState>().Property(e => e.Rank).HasMaxLength(50);
         modelBuilder.Entity<EmployeeState>().Property(e => e.UserId).HasMaxLength(36);
 
         modelBuilder.Entity<BusinessUnitState>().HasMany(t => t.ProjectList).WithOne(l => l.BusinessUnit).HasForeignKey(t => t.BusinessUnitId);
         modelBuilder.Entity<EmployeeState>().HasMany(t => t.ProjectList).WithOne(l => l.Employee).HasForeignKey(t => t.ProjectManagerId);
         modelBuilder.Entity<ProjectState>().HasMany(t => t.TeamMembersList).WithOne(l => l.Project).HasForeignKey(t => t.ProjectId);
-        modelBuilder.Entity<ProjectState>().HasMany(t => t.ProjectHistoryList).WithOne(l => l.Project).HasForeignKey(t => t.ProjectId);
-        modelBuilder.Entity<BusinessUnitState>().HasMany(t => t.ProjectHistoryList).WithOne(l => l.BusinessUnit).HasForeignKey(t => t.BusinessUnitId);
-        modelBuilder.Entity<EmployeeState>().HasMany(t => t.ProjectHistoryList).WithOne(l => l.Employee).HasForeignKey(t => t.ProjectManagerId);
-        modelBuilder.Entity<ProjectHistoryState>().HasMany(t => t.TeamMembersHistoryList).WithOne(l => l.ProjectHistory).HasForeignKey(t => t.ProjectHistoryId);
         // Additional Employee references (deputy PM, technology business partner,
         // team-member employee). NoAction avoids SQL Server's multiple-cascade-path
         // restriction - the PM FK above already owns the cascade from Employee.
         modelBuilder.Entity<ProjectState>().HasOne(t => t.DeputyProjectManager).WithMany().HasForeignKey(t => t.DeputyProjectManagerId).OnDelete(DeleteBehavior.NoAction);
         modelBuilder.Entity<ProjectState>().HasOne(t => t.TechnologyBusinessPartner).WithMany().HasForeignKey(t => t.TechnologyBusinessPartnerId).OnDelete(DeleteBehavior.NoAction);
-        modelBuilder.Entity<ProjectHistoryState>().HasOne(t => t.DeputyProjectManager).WithMany().HasForeignKey(t => t.DeputyProjectManagerId).OnDelete(DeleteBehavior.NoAction);
-        modelBuilder.Entity<ProjectHistoryState>().HasOne(t => t.TechnologyBusinessPartner).WithMany().HasForeignKey(t => t.TechnologyBusinessPartnerId).OnDelete(DeleteBehavior.NoAction);
         modelBuilder.Entity<TeamMembersState>().HasOne(t => t.Employee).WithMany().HasForeignKey(t => t.EmployeeId).OnDelete(DeleteBehavior.NoAction);
-        modelBuilder.Entity<TeamMembersHistoryState>().HasOne(t => t.Employee).WithMany().HasForeignKey(t => t.EmployeeId).OnDelete(DeleteBehavior.NoAction);
+
+        // BusinessUnit <-> Technology Business Partner (Employee) mapping table.
+        modelBuilder.Entity<BusinessUnitState>().HasMany(t => t.TechnologyBusinessPartnerList).WithOne(l => l.BusinessUnit).HasForeignKey(t => t.BusinessUnitId);
+        modelBuilder.Entity<BusinessUnitTechnologyBusinessPartnerState>().HasOne(t => t.Employee).WithMany().HasForeignKey(t => t.EmployeeId).OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<BusinessUnitTechnologyBusinessPartnerState>().HasIndex(e => new { e.BusinessUnitId, e.EmployeeId }).IsUnique();
 
         modelBuilder.Entity<StatusReportState>().Property(e => e.OverallHealth).HasMaxLength(20);
         modelBuilder.Entity<StatusReportState>().Property(e => e.Status).HasMaxLength(50);

@@ -23,7 +23,7 @@ public class GetProjectQueryHandler(ApplicationContext context) : BaseQueryHandl
 				LastModifiedDate = e.LastModifiedDate,
 				ProjectCode = e.ProjectCode,
 				ProjectName = e.ProjectName,
-				DeliveryTower = e.DeliveryTower,
+				DeliveryCategory = e.DeliveryCategory,
 				DemandType = e.DemandType,
 				BusinessUnitId = e.BusinessUnit == null ? "" : e.BusinessUnit!.Name,
 				ProjectManagerId = e.Employee == null ? "" : e.Employee!.Name,

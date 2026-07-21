@@ -12,7 +12,7 @@ public record ApproverSetupViewModel : BaseViewModel
     // Optional routing discriminator for the Project module: blank = all towers.
     [Display(Name = "Delivery Tower")]
     [StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
-    public string? DeliveryTower { get; init; }
+    public string? DeliveryCategory { get; init; }
     [Display(Name = "Approval Type")]
     [Required]
     [StringLength(450, ErrorMessage = "{0} length can't be more than {1}.")]

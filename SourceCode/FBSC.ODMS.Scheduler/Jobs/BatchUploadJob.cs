@@ -161,28 +161,6 @@ namespace FBSC.ODMS.Scheduler.Jobs
                         exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<TeamMembersState>(teamMembersImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
                     }
                     break;
-                case nameof(ProjectHistoryState):
-                    var projectHistoryImportResult = await excelService.ImportAsync<ProjectHistoryState>(path);
-                    if (projectHistoryImportResult.IsSuccess)
-                    {
-                        await context.AddRangeAsync(projectHistoryImportResult.SuccessRecords);
-                    }
-                    else
-                    {
-                        exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<ProjectHistoryState>(projectHistoryImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
-                    }
-                    break;
-                case nameof(TeamMembersHistoryState):
-                    var teamMembersHistoryImportResult = await excelService.ImportAsync<TeamMembersHistoryState>(path);
-                    if (teamMembersHistoryImportResult.IsSuccess)
-                    {
-                        await context.AddRangeAsync(teamMembersHistoryImportResult.SuccessRecords);
-                    }
-                    else
-                    {
-                        exceptionFilePath = ExcelService.UpdateExistingExcelValidationResult<TeamMembersHistoryState>(teamMembersHistoryImportResult.FailedRecords, _uploadPath + "\\BatchUploadErrors", path);
-                    }
-                    break;
                 case nameof(EmployeeState):
                     var employeeImportResult = await excelService.ImportAsync<EmployeeState>(path);
                     if (employeeImportResult.IsSuccess)

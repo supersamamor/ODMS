@@ -16,8 +16,8 @@ namespace FBSC.ODMS.Application.Helpers
             // setups match - preserving the previous behavior exactly.
             var setup = await context.ApproverSetup
                 .Where(s => s.TableName == approvalModule
-                    && (s.DeliveryTower == deliveryTower || s.DeliveryTower == null || s.DeliveryTower == ""))
-                .OrderByDescending(s => s.DeliveryTower) // tower-specific (non-null) before the null fallback
+                    && (s.DeliveryCategory == deliveryTower || s.DeliveryCategory == null || s.DeliveryCategory == ""))
+                .OrderByDescending(s => s.DeliveryCategory) // tower-specific (non-null) before the null fallback
                 .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);
             if (setup == null)

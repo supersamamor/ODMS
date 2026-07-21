@@ -6,11 +6,11 @@
     <div class="row g-3">
         <div class="col-12 col-md-6">
             <div class="mb-3">
-                <label asp-for="@Model.DeliveryTower" class="form-label fieldrequired"><strong>@Localizer["Delivery Tower"] :</strong></label>
-                <select asp-for="@Model.DeliveryTower" class="form-control" asp-items="@(dropdownService.DeliveryTowerList())">
+                <label asp-for="@Model.DeliveryCategory" class="form-label fieldrequired"><strong>@Localizer["Delivery Category"] :</strong></label>
+                <select asp-for="@Model.DeliveryCategory" class="form-control" asp-items="@(dropdownService.DeliveryCategoryList())">
                     <option value="">@Localizer["Select tower"]</option>
                 </select>
-                <span asp-validation-for="@Model.DeliveryTower" class="text-danger d-block mt-1"></span>
+                <span asp-validation-for="@Model.DeliveryCategory" class="text-danger d-block mt-1"></span>
             </div>
         </div>
         <div class="col-12 col-md-6">

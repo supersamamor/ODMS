@@ -5,7 +5,7 @@ namespace FBSC.ODMS.Core.Constants
     /// ODMS DatabaseStructure workbook. Kept as constants (not lookup tables)
     /// by design decision.
     /// </summary>
-    public static class DeliveryTowers
+    public static class DeliveryCategories
     {
         public const string Infrastructure = "Infrastructure";
         public const string Application = "Application";
@@ -52,5 +52,18 @@ namespace FBSC.ODMS.Core.Constants
         public const string Manager = "Manager";
 
         public static readonly string[] List = [RankAndFile, Supervisor, Manager];
+    }
+
+    /// <summary>
+    /// Employee rank values. Same domain as <see cref="MemberLevels"/> (Rank &amp;
+    /// File / Supervisor / Manager); aliased here so Employee code reads "Rank".
+    /// </summary>
+    public static class Ranks
+    {
+        public const string RankAndFile = MemberLevels.RankAndFile;
+        public const string Supervisor = MemberLevels.Supervisor;
+        public const string Manager = MemberLevels.Manager;
+
+        public static readonly string[] List = MemberLevels.List;
     }
 }

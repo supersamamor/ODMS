@@ -107,7 +107,7 @@ namespace FBSC.ODMS.Core.ODMS
         /// setup applies only to projects of that Delivery Tower; null/empty means
         /// it applies to all towers (fallback). Ignored by non-Project modules.
         /// </summary>
-        public string? DeliveryTower { get; init; }
+        public string? DeliveryCategory { get; init; }
         public string ApprovalType { get; init; } = ApprovalTypes.InSequence;
         public string EmailSubject { get; init; } = "";
         public string EmailBody { get; init; } = "";

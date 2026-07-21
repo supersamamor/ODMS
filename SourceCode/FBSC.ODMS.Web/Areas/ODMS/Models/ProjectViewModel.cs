@@ -16,7 +16,7 @@ public record ProjectViewModel : BaseViewModel
 	[Display(Name = "Delivery Tower")]
 	[Required]
 	[StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
-	public string DeliveryTower { get; init; } = "";
+	public string DeliveryCategory { get; init; } = "";
 	[Display(Name = "Demand Type")]
 	[Required]
 	[StringLength(100, ErrorMessage = "{0} length can't be more than {1}.")]
@@ -64,6 +64,5 @@ public record ProjectViewModel : BaseViewModel
 	public EmployeeViewModel? Employee { get; init; }
 
 	public IList<TeamMembersViewModel>? TeamMembersList { get; set; }
-	public IList<ProjectHistoryViewModel>? ProjectHistoryList { get; set; }
 
 }

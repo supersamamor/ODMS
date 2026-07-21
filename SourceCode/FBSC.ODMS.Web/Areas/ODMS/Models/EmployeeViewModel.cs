@@ -27,6 +27,9 @@ public record EmployeeViewModel : BaseViewModel
 	[Required]
 	
 	public string Position { get; init; } = "";
+	[Display(Name = "Rank")]
+	[StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
+	public string? Rank { get; init; }
 	[Display(Name = "User Id")]
 	[StringLength(36, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string? UserId { get; init; }
@@ -34,6 +37,5 @@ public record EmployeeViewModel : BaseViewModel
 	public DateTime LastModifiedDate { get; set; }
 		
 	public IList<ProjectViewModel>? ProjectList { get; set; }
-	public IList<ProjectHistoryViewModel>? ProjectHistoryList { get; set; }
 	
 }

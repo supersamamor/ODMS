@@ -20,6 +20,5 @@ public record BusinessUnitViewModel : BaseViewModel
 	public DateTime LastModifiedDate { get; set; }
 		
 	public IList<ProjectViewModel>? ProjectList { get; set; }
-	public IList<ProjectHistoryViewModel>? ProjectHistoryList { get; set; }
 	
 }

@@ -6,7 +6,7 @@ public record ProjectListDto : BaseDto
 {
 	public string ProjectCode { get; init; } = "";
 	public string ProjectName { get; init; } = "";
-	public string DeliveryTower { get; init; } = "";
+	public string DeliveryCategory { get; init; } = "";
 	public string DemandType { get; init; } = "";
 	public string BusinessUnitId { get; init; } = "";
 	public string ProjectManagerId { get; init; } = "";

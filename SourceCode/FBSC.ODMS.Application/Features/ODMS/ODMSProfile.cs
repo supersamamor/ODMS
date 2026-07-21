@@ -6,10 +6,8 @@ using FBSC.ODMS.Application.Features.ODMS.DataSource.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Employee.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Milestone.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Project.Commands;
-using FBSC.ODMS.Application.Features.ODMS.ProjectHistory.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Report.Commands;
 using FBSC.ODMS.Application.Features.ODMS.TeamMembers.Commands;
-using FBSC.ODMS.Application.Features.ODMS.TeamMembersHistory.Commands;
 using FBSC.ODMS.Core.ODMS;
 
 namespace FBSC.ODMS.Application.Features.ODMS;
@@ -43,10 +41,6 @@ public class ODMSProfile : Profile
         CreateMap<EditProjectCommand, ProjectState>().IgnoreBaseEntityProperties();
         CreateMap<AddTeamMembersCommand, TeamMembersState>();
         CreateMap<EditTeamMembersCommand, TeamMembersState>().IgnoreBaseEntityProperties();
-        CreateMap<AddProjectHistoryCommand, ProjectHistoryState>();
-        CreateMap<EditProjectHistoryCommand, ProjectHistoryState>().IgnoreBaseEntityProperties();
-        CreateMap<AddTeamMembersHistoryCommand, TeamMembersHistoryState>();
-        CreateMap<EditTeamMembersHistoryCommand, TeamMembersHistoryState>().IgnoreBaseEntityProperties();
         CreateMap<AddEmployeeCommand, EmployeeState>();
         CreateMap<EditEmployeeCommand, EmployeeState>().IgnoreBaseEntityProperties();
 
