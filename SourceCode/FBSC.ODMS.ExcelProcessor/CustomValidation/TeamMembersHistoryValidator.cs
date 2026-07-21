@@ -21,15 +21,7 @@ namespace FBSC.ODMS.ExcelProcessor.CustomValidation
 			{
 				rowValue[nameof(TeamMembersHistoryState.ProjectHistoryId)] = projectHistory?.Id;
 			}
-			var memberName = rowValue[nameof(TeamMembersHistoryState.MemberName)]?.ToString();
-			if (!string.IsNullOrEmpty(memberName))
-			{
-				var memberNameMaxLength = 255;
-				if (memberName.Length > memberNameMaxLength)
-				{
-					errorValidation += $"Full Name of the Member should be less than {memberNameMaxLength} characters.;";
-				}
-			}
+			
 			var role = rowValue[nameof(TeamMembersHistoryState.Role)]?.ToString();
 			if (!string.IsNullOrEmpty(role))
 			{

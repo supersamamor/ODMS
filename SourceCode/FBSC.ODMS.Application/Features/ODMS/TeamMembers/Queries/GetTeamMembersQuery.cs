@@ -14,18 +14,20 @@ public record GetTeamMembersQuery : BaseQuery, IRequest<PagedListResponse<TeamMe
 
 public class GetTeamMembersQueryHandler(ApplicationContext context) : BaseQueryHandler<ApplicationContext, TeamMembersListDto, GetTeamMembersQuery>(context), IRequestHandler<GetTeamMembersQuery, PagedListResponse<TeamMembersListDto>>
 {
-	public override Task<PagedListResponse<TeamMembersListDto>> Handle(GetTeamMembersQuery request, CancellationToken cancellationToken = default)
-	{
-		return Task.FromResult(Context.Set<TeamMembersState>().Include(l=>l.Project)
-			.AsNoTracking().Select(e => new TeamMembersListDto()
-			{
-				Id = e.Id,
-				LastModifiedDate = e.LastModifiedDate,
-				MemberName = e.MemberName,
-				Role = e.Role,
-			})
-			.ToPagedResponse(request.SearchColumns, request.SearchValue,
-				request.SortColumn, request.SortOrder,
-				request.PageNumber, request.PageSize));
-	}	
+    public override Task<PagedListResponse<TeamMembersListDto>> Handle(GetTeamMembersQuery request, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(Context.Set<TeamMembersState>().Include(l => l.Project)
+            .Include(l => l.Employee)
+            .AsNoTracking().Select(e => new TeamMembersListDto()
+            {
+                Id = e.Id,
+                LastModifiedDate = e.LastModifiedDate,
+                MemberLevel = e.MemberLevel,
+                Name = e.Employee != null ? e.Employee.Name : string.Empty,
+                Role = e.Role,
+            })
+            .ToPagedResponse(request.SearchColumns, request.SearchValue,
+                request.SortColumn, request.SortOrder,
+                request.PageNumber, request.PageSize));
+    }
 }

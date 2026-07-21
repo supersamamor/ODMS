@@ -17,13 +17,15 @@ public class GetTeamMembersHistoryQueryHandler(ApplicationContext context) : Bas
 	public override Task<PagedListResponse<TeamMembersHistoryListDto>> Handle(GetTeamMembersHistoryQuery request, CancellationToken cancellationToken = default)
 	{
 		return Task.FromResult(Context.Set<TeamMembersHistoryState>().Include(l=>l.ProjectHistory)
+			.Include(l=>l.Employee)
 			.AsNoTracking().Select(e => new TeamMembersHistoryListDto()
 			{
-				Id = e.Id,
-				LastModifiedDate = e.LastModifiedDate,
-				MemberName = e.MemberName,
-				Role = e.Role,
-			})
+                Id = e.Id,
+                LastModifiedDate = e.LastModifiedDate,
+                MemberLevel = e.MemberLevel,
+                Name = e.Employee != null ? e.Employee.Name : string.Empty,
+                Role = e.Role,
+            })
 			.ToPagedResponse(request.SearchColumns, request.SearchValue,
 				request.SortColumn, request.SortOrder,
 				request.PageNumber, request.PageSize));

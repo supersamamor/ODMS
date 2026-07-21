@@ -48,9 +48,6 @@ namespace FBSC.ODMS.ExcelProcessor.CustomValidation
 					errorValidation += $"Project Priority should be less than {priorityMaxLength} characters.;";
 				}
 			}
-			
-			
-			
 			var projectDescription = rowValue[nameof(ProjectHistoryState.ProjectDescription)]?.ToString();
 			if (!string.IsNullOrEmpty(projectDescription))
 			{
@@ -69,36 +66,6 @@ namespace FBSC.ODMS.ExcelProcessor.CustomValidation
 			{
 				rowValue[nameof(ProjectHistoryState.ProjectManagerId)] = employee?.Id;
 			}
-			var healthStatus = rowValue[nameof(ProjectHistoryState.HealthStatus)]?.ToString();
-			if (!string.IsNullOrEmpty(healthStatus))
-			{
-				var healthStatusMaxLength = 20;
-				if (healthStatus.Length > healthStatusMaxLength)
-				{
-					errorValidation += $"RAG Status (Red, Amber, Green) should be less than {healthStatusMaxLength} characters.;";
-				}
-			}
-			var phase = rowValue[nameof(ProjectHistoryState.Phase)]?.ToString();
-			if (!string.IsNullOrEmpty(phase))
-			{
-				var phaseMaxLength = 100;
-				if (phase.Length > phaseMaxLength)
-				{
-					errorValidation += $"Current Phase (e.g. Development) should be less than {phaseMaxLength} characters.;";
-				}
-			}
-			var scheduleStatus = rowValue[nameof(ProjectHistoryState.ScheduleStatus)]?.ToString();
-			if (!string.IsNullOrEmpty(scheduleStatus))
-			{
-				var scheduleStatusMaxLength = 50;
-				if (scheduleStatus.Length > scheduleStatusMaxLength)
-				{
-					errorValidation += $"Schedule Status (e.g. Delayed) should be less than {scheduleStatusMaxLength} characters.;";
-				}
-			}
-			
-			
-			
 			if (!string.IsNullOrEmpty(errorValidation))
 			{
 				throw new Exception(errorValidation);

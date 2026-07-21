@@ -5,8 +5,9 @@ namespace FBSC.ODMS.Application.DTOs;
 
 public record TeamMembersHistoryListDto : BaseDto
 {
-    public string MemberName { get; init; } = "";
+    public string? MemberLevel { get; init; } = "";
     public string Role { get; init; } = "";
+    public string? Name { get; init; } = "";
 
 
 }

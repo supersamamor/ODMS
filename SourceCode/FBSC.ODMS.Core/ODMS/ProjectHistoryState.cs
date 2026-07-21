@@ -1,29 +1,15 @@
-using FBSC.Common.Core.Base.Models;
-using System.ComponentModel;
-
 namespace FBSC.ODMS.Core.ODMS;
 
-public record ProjectHistoryState : BaseEntity
+public record ProjectHistoryState : ProjectBase
 {
 	public string ProjectId { get; init; } = "";
-	public string ProjectName { get; init; } = "";
-    public string BusinessUnitId { get; init; } = "";
-    public string Priority { get; init; } = "";
-	public DateTime StartDate { get; init; }
-	public DateTime TargetEndDate { get; init; }
-	public decimal? EstimatedBudget { get; init; }
-	public string? ProjectDescription { get; init; }
-	public string ProjectManagerId { get; init; } = "";
-	public string? HealthStatus { get; init; }
-	public string? Phase { get; init; }
-	public string? ScheduleStatus { get; init; }
-	public DateTime? LastReviewDate { get; init; }
-	public DateTime? LastUpdatedDate { get; init; }
-	
+
 	public ProjectState? Project { get; init; }
 	public BusinessUnitState? BusinessUnit { get; init; }
 	public EmployeeState? Employee { get; init; }
-	
+	public EmployeeState? DeputyProjectManager { get; init; }
+	public EmployeeState? TechnologyBusinessPartner { get; init; }
+
 	public IList<TeamMembersHistoryState>? TeamMembersHistoryList { get; set; }
-	
+
 }

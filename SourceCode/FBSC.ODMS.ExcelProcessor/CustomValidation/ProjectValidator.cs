@@ -60,36 +60,6 @@ namespace FBSC.ODMS.ExcelProcessor.CustomValidation
 			{
 				rowValue[nameof(ProjectState.ProjectManagerId)] = employee?.Id;
 			}
-			var healthStatus = rowValue[nameof(ProjectState.HealthStatus)]?.ToString();
-			if (!string.IsNullOrEmpty(healthStatus))
-			{
-				var healthStatusMaxLength = 20;
-				if (healthStatus.Length > healthStatusMaxLength)
-				{
-					errorValidation += $"RAG Status (Red, Amber, Green) should be less than {healthStatusMaxLength} characters.;";
-				}
-			}
-			var phase = rowValue[nameof(ProjectState.Phase)]?.ToString();
-			if (!string.IsNullOrEmpty(phase))
-			{
-				var phaseMaxLength = 100;
-				if (phase.Length > phaseMaxLength)
-				{
-					errorValidation += $"Current Phase (e.g. Development) should be less than {phaseMaxLength} characters.;";
-				}
-			}
-			var scheduleStatus = rowValue[nameof(ProjectState.ScheduleStatus)]?.ToString();
-			if (!string.IsNullOrEmpty(scheduleStatus))
-			{
-				var scheduleStatusMaxLength = 50;
-				if (scheduleStatus.Length > scheduleStatusMaxLength)
-				{
-					errorValidation += $"Schedule Status (e.g. Delayed) should be less than {scheduleStatusMaxLength} characters.;";
-				}
-			}
-			
-			
-			
 			if (!string.IsNullOrEmpty(errorValidation))
 			{
 				throw new Exception(errorValidation);

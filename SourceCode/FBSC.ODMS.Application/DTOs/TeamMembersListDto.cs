@@ -5,8 +5,8 @@ namespace FBSC.ODMS.Application.DTOs;
 
 public record TeamMembersListDto : BaseDto
 {
-    public string MemberName { get; init; } = "";
+    public string? MemberLevel { get; init; } = "";
     public string Role { get; init; } = "";
-
+    public string? Name { get; init; } = "";
 
 }
