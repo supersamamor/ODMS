@@ -9,7 +9,25 @@
 @section Styles {
     <partial name="_DataTableStyles" />
 }
-@if (Model?.Report.Filters.Count > 0)
+@{
+    // The dashboard's global header bar owns these filter parameters; they are
+    // appended to every report's filter list server-side, so they must not
+    // render again as per-widget inputs. Widget-specific filters still do.
+    var globalFieldNames = new[]
+    {
+        FBSC.ODMS.Core.Constants.GlobalReportFilterFields.Project,
+        FBSC.ODMS.Core.Constants.GlobalReportFilterFields.WeekNumber,
+        FBSC.ODMS.Core.Constants.GlobalReportFilterFields.WeekStartDate,
+        FBSC.ODMS.Core.Constants.GlobalReportFilterFields.WeekEndDate,
+        FBSC.ODMS.Core.Constants.GlobalReportFilterFields.BusinessUnit,
+    };
+    var widgetFilters = (Model?.Report.Filters ?? [])
+               .Where(f => !globalFieldNames.Contains(f.FieldName, StringComparer.OrdinalIgnoreCase))
+               .OrderBy(f => f.Sequence)
+               .ToList();
+}
+
+@if (widgetFilters.Count > 0)
 {
     <div class="row">
         <div class="col">
@@ -22,7 +40,7 @@
                             @{
                                 var counter = 0;
                             }
-                            @foreach (var item in Model.Report.Filters.OrderBy(l => l.Sequence))
+                            @foreach (var item in widgetFilters.OrderBy(l => l.Sequence))
                             {
                                 <input type="hidden" asp-for="@item.FieldName" name="Filters[@counter].FieldName" />
                                 <input type="hidden" asp-for="@item.FieldDescription" name="Filters[@counter].FieldDescription" />
