@@ -13,5 +13,3 @@ Role-Based Filtering Stub: Refactor the backend API endpoint serving the Employe
 
 Scan for delete cascade, check if needs to disable
 -----
-if there is a validation error, will scroll up and will display the summary of error (jquery-validation)
-create svg icon for "Create Status Report" in page /ODMS/MyProjects. use other icons as template for size and theme
