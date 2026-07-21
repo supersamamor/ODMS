@@ -1,6 +1,20 @@
 @using Models
 @model IList<ReportResultViewModel>
 
+@{
+    // The dashboard's global header bar owns these filter parameters; they are
+    // appended to every report's filter list server-side, so they must not
+    // render again as per-widget inputs. Widget-specific filters still do.
+    var globalFieldNames = new[]
+    {
+        FBSC.ODMS.Core.Constants.GlobalReportFilterFields.Project,
+        FBSC.ODMS.Core.Constants.GlobalReportFilterFields.WeekNumber,
+        FBSC.ODMS.Core.Constants.GlobalReportFilterFields.WeekStartDate,
+        FBSC.ODMS.Core.Constants.GlobalReportFilterFields.WeekEndDate,
+        FBSC.ODMS.Core.Constants.GlobalReportFilterFields.BusinessUnit,
+    };
+}
+
 <input type="hidden" id="ReportListCount" value="@Model.Count" />
 
 @if (Model?.Count > 0)
@@ -30,6 +44,10 @@
                 FBSC.ODMS.Core.Constants.ReportChartType.CustomHtml => "fas fa-file-code",
                 _ => "fas fa-chart-line"
             };
+            var widgetFilters = (item.Filters ?? [])
+                .Where(f => !globalFieldNames.Contains(f.FieldName, StringComparer.OrdinalIgnoreCase))
+                .OrderBy(f => f.Sequence)
+                .ToList();
             <div class="@columnWidthClass margin-bottom-20">
                 <div class="card custom-card-container dashboard-widget-card dashboard-widget-animate">
                     <h5 class="card-header dashboard-widget-header d-flex justify-content-between align-items-center">
@@ -38,7 +56,7 @@
                             <span class="dashboard-widget-title-text" title="@item.ReportName">@item.ReportName</span>
                         </span>
                         <div class="dashboard-widget-actions">
-                            @if (item.Filters?.Count > 0)
+                            @if (widgetFilters.Count > 0)
                             {
                                 <button type="button" class="btn btn-sm widget-icon-btn" data-bs-toggle="collapse" data-bs-target="#collapse_@item.DomId" aria-expanded="false" aria-controls="collapse_@item.DomId" title="@Localizer["Filters"]">
                                     <i class="fas fa-filter"></i>
@@ -53,9 +71,10 @@
                         </div>
                     </h5>
 
-                    @if (item.Filters?.Count > 0)
+                    @if (widgetFilters.Count > 0)
                     {
-                        <!-- Filter Collapse Container adapted from Report Module UI -->
+                        <!-- Per-widget (report-specific) filters. Global filters are
+                             excluded above - the dashboard header bar owns those. -->
                         <div class="collapse dashboard-widget-filters border-bottom" id="collapse_@item.DomId">
                             <div class="card-body dashboard-widget-filters-body">
                                 <span class="dashboard-widget-filters-eyebrow"><i class="fas fa-sliders-h"></i>@Localizer["Filters"]</span>
@@ -64,7 +83,7 @@
                                         @{
                                             int filterSequence = 1;
                                         }
-                                        @foreach (var filter in item.Filters.OrderBy(l => l.Sequence))
+                                        @foreach (var filter in widgetFilters)
                                         {
                                             <!-- Hidden inputs to construct the request model -->
                                             <input type="hidden" name="Filters[@(filterSequence - 1)].FieldName" value="@filter.FieldName" />

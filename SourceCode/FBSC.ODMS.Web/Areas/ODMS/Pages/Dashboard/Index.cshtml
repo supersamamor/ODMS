@@ -173,8 +173,9 @@
                 return $('#chart-form input[name="__RequestVerificationToken"]').val();
             }
 
-            // Refreshes every widget with the current global filter values -
-            // including widgets that have no filter form of their own.
+            // Refreshes every widget with the current global filter values,
+            // carrying each widget's own (report-specific) filter form along
+            // when it has one.
             function refreshAllWidgets() {
                 var globalQuery = $.param(globalFilterData());
                 var reportCount = $('#ReportListCount').val();
@@ -219,6 +220,7 @@
 
                 refreshWidget(form.data('reportid'), form.data('domid'), data, token, submitBtn);
             });
+
             function analyzeDataModalPopup(reff) {
                 var reportId = $(reff)[0].dataset.reportid;
                 $('#SelectedReportId').val(reportId);

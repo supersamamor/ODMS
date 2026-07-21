@@ -4,17 +4,23 @@
     // 1. Initialize a global dictionary to hold multiple chart instances
     window.myCharts = window.myCharts || {};
 
-    // Generates a chart color palette derived from the active theme's
-    // --custom-primary CSS variable, so dashboard charts automatically
-    // match whichever theme is applied (see site.css "THEMES" section)
-    // without the backend needing to know which theme is active.
+    // Static chart palette matching the reference dashboard design -
+    // deliberately NOT derived from the active theme: chart colors stay
+    // identical no matter which body.theme-* class is applied. Order matters;
+    // the first N series take the first N colors, cycling for long palettes.
     $.ThemeChartColors = (function () {
-        var cache = { key: null, palette: [] };
-
-        // Pastel bands close in feel to the original hardcoded palette,
-        // cycled per index so long palettes stay visually distinguishable.
-        var LIGHTNESS_BANDS = [82, 74, 88];
-        var SATURATION_BANDS = [55, 40, 68];
+        var PALETTE = [
+            '#2563eb', // royal blue
+            '#38bdf8', // sky
+            '#10b981', // emerald
+            '#fb923c', // orange
+            '#8b5cf6', // violet
+            '#cbd5e1', // slate (neutral / "others")
+            '#f43f5e', // rose
+            '#14b8a6', // teal
+            '#f59e0b', // amber
+            '#6366f1'  // indigo
+        ];
 
         function hexToRgb(hex) {
             hex = (hex || '').trim().replace('#', '');
@@ -23,85 +29,23 @@
             }
             var num = parseInt(hex, 16);
             if (isNaN(num)) {
-                return { r: 0, g: 191, b: 255 }; // Fallback: default sky-blue theme
+                return { r: 37, g: 99, b: 235 }; // Fallback: palette's lead blue
             }
             return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
         }
 
-        function rgbToHsl(r, g, b) {
-            r /= 255; g /= 255; b /= 255;
-            var max = Math.max(r, g, b), min = Math.min(r, g, b);
-            var h = 0, s = 0, l = (max + min) / 2;
-
-            if (max !== min) {
-                var d = max - min;
-                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-                switch (max) {
-                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                    case g: h = (b - r) / d + 2; break;
-                    default: h = (r - g) / d + 4; break;
-                }
-                h /= 6;
-            }
-            return { h: h * 360, s: s * 100, l: l * 100 };
-        }
-
-        function hslToHex(h, s, l) {
-            h = ((h % 360) + 360) % 360;
-            s /= 100; l /= 100;
-            var c = (1 - Math.abs(2 * l - 1)) * s;
-            var x = c * (1 - Math.abs((h / 60) % 2 - 1));
-            var m = l - c / 2;
-            var r = 0, g = 0, b = 0;
-
-            if (h < 60) { r = c; g = x; b = 0; }
-            else if (h < 120) { r = x; g = c; b = 0; }
-            else if (h < 180) { r = 0; g = c; b = x; }
-            else if (h < 240) { r = 0; g = x; b = c; }
-            else if (h < 300) { r = x; g = 0; b = c; }
-            else { r = c; g = 0; b = x; }
-
-            var toHex = function (v) {
-                var hex = Math.round((v + m) * 255).toString(16);
-                return hex.length === 1 ? '0' + hex : hex;
-            };
-            return '#' + toHex(r) + toHex(g) + toHex(b);
-        }
-
-        function getBaseHue() {
-            var raw = getComputedStyle(document.body).getPropertyValue('--custom-primary');
-            var rgb = hexToRgb(raw);
-            return rgbToHsl(rgb.r, rgb.g, rgb.b).h;
-        }
-
-        // Converts any hex color (theme-derived or otherwise) to an rgba()
-        // string at the given alpha, for translucent fills (line/radar area).
+        // Converts any hex color to an rgba() string at the given alpha, for
+        // translucent fills (line/radar area).
         function hexToRgba(hex, alpha) {
             var rgb = hexToRgb(hex);
             return 'rgba(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', ' + alpha + ')';
         }
 
-        // Returns `count` colors, rotated around the color wheel starting at
-        // the current theme's own hue, so the first series always reads as
-        // "on brand" for the active theme.
         function generate(count) {
-            var cacheKey = document.body.className + '|' + count;
-            if (cache.key === cacheKey) {
-                return cache.palette;
-            }
-
-            var baseHue = getBaseHue();
-            var hueStep = 360 / Math.max(count, 6);
             var palette = [];
-
             for (var i = 0; i < count; i++) {
-                var hue = baseHue + (i * hueStep);
-                var lightness = LIGHTNESS_BANDS[i % LIGHTNESS_BANDS.length];
-                var saturation = SATURATION_BANDS[i % SATURATION_BANDS.length];
-                palette.push(hslToHex(hue, saturation, lightness));
+                palette.push(PALETTE[i % PALETTE.length]);
             }
-
-            cache = { key: cacheKey, palette: palette };
             return palette;
         }
 
@@ -109,7 +53,7 @@
     })();
 
     // Fills in backgroundColor for any dataset the server left uncolored,
-    // using the current theme's palette. Datasets that already carry an
+    // using the static palette above. Datasets that already carry an
     // explicit color (single hex string or a populated array) are left
     // untouched, so this stays safe even if some report configs set their
     // own colors deliberately.
@@ -124,22 +68,16 @@
     var PER_POINT_CHART_TYPES = ['pie', 'doughnut', 'polarArea'];
 
     // Datasets whose label IS a semantic status name (e.g. a RAG breakdown
-    // query with Green/Amber/Red columns) get the app's semantic status
-    // colors instead of theme-derived hues - a green segment must be green
-    // no matter which theme is active.
-    var SEMANTIC_LABEL_COLOR_VARS = {
-        'green': '--color-success',
-        'amber': '--color-warning',
-        'red': '--color-danger'
+    // query with Green/Amber/Red columns) get fixed status colors - static
+    // like the rest of the palette, and a green segment is always green.
+    var SEMANTIC_LABEL_COLORS = {
+        'green': '#10b981',
+        'amber': '#f59e0b',
+        'red': '#ef4444'
     };
 
     function semanticColorForLabel(label) {
-        var varName = SEMANTIC_LABEL_COLOR_VARS[(label || '').trim().toLowerCase()];
-        if (!varName) {
-            return null;
-        }
-        var value = getComputedStyle(document.body).getPropertyValue(varName).trim();
-        return value || null;
+        return SEMANTIC_LABEL_COLORS[(label || '').trim().toLowerCase()] || null;
     }
 
     $.ApplyThemeChartColors = function (chartRenderType, datasets) {
@@ -289,7 +227,7 @@
             var ctx = chart.ctx;
             ctx.save();
             ctx.font = '700 11px ' + (getComputedStyle(document.body).fontFamily || 'sans-serif');
-            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-color').trim() || '#2c3e50';
+            ctx.fillStyle = '#1e293b'; // static, matching the static chart palette
 
             for (var index = 0; index < categoryCount; index++) {
                 var total = 0;

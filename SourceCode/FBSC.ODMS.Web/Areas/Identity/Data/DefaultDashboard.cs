@@ -305,27 +305,56 @@ public static class DefaultDashboard
                     }
                 ]
             });
+            await context.SaveChangesAsync();
+        }
 
+        var budgetByBu = await context.Report
+            .Include(r => r.ReportRoleAssignmentList)
+            .Include(r => r.ReportQueryFilterList)
+            .FirstOrDefaultAsync(e => e.ReportName == "Budget Performance by BU");
+
+        // One-time migration: the first version of this seed colored bars with
+        // theme CSS variables; the chart palette is now static. Drop the stale
+        // copy so it reseeds below with fixed hex colors.
+        if (budgetByBu != null && budgetByBu.QueryString!.Contains("var(--color-"))
+        {
+            if(budgetByBu.ReportRoleAssignmentList != null &&budgetByBu.ReportRoleAssignmentList.Count > 0)
+            {
+                context.ReportRoleAssignment.RemoveRange(budgetByBu.ReportRoleAssignmentList);
+            }
+            if (budgetByBu.ReportQueryFilterList != null && budgetByBu.ReportQueryFilterList.Count > 0)
+            {
+                context.ReportQueryFilter.RemoveRange(budgetByBu.ReportQueryFilterList);
+            }
+ 
+            context.Report.Remove(budgetByBu);
+            await context.SaveChangesAsync();
+            budgetByBu = null;
+        }
+
+        if (budgetByBu == null)
+        {
             // Widget 2: budget-vs-target progress bars. Not a chart - Custom Html
             // with every presentational value (percent widths, colors, badge class,
             // delta label) precomputed in the query so the template is dumb
             // substitution. Percentages share one scale so bar lengths compare
             // across BUs; the blue tick marks each BU's budget target.
+            var budgetByBuReportId = Guid.NewGuid().ToString();
             context.Report.Add(new ReportState()
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = budgetByBuReportId,
                 ReportName = "Budget Performance by BU",
                 QueryType = Core.Constants.QueryType.TSql,
                 ReportOrChartType = Core.Constants.ReportChartType.CustomHtml,
                 IsDistinct = false,
                 QueryString = @"SELECT [BusinessUnit], [ActualM], [DeltaLabel], [BadgeClass], [FillPct], [TargetPct], [BarColor]
                     FROM (VALUES
-                        ('Filinvest Land', 312, '-28M', 'badge-soft-success', 92, 100, 'var(--color-success)'),
-                        ('Filinvest Alabang', 295, '+15M', 'badge-soft-danger', 87, 82, 'var(--color-danger)'),
-                        ('FDC Utilities', 198, '-22M', 'badge-soft-success', 58, 65, 'var(--color-success)'),
-                        ('Countrywide Water', 172, '-8M', 'badge-soft-success', 51, 53, 'var(--color-success)'),
-                        ('Chroma Hospitality', 115, '-5M', 'badge-soft-success', 34, 35, 'var(--color-success)'),
-                        ('SharePro', 88, '-2M', 'badge-soft-success', 26, 27, 'var(--color-success)')
+                        ('Filinvest Land', 312, '-28M', 'badge-soft-success', 92, 100, '#10b981'),
+                        ('Filinvest Alabang', 295, '+15M', 'badge-soft-danger', 87, 82, '#ef4444'),
+                        ('FDC Utilities', 198, '-22M', 'badge-soft-success', 58, 65, '#10b981'),
+                        ('Countrywide Water', 172, '-8M', 'badge-soft-success', 51, 53, '#10b981'),
+                        ('Chroma Hospitality', 115, '-5M', 'badge-soft-success', 34, 35, '#10b981'),
+                        ('SharePro', 88, '-2M', 'badge-soft-success', 26, 27, '#10b981')
                     ) v([BusinessUnit], [ActualM], [DeltaLabel], [BadgeClass], [FillPct], [TargetPct], [BarColor]);",
                 DisplayOnDashboard = true,
                 DisplayOnReportModule = false,
@@ -342,14 +371,14 @@ public static class DefaultDashboard
                         </div>
                         <div style="position: relative; height: 12px; background-color: #e8ebf3; border-radius: 999px;">
                             <div style="position: absolute; left: 0; top: 0; height: 12px; width: {FillPct}%; background-color: {BarColor}; border-radius: 999px;"></div>
-                            <div style="position: absolute; left: {TargetPct}%; top: -2px; height: 16px; width: 3px; background-color: #3b5bdb; border-radius: 2px;"></div>
+                            <div style="position: absolute; left: {TargetPct}%; top: -2px; height: 16px; width: 3px; background-color: #2563eb; border-radius: 2px;"></div>
                         </div>
                     </div>
                     <!--{/foreach}-->
                     <div style="display: flex; gap: 18px; margin-top: 4px; font-size: var(--font-size-dense); color: var(--text-muted);">
-                        <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: var(--color-success); margin-right: 5px;"></span>Within budget</span>
-                        <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: var(--color-danger); margin-right: 5px;"></span>Over budget</span>
-                        <span><span style="display: inline-block; width: 3px; height: 12px; background-color: #3b5bdb; margin-right: 5px;"></span>Budget target</span>
+                        <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #10b981; margin-right: 5px;"></span>Within budget</span>
+                        <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #ef4444; margin-right: 5px;"></span>Over budget</span>
+                        <span><span style="display: inline-block; width: 3px; height: 12px; background-color: #2563eb; margin-right: 5px;"></span>Budget target</span>
                     </div>
                 </div>
                 """,
@@ -358,6 +387,7 @@ public static class DefaultDashboard
                 ReportRoleAssignmentList = [
                     new ReportRoleAssignmentState()
                     {
+                        ReportId = budgetByBuReportId,
                         Id = Guid.NewGuid().ToString(),
                         RoleName = Core.Constants.Roles.Admin
                     }
