@@ -4,12 +4,9 @@
     ViewData["Title"] = Localizer["Edit Project"];
 	ViewData["ActiveMainPage"] = "Projects";
 	ViewData["Level1"] = "Projects";
-	var breadcrumbs = new[] {
-		new { Title = "Project List", Url = "/ODMS/Project/Index", IsActive = false },
-		new { Title = "Edit Project", Url = "", IsActive = true },
-	};
+
 }
-<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<partial name="_PageHeaderPartial" />
 <form id="project-form" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="@Model.RemoveSubDetailId" />

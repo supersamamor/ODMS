@@ -772,15 +772,47 @@ li.breadcrumb-item.home {
     margin-top: -2px !important;
 }
 
-/* Footer */
+/* Footer - slim bar matching the page-header design language (white surface,
+   #e9ecf2 hairline, dense mono type). Left: copyright. Right: release chip,
+   support email, privacy link. */
 footer.sticky-footer {
-    padding: 2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
     flex-shrink: 0;
+    padding: .9rem 1.5rem .9rem 2.5rem;
+    border-top: 1px solid #e9ecf2;
+    font-family: var(--font-secondary);
+    font-size: 11px;
+    color: var(--text-muted);
 }
 
-    footer.sticky-footer .copyright {
-        line-height: 1;
-        font-size: .8rem;
+.app-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.app-footer-chip {
+    padding: .2rem .6rem;
+    border: 1px solid #e9ecf2;
+    border-radius: 999px;
+    background-color: #f4f5f7;
+    white-space: nowrap;
+}
+
+footer.sticky-footer .app-footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition-base);
+}
+
+    footer.sticky-footer .app-footer-link:hover {
+        color: var(--custom-primary);
+        text-decoration: underline;
     }
 
 /* ==================== COMPONENTS ==================== */
@@ -1534,7 +1566,8 @@ form.user .btn-user {
 }
 
 /* Dashboard global header/filter bar (title left, filter chips right) */
-.dashboard-header-bar {
+.dashboard-header-bar,
+.page-header-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1552,18 +1585,51 @@ form.user .btn-user {
     border-bottom: 1px solid #e9ecf2;
 }
 
-.dashboard-header-title h1 {
+.dashboard-header-title h1,
+.page-header-title h1 {
     margin: 0;
     font-size: 1.15rem;
     font-weight: 700;
     color: var(--text-color);
 }
 
-.dashboard-header-title p {
+.dashboard-header-title p,
+.page-header-title p {
     margin: .2rem 0 0;
     font-size: var(--font-size-dense);
     font-family: var(--font-secondary);
     color: var(--text-muted);
+}
+
+/* Compact breadcrumb trail on the right side of the page header bar
+   (replaces the old _BreadcrumbPartial toolbar on migrated pages). */
+.page-header-crumbs {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    font-family: var(--font-secondary);
+    font-size: var(--font-size-dense);
+    color: var(--text-muted);
+}
+
+.page-header-crumb-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition-base);
+}
+
+    .page-header-crumb-link:hover {
+        color: var(--custom-primary);
+    }
+
+.page-header-crumb-sep {
+    color: #cbd5e1;
+}
+
+.page-header-crumb-current {
+    color: var(--text-color);
+    font-weight: 600;
 }
 
 .dashboard-header-controls {

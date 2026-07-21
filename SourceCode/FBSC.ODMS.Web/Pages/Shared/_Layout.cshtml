@@ -35,6 +35,8 @@
                 </div>
             </div>
             <footer class="bg-white sticky-footer">
+                @* Hidden feature toggles - kept in the DOM because site.js binds
+                   to #themeSwitch unconditionally and would throw if removed. *@
                 <div id="themeSwitchContainer" class="float-right custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="themeSwitch">
                     <label class="custom-control-label" for="themeSwitch">Dark mode</label>
@@ -42,12 +44,13 @@
                 <div id="languangeSwitchContainer" class="float-right p-1 d-none d-sm-block">
                     @await Html.PartialAsync("_SelectLanguagePartial")
                 </div>
-                <div class="copyright-container">
-                    <div class="text-center my-auto copyright">
-                        <strong>Copyright &copy; @System.DateTime.Now.Year - @companyName - <a href="mailto:@customerSupportEmail">@customerSupportEmail</a></strong> All rights reserved.
-                        Release @release Build @build
-                        <a href="@privacyPolicyUrl" target="_blank">Privacy</a>
-                    </div>
+                <div class="app-footer-left">
+                    &copy; @System.DateTime.Now.Year @companyName &middot; All rights reserved.
+                </div>
+                <div class="app-footer-right">
+                    <span class="app-footer-chip">Release @release &middot; Build @build</span>
+                    <a class="app-footer-link" href="mailto:@customerSupportEmail">@customerSupportEmail</a>
+                    <a class="app-footer-link" href="@privacyPolicyUrl" target="_blank">Privacy</a>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>

@@ -5,12 +5,12 @@
     <partial name="_DataTableStyles" />
 }
 @{
-    ViewData["Title"] = Localizer["Project List"];
+    ViewData["Title"] = Localizer["Project Register"];
+    ViewData["PageSubtitle"] = Localizer["All projects across the portfolio"];
     ViewData["ActiveMainPage"] = "Projects";
     ViewData["Level1"] = "Projects";
-	IEnumerable<dynamic> breadCrumbs = [new { Title = "Project List", Url = "", IsActive = true }];
 }
-<partial name="_BreadcrumbPartial" model=@(breadCrumbs) />
+<partial name="_PageHeaderPartial"  />
 <div class="row">
     <div class="col-12">
         <div class="card">

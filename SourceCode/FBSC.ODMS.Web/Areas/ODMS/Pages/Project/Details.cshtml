@@ -4,12 +4,9 @@
     ViewData["Title"] = Localizer["View Project"];
     ViewData["ActiveMainPage"] = "Projects";
     ViewData["Level1"] = "Projects";
-	var breadcrumbs = new[] {
-		new { Title = "Project List", Url = "/ODMS/Project/Index", IsActive = false },
-		new { Title = "View Project", Url = "", IsActive = true },
-	};
+
 }
-<partial name="_BreadcrumbPartial" model=@(breadcrumbs) />
+<partial name="_PageHeaderPartial" />
 <div id="project-container">
     <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
     <input type="hidden" asp-for="@Model.AsyncAction" />
