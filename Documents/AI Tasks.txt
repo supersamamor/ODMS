@@ -1,3 +1,29 @@
+Act as a Senior Software Engineer. I need to implement a specific feature and fix a few validation bugs. The solution must be enterprise-grade, written in modern C#.
+
+Please generate the necessary backend logic, validation rules, and UI updates for the following requirements:
+
+1. File Upload Validation in Project Module
+
+Add explicit validation to the file upload component. If a user attempts to submit or perform an action that requires a file but no file is uploaded (no sow yet is unchecked), block the action and display a clear error message in the UI. Ensure this is also validated on the backend.
+
+2. Technology Business Partner (TBP) Assignment
+
+Update the BusinessUnit module to support assigning multiple Technology Business Partners to a single Business Unit.
+
+Implement the necessary UI components to manage this relationship. Back-end relationship already applied.
+
+3. Approver Setup Validation Bug
+
+Fix the existing duplicate validation logic in ApproverSetup\Add and Edit. Currently, it incorrectly throws a "tableName Project already exists" error even when the specific (TableName, DeliveryCategory) combination does not exist.
+
+Ensure the validation accurately checks against the composite key (both TableName and DeliveryCategory) before throwing the duplicate error.
+
+4. Team Member Validation Bug
+
+Fix the missing validation in the Team Members subcollection. Currently, no error message appears if the team member's rank\Level and role are submitted as null.
+
+Implement required field validation on both the frontend UI and the backend API to ensure team member records cannot be saved with null fields. Display standard error messages when validation fails.
+
 --------------------------------
 Phase 4: Workflows, Routing, & Extensibility
 Act as a Senior Software Engineer. I need to implement the new "My Projects" page, integrate the dynamic approval workflows, and prepare the codebase for future feature extensions.
@@ -34,15 +60,9 @@ Include a [+] button to add a new item and a [-] button to remove an item, seria
 
 
 
-4. Add error when no uploaded file (error message)
-
-5. Add TechnologyBusinessPartner assignment on BusinessUnit module (can asign multiple TechnologyBusinessPartner per BU)
-
-6. ApproverSetup with tableName Project already exists validation is appearing, even if there is still no record with that delivery category / tablename combination
-
 Delivery/Portfolio Lead has no approval yet
 
-No error message if team member fields are null
+
 
 
 
