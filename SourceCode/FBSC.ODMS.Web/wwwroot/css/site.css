@@ -438,9 +438,10 @@ select:disabled {
 
 /* ==================== LAYOUT ==================== */
 
-/* Content Wrapper */
+/* Content Wrapper - #f4f5f7 (not white) per the reference design, so the
+   white header bar and white widget/content cards read as distinct surfaces. */
 #wrapper #content-wrapper {
-    background: #fff;
+    background: #f4f5f7;
     margin-left: var(--sidebar-width-sm) !important;
     min-height: 100vh;
     display: flex;
@@ -1539,9 +1540,16 @@ form.user .btn-user {
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
+    /* Full-bleed sticky white bar per the reference design: the negative
+       margins cancel #content's padding (20px top/right, 40px left) so the
+       bar runs edge-to-edge; its own padding restores the visual inset. */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin: -20px -20px 1.5rem -40px;
+    padding: 1rem 1.5rem 1rem 2.5rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e9ecf2;
 }
 
 .dashboard-header-title h1 {
@@ -1571,9 +1579,10 @@ form.user .btn-user {
     gap: .45rem;
     margin: 0;
     padding: .45rem .75rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid #e9ecf2;
     border-radius: var(--border-radius-base);
-    background-color: var(--bg-light);
+    /* Page-background gray on the white header bar, per the reference. */
+    background-color: #f4f5f7;
     color: var(--text-muted);
     font-size: var(--font-size-dense);
     font-family: var(--font-secondary);
