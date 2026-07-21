@@ -4,7 +4,6 @@
 <div class="card">
     <div class="card-body">
         <input type="hidden" asp-for="@Model.Id" name="Id" />
-        <input type="hidden" asp-for="@Model.SOWFileName" />
         <partial name="_EditProjectDetails" model="Model" />
     </div>
 </div>
@@ -13,15 +12,44 @@
 <div class="card">
     <div class="card-body">
         <h6 class="form-section-title fieldrequired" id="sowSectionTitle">@Localizer["Statement of Work"]</h6>
-        <p class="sow-hint">@Localizer["Attach the required document"]</p>
+        <p class="sow-hint">@Localizer["Attach one or more documents"]</p>
         <div class="sow-dropzone" id="sowDropzone">
-            <input type="file" id="SOWForm" name="SOWForm" accept=".pdf,.docx,.jpg,.jpeg,.png,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg" class="sow-dropzone-input" />
+            <input type="file" id="SOWForms" name="SOWForms" multiple accept=".pdf,.docx,.jpg,.jpeg,.png,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/png,image/jpeg" class="sow-dropzone-input" />
             <span class="sow-dropzone-icon"><i class="fas fa-upload" aria-hidden="true"></i></span>
             <span class="sow-dropzone-text"><span class="sow-dropzone-link">@Localizer["Click to upload"]</span> @Localizer["or drag and drop"]</span>
             <span class="sow-dropzone-types">PDF, DOCX, JPG, PNG, XLSX</span>
-            <span class="sow-dropzone-filename" id="sowSelectedFile">@(string.IsNullOrEmpty(Model.SOWFileName) ? "" : System.IO.Path.GetFileName(Model.SOWFileName))</span>
+            <span class="sow-dropzone-filename" id="sowSelectedFile"></span>
         </div>
-        <span asp-validation-for="@Model.SOWForm" class="text-danger d-block mt-1"></span>
+        <span asp-validation-for="@Model.SOWForms" class="text-danger d-block mt-1"></span>
+
+        @* Already-uploaded files: clickable, secure, downloadable links. Each is
+           round-tripped as hidden fields so it survives async partial reloads and
+           is preserved (not deleted) when the project is saved. *@
+        <div class="sow-attachment-list" id="sowAttachmentList">
+            @if (Model?.ProjectAttachmentList != null)
+            {
+                int aCounter = 0;
+                foreach (var att in Model.ProjectAttachmentList)
+                {
+                    <div class="sow-attachment-row">
+                        <input type="hidden" name="ProjectAttachmentList[@aCounter].Id" value="@att.Id" />
+                        <input type="hidden" name="ProjectAttachmentList[@aCounter].ProjectId" value="@Model.Id" />
+                        <input type="hidden" name="ProjectAttachmentList[@aCounter].StoredFileName" value="@att.StoredFileName" />
+                        <input type="hidden" name="ProjectAttachmentList[@aCounter].OriginalFileName" value="@att.OriginalFileName" />
+                        <input type="hidden" name="ProjectAttachmentList[@aCounter].FileSize" value="@att.FileSize" />
+                        <input type="hidden" name="ProjectAttachmentList[@aCounter].ContentType" value="@att.ContentType" />
+                        <i class="fas fa-paperclip sow-attachment-icon" aria-hidden="true"></i>
+                        <a class="sow-attachment-link"
+                           href="@Url.Page("/ViewAttachment/Index", new { area = "ODMS", subFolder = FBSC.ODMS.Web.WebConstants.Project, id = Model.Id, fieldName = FBSC.ODMS.Web.WebConstants.ProjectSowField, fileName = att.StoredFileName })"
+                           download="@att.OriginalFileName" target="_blank" rel="noopener">@att.OriginalFileName</a>
+                        <button type="button" class="team-remove-btn cancel RemoveAttachmentButton" aria-label="@Localizer["Remove attachment"]" title="@Localizer["Remove attachment"]" removeId="@att.Id">&mdash;</button>
+                    </div>
+                    aCounter++;
+                }
+            }
+        </div>
+        <button class="cancel d-none" type="button" id="btnRemoveAttachment" value="RemoveAttachment"></button>
+
         <div class="form-check mt-2">
             <input class="form-check-input" type="checkbox" asp-for="@Model.NoSOW" />
             <label class="form-check-label" asp-for="@Model.NoSOW">@Localizer["No SOW yet"]</label>

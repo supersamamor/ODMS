@@ -52,10 +52,21 @@ public class EditModel : ProjectFormPageModel<EditModel>
 		{
 			return RemoveTeamMembers();
 		}
-		
-		
+		if (AsyncAction == "RemoveAttachment")
+		{
+			return RemoveAttachment();
+		}
+
+
         return Partial("_InputFieldsPartial", Project);
     }
+
+	private PartialViewResult RemoveAttachment()
+	{
+		ModelState.Clear();
+		Project.ProjectAttachmentList = [..(Project.ProjectAttachmentList ?? []).Where(l => l.Id != RemoveSubDetailId)];
+		return Partial("_InputFieldsPartial", Project);
+	}
 	
 	private PartialViewResult AddTeamMembers()
 	{

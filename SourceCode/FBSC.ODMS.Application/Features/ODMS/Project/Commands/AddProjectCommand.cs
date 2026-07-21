@@ -42,6 +42,7 @@ public class AddProjectCommandHandler(ApplicationContext context,
 
 		ProjectState entity = Mapper.Map<ProjectState>(request) with { ProjectCode = projectCode };
 		AddEntitySubCollection<ProjectState, TeamMembersState>(entity, nameof(request.TeamMembersList));
+		AddEntitySubCollection<ProjectState, ProjectAttachmentState>(entity, nameof(request.ProjectAttachmentList));
 		_ = await Context.AddAsync(entity, cancellationToken);
 		// Dynamic approval routing: resolve approvers for the project's Delivery Tower.
 		await ApprovalHelper.AddApprovers(Context, identityContext, ApprovalModule.Project, entity.Id, cancellationToken, entity.DeliveryCategory);

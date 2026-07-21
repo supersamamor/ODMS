@@ -121,6 +121,43 @@
     pointer-events: none;
 }
 
+/* Uploaded SOW files rendered as downloadable links */
+.sow-attachment-list {
+    margin-top: .75rem;
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+.sow-attachment-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .4rem .6rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--border-radius-sm, .375rem);
+}
+
+.sow-attachment-icon {
+    color: #64748b;
+    font-size: .85rem;
+    flex: 0 0 auto;
+}
+
+.sow-attachment-link {
+    flex: 1 1 auto;
+    color: #0f6b47;
+    font-family: var(--font-secondary);
+    font-size: var(--font-size-dense);
+    text-decoration: none;
+    word-break: break-all;
+}
+
+    .sow-attachment-link:hover {
+        text-decoration: underline;
+    }
+
 /* ==================== Team Assignment member grid (Project Add/Edit) ==================== */
 .team-grid {
     margin-top: .5rem;

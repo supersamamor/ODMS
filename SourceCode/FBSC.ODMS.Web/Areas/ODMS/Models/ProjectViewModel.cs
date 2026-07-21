@@ -52,10 +52,11 @@ public record ProjectViewModel : BaseViewModel
 	[Display(Name = "Status")]
 	[StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string? ActiveStatus { get; init; } = Core.Constants.ProjectActiveStatuses.Active;
+	// Multiple SOW/supporting files. SOWForms are the newly-selected uploads on
+	// this post; ProjectAttachmentList is the already-stored set (rendered as
+	// download links and round-tripped as hidden fields so they persist).
 	[Display(Name = "Statement of Work")]
-	public string? SOWFileName { get; init; }
-	[Display(Name = "Statement of Work")]
-	public IFormFile? SOWForm { get; init; }
+	public IList<IFormFile>? SOWForms { get; init; }
 	[Display(Name = "No SOW yet")]
 	public bool NoSOW { get; init; }
 
@@ -64,5 +65,6 @@ public record ProjectViewModel : BaseViewModel
 	public EmployeeViewModel? Employee { get; init; }
 
 	public IList<TeamMembersViewModel>? TeamMembersList { get; set; }
+	public IList<ProjectAttachmentViewModel>? ProjectAttachmentList { get; set; }
 
 }

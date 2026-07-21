@@ -48,6 +48,7 @@ public class ODMSProfile : Profile
         CreateMap<ProjectViewModel, EditProjectCommand>();
         CreateMap<ProjectState, ProjectViewModel>().ForPath(e => e.ReferenceFieldProjectManagerId, o => o.MapFrom(s => s.Employee!.Id)).ForPath(e => e.ReferenceFieldBusinessUnitId, o => o.MapFrom(s => s.BusinessUnit!.Name));
         CreateMap<ProjectViewModel, ProjectState>();
+        CreateMap<ProjectAttachmentState, ProjectAttachmentViewModel>().ReverseMap();
         CreateMap<TeamMembersViewModel, AddTeamMembersCommand>();
         CreateMap<TeamMembersViewModel, EditTeamMembersCommand>();
         CreateMap<TeamMembersState, TeamMembersViewModel>().ForPath(e => e.ProjectName, o => o.MapFrom(s => s.Project!.ProjectName));

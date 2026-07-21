@@ -39,6 +39,7 @@ public class EditProjectCommandHandler(ApplicationContext context,
 		var entity = await Context.Project.Where(l => l.Id == request.Id).SingleAsync(cancellationToken: cancellationToken);
 		Mapper.Map(request, entity);
 		await UpdateEntitySubCollectionAsync<ProjectState, TeamMembersState>(request.Id, nameof(TeamMembersState.ProjectId), nameof(request.TeamMembersList), entity, cancellationToken);
+		await UpdateEntitySubCollectionAsync<ProjectState, ProjectAttachmentState>(request.Id, nameof(ProjectAttachmentState.ProjectId), nameof(request.ProjectAttachmentList), entity, cancellationToken);
 		Context.Update(entity);
 		_ = await Context.SaveChangesAsync(cancellationToken);
 		return Success<Error, ProjectState>(entity);

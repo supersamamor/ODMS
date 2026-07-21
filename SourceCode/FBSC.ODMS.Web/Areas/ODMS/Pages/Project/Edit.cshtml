@@ -71,6 +71,12 @@
 				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#project-form', InitializeForm, true);
 			});
 
+			$('.RemoveAttachmentButton').on( 'click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveAttachment');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#project-form', InitializeForm, true);
+			});
+
 			$.fn.employeeSelect = function() {
 				this.filter("select").each(function() {
 					$(this).ajaxSelect({

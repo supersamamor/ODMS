@@ -14,6 +14,10 @@ namespace FBSC.ODMS.Web
 		public const string DataUpload = "DataUpload";
 		public const string DataSource = "DataSource";
 		public const string Project = "Project";
+		// Sub-folder (fieldName) under the project's secure-upload directory where
+		// Statement-of-Work attachments are stored: {module}/{projectId}/{ProjectSowField}/{file}.
+		// Also the fieldName used to build ViewAttachment download links.
+		public const string ProjectSowField = "SOW";
 
     }
 }

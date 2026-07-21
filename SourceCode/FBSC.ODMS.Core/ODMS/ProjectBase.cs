@@ -23,6 +23,7 @@ public abstract record ProjectBase : BaseEntity
     public string ProjectManagerId { get; init; } = "";
     public string? DeputyProjectManagerId { get; init; }
     public string? ActiveStatus { get; init; }
-    public string? SOWFileName { get; init; }
+    // Statement-of-Work documents are now multi-file: see ProjectAttachmentState.
+    // NoSOW records that a project legitimately has no SOW yet.
     public bool NoSOW { get; init; }
 }

@@ -6,12 +6,15 @@
 <script asp-add-nonce>
     window.initSowDropzone = function () {
         var zone = document.getElementById('sowDropzone');
-        var input = document.getElementById('SOWForm');
+        var input = document.getElementById('SOWForms');
         if (!zone || !input) { return; }
 
         function showSelectedFile() {
-            var name = input.files && input.files.length ? input.files[0].name : '';
-            document.getElementById('sowSelectedFile').textContent = name;
+            var names = [];
+            if (input.files && input.files.length) {
+                for (var i = 0; i < input.files.length; i++) { names.push(input.files[i].name); }
+            }
+            document.getElementById('sowSelectedFile').textContent = names.join(', ');
         }
 
         input.addEventListener('change', showSelectedFile);

@@ -16,6 +16,7 @@ public class GetProjectByIdQueryHandler(ApplicationContext context) : BaseQueryB
 	{
 		return await Context.Project.Include(l=>l.Employee).Include(l=>l.BusinessUnit)
 			.Include(l=>l.TeamMembersList)
+				.Include(l=>l.ProjectAttachmentList)
 			.Where(e => e.Id == request.Id).AsNoTracking().FirstOrDefaultAsync(cancellationToken);
 	}
 	

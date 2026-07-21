@@ -25,6 +25,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
     public DbSet<BusinessUnitState> BusinessUnit { get; set; } = default!;
     public DbSet<ProjectState> Project { get; set; } = default!;
     public DbSet<TeamMembersState> TeamMembers { get; set; } = default!;
+    public DbSet<ProjectAttachmentState> ProjectAttachment { get; set; } = default!;
     public DbSet<BusinessUnitTechnologyBusinessPartnerState> BusinessUnitTechnologyBusinessPartner { get; set; } = default!;
     public DbSet<EmployeeState> Employee { get; set; } = default!;
     public DbSet<StatusReportState> StatusReport { get; set; } = default!;
@@ -151,8 +152,10 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<ProjectState>().Property(e => e.Priority).HasMaxLength(50);
         modelBuilder.Entity<ProjectState>().Property(e => e.ProjectDescription).HasMaxLength(1000);
         modelBuilder.Entity<ProjectState>().Property(e => e.ActiveStatus).HasMaxLength(50);
-        modelBuilder.Entity<ProjectState>().Property(e => e.SOWFileName).HasMaxLength(450);
         modelBuilder.Entity<ProjectState>().HasIndex(e => e.ProjectCode).IsUnique();
+        modelBuilder.Entity<ProjectAttachmentState>().Property(e => e.StoredFileName).HasMaxLength(450);
+        modelBuilder.Entity<ProjectAttachmentState>().Property(e => e.OriginalFileName).HasMaxLength(450);
+        modelBuilder.Entity<ProjectAttachmentState>().Property(e => e.ContentType).HasMaxLength(255);
         modelBuilder.Entity<TeamMembersState>().Property(e => e.Role).HasMaxLength(100);
         modelBuilder.Entity<TeamMembersState>().Property(e => e.MemberLevel).HasMaxLength(50);
         modelBuilder.Entity<EmployeeState>().Property(e => e.Email).HasMaxLength(255);
@@ -164,6 +167,9 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<BusinessUnitState>().HasMany(t => t.ProjectList).WithOne(l => l.BusinessUnit).HasForeignKey(t => t.BusinessUnitId);
         modelBuilder.Entity<EmployeeState>().HasMany(t => t.ProjectList).WithOne(l => l.Employee).HasForeignKey(t => t.ProjectManagerId);
         modelBuilder.Entity<ProjectState>().HasMany(t => t.TeamMembersList).WithOne(l => l.Project).HasForeignKey(t => t.ProjectId);
+        // A project's SOW/supporting files - same relationship shape (and global
+        // Restrict delete convention) as the other Project child collections.
+        modelBuilder.Entity<ProjectState>().HasMany(t => t.ProjectAttachmentList).WithOne(l => l.Project).HasForeignKey(t => t.ProjectId);
         // Additional Employee references (deputy PM, technology business partner,
         // team-member employee). NoAction avoids SQL Server's multiple-cascade-path
         // restriction - the PM FK above already owns the cascade from Employee.
