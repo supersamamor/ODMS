@@ -1,9 +1,11 @@
+/* Aligned to the app-wide table design in site.css (light gray mono header) -
+   this id selector outranks the class-based rules there, so it must carry the
+   same colors itself. */
 #ipi-table > thead > tr, #ipi-table > thead > tr > td {
   font-size: .9em;
-  font-weight: 400;
-  background: #51596a;
-  text-transform: uppercase;
-  color: #ffffff;
+  font-weight: 500;
+  background: #f8f9fb;
+  color: #6b7280;
 }
 
 #ipi-table > tbody > tr > td {

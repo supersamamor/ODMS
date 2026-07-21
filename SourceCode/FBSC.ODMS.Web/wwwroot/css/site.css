@@ -902,24 +902,20 @@ footer.sticky-footer .app-footer-link {
     }
 
 /* Tables */
+/* Static table design per the reference (independent of theme): light gray
+   mono header, hairline separators, no vertical borders, no zebra striping. */
 .fills-table th,
 table th {
-    background-color: var(--table-header-bg, var(--custom-primary)) !important;
-    color: var(--table-header-text, #ffffff) !important;
-    border-bottom: 2px solid #ccc;
+    background-color: #f8f9fb !important;
+    color: #6b7280 !important;
+    border-bottom: 1px solid #e9ecf2;
+    padding: .8rem .75rem;
+    font-family: var(--font-secondary);
+    font-size: var(--font-size-dense);
     font-weight: 500;
+    letter-spacing: .02em;
+    white-space: nowrap;
 }
-
-    body.theme-onetech .fills-table th,
-    body.theme-onetech table th,
-    body.theme-deepslate .fills-table th,
-    body.theme-deepslate table th {
-        font-family: var(--font-secondary);
-        font-size: .7rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: .05em;
-    }
 
 .fills-table.auditlogs {
     width: 100%;
@@ -927,10 +923,27 @@ table th {
 }
 
 table tbody td {
-    border-bottom: 1px solid #e0e0e0;
-    color: black !important;
-    font-weight: 100 !important;
+    border-bottom: 1px solid #eef1f6;
+    color: #1e293b !important;
+    font-weight: 400 !important;
     vertical-align: middle;
+    padding: .85rem .75rem;
+}
+
+/* Neutralize Bootstrap's vertical borders and zebra striping on listing
+   tables - the reference design uses hairline row separators only. Kept as
+   CSS overrides so the table-bordered/table-striped classes sprinkled across
+   every listing page don't need markup edits. */
+.fills-table.table-bordered > :not(caption) > *,
+.fills-table.table-bordered > :not(caption) > * > * {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+}
+
+.fills-table.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: transparent;
+    background-color: transparent;
 }
 
 .fills-table tbody tr:hover,
