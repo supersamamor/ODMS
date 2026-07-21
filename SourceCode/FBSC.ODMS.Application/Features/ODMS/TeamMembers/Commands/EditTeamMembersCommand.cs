@@ -35,6 +35,10 @@ public class EditTeamMembersCommandValidator : AbstractValidator<EditTeamMembers
         _context = context;
 		RuleFor(x => x.Id).MustAsync(async (id, cancellation) => await _context.Exists<TeamMembersState>(x => x.Id == id, cancellationToken: cancellation))
                           .WithMessage("TeamMembers with id {PropertyValue} does not exists");
-        
+        // Level and Role are mandatory - nulls must not slip through the direct
+        // command path (Employee may legitimately be null = "(Unknown)").
+        RuleFor(x => x.MemberLevel).NotEmpty().WithMessage("'Level' is required.");
+        RuleFor(x => x.Role).NotEmpty().WithMessage("'Role' is required.");
+
     }
 }

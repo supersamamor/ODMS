@@ -1,0 +1,392 @@
+@page
+@using FBSC.ODMS.Core.Constants
+@model AddModel
+@{
+    ViewData["Title"] = Localizer["Create Report"];
+    ViewData["ActiveMainPage"] = "MyProjects";
+    ViewData["Level1"] = "Projects";
+}
+@* Header: back navigation + Import Last Report / Cancel / Submit actions. *@
+<div class="page-header-bar">
+    <nav class="page-header-backnav" aria-label="@Localizer["Back navigation"]">
+        <a href="#" id="btnBackNav" class="page-header-back">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            @Localizer["My Projects"]
+        </a>
+        <span class="page-header-crumb-sep" aria-hidden="true">/</span>
+        <span class="page-header-crumb-current">@Localizer["Weekly Status Report"]</span>
+        <span class="page-header-crumb-sep" aria-hidden="true">/</span>
+        <span class="page-header-crumb-current">@Localizer["Create Report"]</span>
+    </nav>
+    <div class="page-header-form-actions">
+        <a href="@Url.Page("Add", new { projectId = Model.StatusReport.ProjectId, importLast = true })" id="btnImportLast" class="btn-header-cancel"><i class="fas fa-sync-alt" aria-hidden="true"></i>&nbsp;@Localizer["Import Last Report"]</a>
+        <a href="@Url.Page("/MyProjects/Index")" id="btnCancelConfirmationModal" class="btn-header-cancel">@Localizer["Cancel"]</a>
+        <button type="button" id="btnConfirmationModal" class="page-header-action-btn">@Localizer["Submit Report"]</button>
+    </div>
+</div>
+
+<form id="statusReport-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.StatusReport.Id" name="StatusReport.Id" />
+    <input type="hidden" asp-for="@Model.StatusReport.ProjectId" name="StatusReport.ProjectId" />
+    <input type="hidden" asp-for="@Model.StatusReport.BaselineBudget" name="StatusReport.BaselineBudget" />
+
+    @* ==================== Report Information ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Report Information"]</h6>
+            <p class="sow-hint">@Localizer["Basic details for this weekly status report"]</p>
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label fieldrequired"><strong>@Localizer["Project"] :</strong></label>
+                        <input asp-for="@Model.StatusReport.ProjectName" name="StatusReport.ProjectName" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>@Localizer["BU"] :</strong></label>
+                        <input asp-for="@Model.StatusReport.BusinessUnitName" name="StatusReport.BusinessUnitName" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>@Localizer["Project Manager"] :</strong></label>
+                        <input asp-for="@Model.StatusReport.ProjectManagerName" name="StatusReport.ProjectManagerName" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="@Model.StatusReport.SelectedWeekNumber" class="form-label fieldrequired"><strong>@Localizer["Reporting Week"] :</strong></label>
+                        <select asp-for="@Model.StatusReport.SelectedWeekNumber" name="StatusReport.SelectedWeekNumber" class="form-control" asp-items="@(dropdownService.GetWorkWeekList())">
+                            <option value="">@Localizer["Select the week this report covers"]</option>
+                        </select>
+                        <span asp-validation-for="@Model.StatusReport.SelectedWeekNumber" class="text-danger d-block mt-1"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="@Model.StatusReport.SubmissionDate" class="form-label"><strong>@Localizer["Submission Date"] :</strong></label>
+                        <input asp-for="@Model.StatusReport.SubmissionDate" name="StatusReport.SubmissionDate" class="form-control" type="date" readonly />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Overall Health ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Overall Health"]</h6>
+            <p class="sow-hint">@Localizer["RAG status for this reporting period"]</p>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="@Model.StatusReport.OverallHealth" class="form-label fieldrequired"><strong>@Localizer["This Week's Health"] :</strong></label>
+                        <select asp-for="@Model.StatusReport.OverallHealth" name="StatusReport.OverallHealth" class="form-control sr-rag-select" required data-val="true" data-val-required="@Localizer["This week's health is required."]" asp-items="@(dropdownService.HealthStatusList())">
+                            <option value="">@Localizer["Select the current overall RAG status"]</option>
+                        </select>
+                        <span asp-validation-for="@Model.StatusReport.OverallHealth" class="text-danger d-block mt-1"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>@Localizer["Prior Week's Health"] :</strong> <span class="sr-auto-tag">(@Localizer["auto"])</span></label>
+                        <input asp-for="@Model.StatusReport.PriorWeekHealth" name="StatusReport.PriorWeekHealth" class="form-control" readonly placeholder="@Localizer["Automatically populated from the previous week's report"]" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Accomplishments & Next Steps (dynamic [+]/[-] string lists -> JSON columns) ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Accomplishments & Next Steps"]</h6>
+            <p class="sow-hint">@Localizer["This week's achievements and planned actions"]</p>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label class="form-label fieldrequired"><strong>@Localizer["Accomplishments This Week"] :</strong></label>
+                    <div class="sr-dyn-list" id="accomplishmentList" data-prefix="StatusReport.Accomplishments">
+                        @if (Model.StatusReport.Accomplishments != null)
+                        {
+                            for (var i = 0; i < Model.StatusReport.Accomplishments.Count; i++)
+                            {
+                                <div class="sr-dyn-row">
+                                    <input type="text" name="StatusReport.Accomplishments[@i]" value="@Model.StatusReport.Accomplishments[i]" class="form-control" maxlength="500" placeholder="@Localizer["Key deliverable completed or milestone reached"]" />
+                                    <button type="button" class="team-remove-btn sr-remove-item" aria-label="@Localizer["Remove item"]" title="@Localizer["Remove item"]">&mdash;</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <a class="team-add-link sr-add-item" data-target="accomplishmentList"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;@Localizer["Add Accomplishment"]</a>
+                    <span class="sow-hint d-block">@Localizer["Key deliverables completed or milestones reached"]</span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label fieldrequired"><strong>@Localizer["Next Steps"] :</strong></label>
+                    <div class="sr-dyn-list" id="nextStepList" data-prefix="StatusReport.NextSteps">
+                        @if (Model.StatusReport.NextSteps != null)
+                        {
+                            for (var i = 0; i < Model.StatusReport.NextSteps.Count; i++)
+                            {
+                                <div class="sr-dyn-row">
+                                    <input type="text" name="StatusReport.NextSteps[@i]" value="@Model.StatusReport.NextSteps[i]" class="form-control" maxlength="500" placeholder="@Localizer["Planned action for the coming week"]" />
+                                    <button type="button" class="team-remove-btn sr-remove-item" aria-label="@Localizer["Remove item"]" title="@Localizer["Remove item"]">&mdash;</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <a class="team-add-link sr-add-item" data-target="nextStepList"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;@Localizer["Add Next Step"]</a>
+                    <span class="sow-hint d-block">@Localizer["Planned actions for the coming week"]</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Health Indicators (six fixed RAG dimensions) ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Health Indicators"]</h6>
+            <p class="sow-hint">@Localizer["RAG status and commentary per delivery dimension"]</p>
+            @if (Model.StatusReport.StatusReportHealthIndicatorList != null)
+            {
+                int hi = 0;
+                foreach (var indicator in Model.StatusReport.StatusReportHealthIndicatorList)
+                {
+                    <div class="sr-health-row">
+                        <input type="hidden" name="StatusReport.StatusReportHealthIndicatorList[@hi].Area" value="@indicator.Area" />
+                        <label class="sr-health-label">@Localizer[indicator.Area]</label>
+                        <select id="StatusReport_HealthStatus_@hi" name="StatusReport.StatusReportHealthIndicatorList[@hi].Status" class="form-control sr-rag-select" asp-items="@(new SelectList(dropdownService.HealthStatusList(), "Value", "Text", indicator.Status))"></select>
+                        <input type="text" id="StatusReport_HealthComment_@hi" name="StatusReport.StatusReportHealthIndicatorList[@hi].Comment" value="@indicator.Comment" class="form-control" maxlength="500" placeholder="@Localizer[$"Describe {indicator.Area.ToLowerInvariant()} status..."]" />
+                    </div>
+                    hi++;
+                }
+            }
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Budget & Schedule ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Budget & Schedule"]</h6>
+            <p class="sow-hint">@Localizer["Financial and timeline data for this period"]</p>
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>@Localizer["Baseline Budget"] :</strong></label>
+                        <input type="text" class="form-control" value="@(Model.StatusReport.BaselineBudget?.ToString("N2"))" readonly />
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="mb-3">
+                        <label asp-for="@Model.StatusReport.ActualSpend" class="form-label"><strong>@Localizer["Actual Spend to Date"] :</strong></label>
+                        <input asp-for="@Model.StatusReport.ActualSpend" name="StatusReport.ActualSpend" class="form-control" type="number" step="0.01" min="0" />
+                        <span class="sow-hint">@Localizer["e.g. 2100000.00"]</span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="mb-3">
+                        <label asp-for="@Model.StatusReport.ScheduleVarianceWeeks" class="form-label"><strong>@Localizer["Schedule Variance (weeks)"] :</strong></label>
+                        <input asp-for="@Model.StatusReport.ScheduleVarianceWeeks" name="StatusReport.ScheduleVarianceWeeks" class="form-control" type="number" step="1" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Milestone Tracking (dynamic rows) ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Milestone Tracking"]</h6>
+            <p class="sow-hint">@Localizer["Update progress on key project milestones"]</p>
+            <div class="sr-milestone-grid-header">
+                <span>@Localizer["Milestone"]</span>
+                <span>@Localizer["Start Date"]</span>
+                <span>@Localizer["Target End"]</span>
+                <span>@Localizer["Status"]</span>
+                <span></span>
+            </div>
+            <div class="sr-dyn-list" id="milestoneList" data-prefix="StatusReport.StatusReportMilestoneList">
+                @if (Model.StatusReport.StatusReportMilestoneList != null)
+                {
+                    int mi = 0;
+                    foreach (var m in Model.StatusReport.StatusReportMilestoneList)
+                    {
+                        <div class="sr-dyn-row sr-milestone-row">
+                            <input type="text" name="StatusReport.StatusReportMilestoneList[@mi].Name" value="@m.Name" class="form-control" maxlength="255" required placeholder="@Localizer["Milestone name"]" />
+                            <input type="date" name="StatusReport.StatusReportMilestoneList[@mi].StartDate" value="@m.StartDate.ToString("yyyy-MM-dd")" class="form-control" />
+                            <input type="date" name="StatusReport.StatusReportMilestoneList[@mi].TargetEndDate" value="@m.TargetEndDate.ToString("yyyy-MM-dd")" class="form-control" />
+                            <select name="StatusReport.StatusReportMilestoneList[@mi].Status" class="form-control sr-milestone-status" required asp-items="@(new SelectList(dropdownService.StatusReportMilestoneStatusList(), "Value", "Text", m.Status))"></select>
+                            <button type="button" class="team-remove-btn sr-remove-item" aria-label="@Localizer["Remove milestone"]" title="@Localizer["Remove milestone"]">&mdash;</button>
+                        </div>
+                        mi++;
+                    }
+                }
+            </div>
+            <a class="team-add-link sr-add-item" data-target="milestoneList"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;@Localizer["Add Milestone"]</a>
+        </div>
+    </div>
+
+    <br />
+    @* ==================== Risks & Issues Register (dynamic rows) ==================== *@
+    <div class="card">
+        <div class="card-body">
+            <h6 class="form-section-title">@Localizer["Risks & Issues Register"]</h6>
+            <p class="sow-hint">@Localizer["Track, update, and log new risks and issues for this reporting period"]</p>
+            <div class="sr-risk-scroll">
+                <div class="sr-risk-grid-header">
+                    <span>@Localizer["ID"]</span>
+                    <span>@Localizer["Type"]</span>
+                    <span>@Localizer["Title"]</span>
+                    <span>@Localizer["Severity"]</span>
+                    <span>@Localizer["Status"]</span>
+                    <span>@Localizer["Owner"]</span>
+                    <span>@Localizer["Date Raised"]</span>
+                    <span>@Localizer["Notes / Mitigation"]</span>
+                    <span></span>
+                </div>
+                <div class="sr-dyn-list" id="riskIssueList" data-prefix="StatusReport.StatusReportRiskIssueList">
+                    @if (Model.StatusReport.StatusReportRiskIssueList != null)
+                    {
+                        int ri = 0;
+                        foreach (var r in Model.StatusReport.StatusReportRiskIssueList)
+                        {
+                            <div class="sr-dyn-row sr-risk-row">
+                                <input type="text" name="StatusReport.StatusReportRiskIssueList[@ri].Code" value="@r.Code" class="form-control sr-risk-code" readonly tabindex="-1" />
+                                <select name="StatusReport.StatusReportRiskIssueList[@ri].Type" class="form-control sr-risk-type" required asp-items="@(new SelectList(dropdownService.RiskIssueTypeList(), "Value", "Text", r.Type))"></select>
+                                <input type="text" name="StatusReport.StatusReportRiskIssueList[@ri].Title" value="@r.Title" class="form-control" maxlength="255" required placeholder="@Localizer["Title"]" />
+                                <select name="StatusReport.StatusReportRiskIssueList[@ri].Severity" class="form-control" required asp-items="@(new SelectList(dropdownService.RiskIssueSeverityList(), "Value", "Text", r.Severity))"></select>
+                                <select name="StatusReport.StatusReportRiskIssueList[@ri].Status" class="form-control" required asp-items="@(new SelectList(dropdownService.RiskIssueStatusList(), "Value", "Text", r.Status))"></select>
+                                <select id="StatusReport_RiskOwner_@ri" name="StatusReport.StatusReportRiskIssueList[@ri].OwnerId" class="form-control SrOwnerSelect" required asp-items="@(dropdownService.GetEmployeeList(r.OwnerId))"><option value="">@Localizer["Select owner"]</option></select>
+                                <input type="date" name="StatusReport.StatusReportRiskIssueList[@ri].DateRaised" value="@r.DateRaised.ToString("yyyy-MM-dd")" class="form-control" />
+                                <input type="text" name="StatusReport.StatusReportRiskIssueList[@ri].Notes" value="@r.Notes" class="form-control" maxlength="1000" placeholder="@Localizer["Notes / mitigation"]" />
+                                <button type="button" class="team-remove-btn sr-remove-item" aria-label="@Localizer["Remove item"]" title="@Localizer["Remove item"]">&mdash;</button>
+                            </div>
+                            ri++;
+                        }
+                    }
+                </div>
+            </div>
+            <a class="team-add-link sr-add-item" data-target="riskIssueList"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;@Localizer["Add Item"]</a>
+        </div>
+    </div>
+</form>
+
+@* Row templates for the dynamic list components. __IDX__ is replaced with the
+   next index on add; renumbering keeps indexes contiguous for model binding. *@
+<template id="tmpl-accomplishmentList">
+    <div class="sr-dyn-row">
+        <input type="text" name="StatusReport.Accomplishments[__IDX__]" class="form-control" maxlength="500" placeholder="@Localizer["Key deliverable completed or milestone reached"]" />
+        <button type="button" class="team-remove-btn sr-remove-item" aria-label="@Localizer["Remove item"]" title="@Localizer["Remove item"]">&mdash;</button>
+    </div>
+</template>
+<template id="tmpl-nextStepList">
+    <div class="sr-dyn-row">
+        <input type="text" name="StatusReport.NextSteps[__IDX__]" class="form-control" maxlength="500" placeholder="@Localizer["Planned action for the coming week"]" />
+        <button type="button" class="team-remove-btn sr-remove-item" aria-label="@Localizer["Remove item"]" title="@Localizer["Remove item"]">&mdash;</button>
+    </div>
+</template>
+<template id="tmpl-milestoneList">
+    <div class="sr-dyn-row sr-milestone-row">
+        <input type="text" name="StatusReport.StatusReportMilestoneList[__IDX__].Name" class="form-control" maxlength="255" required placeholder="@Localizer["Milestone name"]" />
+        <input type="date" name="StatusReport.StatusReportMilestoneList[__IDX__].StartDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+        <input type="date" name="StatusReport.StatusReportMilestoneList[__IDX__].TargetEndDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+        <select name="StatusReport.StatusReportMilestoneList[__IDX__].Status" class="form-control sr-milestone-status" required asp-items="@(dropdownService.StatusReportMilestoneStatusList())"></select>
+        <button type="button" class="team-remove-btn sr-remove-item" aria-label="@Localizer["Remove milestone"]" title="@Localizer["Remove milestone"]">&mdash;</button>
+    </div>
+</template>
+<template id="tmpl-riskIssueList">
+    <div class="sr-dyn-row sr-risk-row">
+        <input type="text" name="StatusReport.StatusReportRiskIssueList[__IDX__].Code" class="form-control sr-risk-code" readonly tabindex="-1" />
+        <select name="StatusReport.StatusReportRiskIssueList[__IDX__].Type" class="form-control sr-risk-type" required asp-items="@(dropdownService.RiskIssueTypeList())"></select>
+        <input type="text" name="StatusReport.StatusReportRiskIssueList[__IDX__].Title" class="form-control" maxlength="255" required placeholder="@Localizer["Title"]" />
+        <select name="StatusReport.StatusReportRiskIssueList[__IDX__].Severity" class="form-control" required asp-items="@(dropdownService.RiskIssueSeverityList())"></select>
+        <select name="StatusReport.StatusReportRiskIssueList[__IDX__].Status" class="form-control" required asp-items="@(dropdownService.RiskIssueStatusList())"></select>
+        <select name="StatusReport.StatusReportRiskIssueList[__IDX__].OwnerId" class="form-control SrOwnerSelect" required><option value="">@Localizer["Select owner"]</option></select>
+        <input type="date" name="StatusReport.StatusReportRiskIssueList[__IDX__].DateRaised" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+        <input type="text" name="StatusReport.StatusReportRiskIssueList[__IDX__].Notes" class="form-control" maxlength="1000" placeholder="@Localizer["Notes / mitigation"]" />
+        <button type="button" class="team-remove-btn sr-remove-item" aria-label="@Localizer["Remove item"]" title="@Localizer["Remove item"]">&mdash;</button>
+    </div>
+</template>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+
+<script asp-add-nonce>
+    $(document).ready(function () {
+        $.bindSaveConfirmationModal('Submit', '#btnConfirmationModal', '#statusReport-form');
+        $.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal', '#statusReport-form', 'Do you want to cancel the changes?');
+        $('#btnBackNav').on('click', function (e) {
+            e.preventDefault();
+            $('#btnCancelConfirmationModal')[0].click();
+        });
+
+        var ownerSelectUrl = '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2EmployeeData" })';
+        function initOwnerSelect($scope) {
+            $scope.find('.SrOwnerSelect').filter('select').each(function (i) {
+                if ($(this).hasClass('select2-hidden-accessible')) { return; }
+                if (!this.id) { this.id = 'SrOwner_' + Date.now() + '_' + i; }
+                $(this).ajaxSelect({ ajax: { url: ownerSelectUrl } });
+            });
+        }
+
+        @* RAG selects get a colour class matching their value (design parity). *@
+        function paintRag(el) {
+            var v = ($(el).val() || '').toLowerCase();
+            $(el).removeClass('rag-red rag-amber rag-green').addClass(v ? 'rag-' + v : '');
+        }
+        $(document).on('change', '.sr-rag-select', function () { paintRag(this); });
+        $('.sr-rag-select').each(function () { paintRag(this); });
+
+        @* Sequential display codes for the risk register: R-001/I-001 per type. *@
+        function renumberRiskCodes() {
+            var counters = {};
+            $('#riskIssueList .sr-risk-row').each(function () {
+                var type = $(this).find('.sr-risk-type').val() || 'Risk';
+                var prefix = type === 'Issue' ? 'I' : 'R';
+                counters[prefix] = (counters[prefix] || 0) + 1;
+                $(this).find('.sr-risk-code').val(prefix + '-' + String(counters[prefix]).padStart(3, '0'));
+            });
+        }
+        $(document).on('change', '.sr-risk-type', renumberRiskCodes);
+
+        @* Dynamic list component: [+] appends the list's template row; [-] removes
+           its row. Renumbering keeps [i] indexes contiguous so ASP.NET model
+           binding reconstructs the lists exactly. *@
+        function renumberList($list) {
+            var prefix = $list.data('prefix');
+            var pattern = new RegExp(prefix.replace(/[.[\]]/g, '\\$&') + '\\[\\d+\\]');
+            $list.children('.sr-dyn-row').each(function (i) {
+                $(this).find('[name]').each(function () {
+                    this.name = this.name.replace(pattern, prefix + '[' + i + ']');
+                });
+            });
+        }
+        $('.sr-add-item').on('click', function () {
+            var listId = $(this).data('target');
+            var $list = $('#' + listId);
+            var html = $('#tmpl-' + listId).html().replace(/__IDX__/g, $list.children('.sr-dyn-row').length);
+            var $row = $(html);
+            $list.append($row);
+            initOwnerSelect($row);
+            $row.find('.sr-rag-select').each(function () { paintRag(this); });
+            if (listId === 'riskIssueList') { renumberRiskCodes(); }
+            $row.find('input[type="text"]').first().trigger('focus');
+        });
+        $(document).on('click', '.sr-remove-item', function () {
+            var $list = $(this).closest('.sr-dyn-list');
+            $(this).closest('.sr-dyn-row').remove();
+            renumberList($list);
+            if ($list.attr('id') === 'riskIssueList') { renumberRiskCodes(); }
+        });
+
+        initOwnerSelect($('#riskIssueList'));
+        renumberRiskCodes();
+    });
+</script>
+}

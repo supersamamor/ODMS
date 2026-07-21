@@ -1,0 +1,110 @@
+@page
+@model IndexModel
+
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+@{
+    ViewData["Title"] = Localizer["My Projects"];
+    ViewData["PageSubtitle"] = Localizer["Projects you report status for"];
+    ViewData["ActiveMainPage"] = "MyProjects";
+    ViewData["Level1"] = "Projects";
+}
+<partial name="_PageHeaderPartial" />
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="myProjects" class="table table-hover table-bordered table-striped responsive nowrap fills-table" width="100%">
+                    <thead>
+                        <tr>
+                            <th>@Localizer["ID"]</th>
+                            <th>@Localizer["Project"]</th>
+                            <th>@Localizer["Delivery Category"]</th>
+                            <th>@Localizer["BU"]</th>
+                            <th>@Localizer["Project Manager"]</th>
+                            <th>@Localizer["Priority"]</th>
+                            <th>@Localizer["Status"]</th>
+                            <th>@Localizer["Start Date"]</th>
+                            <th>@Localizer["End Date"]</th>
+                            <th>@Localizer["Budget"]</th>
+                            <th>@Localizer["Actions"]</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_DataTableScripts" />
+    <script asp-add-nonce>
+        $(document).ready(function () {
+            var table = $('#myProjects').DataTable({
+                select: false,
+                serverSide: true,
+                responsive: true,
+                order: [[11, 'desc']],
+                dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DataTableDOMLayOut)',
+                ajax:
+                {
+                    url: '@Url.Page("/MyProjects/Index", new { area = "ODMS", handler = "ListAll" })',
+                    type: "POST",
+                    headers: {
+                        RequestVerificationToken:
+                            $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                },
+                columns: [
+                    { data: "projectCode", name: "ProjectCode", responsivePriority: 1, title: '@Localizer["ID"]', searchable: true, className: "text-start" },
+                    { data: "projectName", name: "ProjectName", responsivePriority: 1, title: '@Localizer["Project"]', searchable: true, className: "text-start" },
+                    { data: "deliveryCategory", name: "DeliveryCategory", responsivePriority: 2, title: '@Localizer["Delivery Category"]', searchable: true, className: "text-start" },
+                    { data: "businessUnitId", name: "BusinessUnitId", responsivePriority: 1, title: '@Localizer["BU"]', searchable: false, className: "text-start" },
+                    { data: "projectManagerId", name: "ProjectManagerId", responsivePriority: 2, title: '@Localizer["Project Manager"]', searchable: false, className: "text-start" },
+                    { data: "priority", name: "Priority", responsivePriority: 1, title: '@Localizer["Priority"]', searchable: true, className: "text-start" },
+                    { data: "activeStatus", name: "ActiveStatus", responsivePriority: 2, title: '@Localizer["Status"]', searchable: false, className: "text-start" },
+                    { data: "baselineStartDateFormatted", name: "BaselineStartDate", responsivePriority: 2, title: '@Localizer["Start Date"]', searchable: false, className: "fills-text-center" },
+                    { data: "baselineEndDateFormatted", name: "BaselineEndDate", responsivePriority: 2, title: '@Localizer["End Date"]', searchable: false, className: "fills-text-center" },
+                    { data: "approvedBudgetFormatted", name: "ApprovedBudget", responsivePriority: 2, title: '@Localizer["Budget"]', searchable: false, className: "fills-text-end" },
+                    {
+                        data: null,
+                        searchable: false,
+                        orderable: false,
+                        responsivePriority: 1,
+                        width: "8%",
+                        className: "fills-text-center",
+                        render: function (data, type, row, meta) {
+                            var button = '';
+                        @* Create Status Report - only with the Project Status Report / Add permission. *@
+                        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ProjectStatusReport.Create)).Succeeded)
+                        {
+                            <text>
+                                var url = '@Url.Page("/StatusReport/Add", new { area = "ODMS" })' + '?projectId=' + row.id;
+                                button = '<a href="' + url + '" class="btn btnFills btn-outline-success btnCreateStatusReport" aria-label="@Localizer["Create Status Report"]" title="@Localizer["Create Status Report"]"><i class="fas fa-file-medical"></i></a>';
+                            </text>
+                        }
+                            return button;
+                        },
+                    },
+                    { data: "lastModifiedDate", name: "LastModifiedDate", title: '@Localizer["Last Modified Date"]', visible: false, searchable: false },
+                    { data: "id", name: "Id", visible: false },
+                ],
+                buttons: [
+                    {
+                        extend: 'pageLength',
+                        className: 'btn btn-primary',
+                        titleAttr: '@Localizer["Rows per page"]'
+                    }
+                ],
+            });
+            var debounce = new $.fn.dataTable.Debounce(table);
+
+            $('.btn-table_filter').on('click', function (e) {
+                table.ajax.reload(null, false);
+            });
+            $.showAjaxLoaderOnClick([".btnCreateStatusReport"]);
+            $.InitializeSearchKeyCookies(table);
+        });
+    </script>
+}

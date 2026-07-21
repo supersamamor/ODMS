@@ -409,3 +409,129 @@ input[type="file"].file-upload-control {
         background-color: var(--custom-primary);
         color: #ffffff;
     }
+
+/* ==================== Weekly Status Report (StatusReport/Add) ==================== */
+.sr-auto-tag {
+    font-size: .7rem;
+    color: #94a3b8;
+    font-family: var(--font-secondary);
+}
+
+.sr-dyn-list {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+}
+
+.sr-dyn-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+    .sr-dyn-row .form-control {
+        flex: 1 1 auto;
+    }
+
+/* Health indicators: fixed six-dimension rows (label | RAG | commentary) */
+.sr-health-row {
+    display: grid;
+    grid-template-columns: 7rem 11rem minmax(0, 1fr);
+    gap: .75rem;
+    align-items: center;
+    padding: .35rem 0;
+}
+
+.sr-health-label {
+    font-weight: 600;
+    font-size: var(--font-size-dense);
+    color: #334155;
+    margin-bottom: 0;
+}
+
+/* RAG select colouring (mirrors the design's red/amber/green pills) */
+.sr-rag-select.rag-red {
+    background-color: #fdecec;
+    color: #b91c1c;
+    border-color: #f5c2c2;
+}
+
+.sr-rag-select.rag-amber {
+    background-color: #fdf6e3;
+    color: #b45309;
+    border-color: #f2dfae;
+}
+
+.sr-rag-select.rag-green {
+    background-color: #e8f8ef;
+    color: #15803d;
+    border-color: #bfe8cf;
+}
+
+/* Milestone tracking rows: name | start | end | status | remove */
+.sr-milestone-grid-header,
+.sr-milestone-row {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) minmax(0, 2fr) minmax(0, 2fr) 2.5rem;
+    gap: .75rem;
+    align-items: center;
+}
+
+.sr-milestone-grid-header {
+    padding: .35rem 0;
+    font-family: var(--font-secondary);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #64748b;
+}
+
+/* Risks & issues register: wide grid inside its own horizontal scroll area */
+.sr-risk-scroll {
+    overflow-x: auto;
+}
+
+.sr-risk-grid-header,
+.sr-risk-row {
+    display: grid;
+    grid-template-columns: 5rem 6.5rem minmax(11rem, 3fr) 6.5rem 7.5rem minmax(10rem, 2fr) 8.5rem minmax(11rem, 3fr) 2.5rem;
+    gap: .6rem;
+    align-items: center;
+    min-width: 70rem;
+}
+
+.sr-risk-grid-header {
+    padding: .35rem 0;
+    font-family: var(--font-secondary);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #64748b;
+}
+
+.sr-risk-code {
+    background: #f8fafc;
+    font-family: var(--font-secondary);
+    font-size: var(--font-size-dense);
+}
+
+@media (max-width: 767.98px) {
+    .sr-health-row {
+        grid-template-columns: 1fr;
+        gap: .35rem;
+        border-bottom: 1px solid #eef1f6;
+        padding: .6rem 0;
+    }
+
+    .sr-milestone-grid-header {
+        display: none;
+    }
+
+    .sr-milestone-row {
+        grid-template-columns: 1fr;
+        border-bottom: 1px solid #eef1f6;
+        padding: .6rem 0;
+    }
+}

@@ -6,6 +6,12 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Build" Version="18.7.1" />
+    <!-- Design-time only: lets this project serve as the EF Core migrations
+         startup project when the Web app is running (its bin is then locked). -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.9" />
     <PackageReference Include="Quartz.AspNetCore" Version="3.18.2" />

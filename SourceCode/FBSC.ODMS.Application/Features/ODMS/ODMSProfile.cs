@@ -45,6 +45,8 @@ public class ODMSProfile : Profile
         CreateMap<EditEmployeeCommand, EmployeeState>().IgnoreBaseEntityProperties();
 
         CreateMap<AddMilestoneCommand, MilestoneState>();
-        CreateMap<EditMilestoneCommand, MilestoneState>().IgnoreBaseEntityProperties();       
+        CreateMap<EditMilestoneCommand, MilestoneState>().IgnoreBaseEntityProperties();
+
+        CreateMap<StatusReport.Commands.AddStatusReportCommand, StatusReportState>();
     }
 }

@@ -253,6 +253,26 @@ namespace FBSC.ODMS.Web.Service
         {
             return Core.Constants.MemberLevels.List.Select(l => new SelectListItem { Value = l, Text = l });
         }
+        public IEnumerable<SelectListItem> HealthStatusList()
+        {
+            return Core.Constants.HealthStatuses.List.Select(l => new SelectListItem { Value = l, Text = l });
+        }
+        public IEnumerable<SelectListItem> StatusReportMilestoneStatusList()
+        {
+            return Core.Constants.StatusReportMilestoneStatuses.List.Select(l => new SelectListItem { Value = l, Text = l });
+        }
+        public IEnumerable<SelectListItem> RiskIssueTypeList()
+        {
+            return Core.Constants.RiskIssueTypes.List.Select(l => new SelectListItem { Value = l, Text = l });
+        }
+        public IEnumerable<SelectListItem> RiskIssueSeverityList()
+        {
+            return Core.Constants.RiskIssueSeverities.List.Select(l => new SelectListItem { Value = l, Text = l });
+        }
+        public IEnumerable<SelectListItem> RiskIssueStatusList()
+        {
+            return Core.Constants.RiskIssueStatuses.List.Select(l => new SelectListItem { Value = l, Text = l });
+        }
         public SelectList GetBusinessUnitList(string? id)
         {
             return _context.GetSingle<BusinessUnitState>(e => e.Id == id, new()).Result.Match(

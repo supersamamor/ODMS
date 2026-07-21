@@ -7,6 +7,7 @@ using FBSC.ODMS.Application.Features.ODMS.Employee.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Milestone.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Project.Commands;
 using FBSC.ODMS.Application.Features.ODMS.Report.Commands;
+using FBSC.ODMS.Application.Features.ODMS.StatusReport.Commands;
 using FBSC.ODMS.Application.Features.ODMS.TeamMembers.Commands;
 using FBSC.ODMS.Core.ODMS;
 using FBSC.ODMS.Web.Areas.ODMS.Models;
@@ -70,9 +71,7 @@ public class ODMSProfile : Profile
         CreateMap<RiskIssueViewModel, RiskIssueState>().ReverseMap();
         CreateMap<ReportingWeekState, ReportingWeekViewModel>().ReverseMap();
         CreateMap<StatusReportMilestoneViewModel, StatusReportMilestoneState>().ReverseMap();
-        CreateMap<AccomplishmentState, AccomplishmentViewModel>().ForPath(e => e.ReferenceFieldStatusReportId, o => o.MapFrom(s => s.StatusReport!.Id));
-        CreateMap<AccomplishmentViewModel, AccomplishmentState>(); 
-        CreateMap<NextStepState, NextStepViewModel>().ForPath(e => e.ReferenceFieldStatusReportId, o => o.MapFrom(s => s.StatusReport!.Id));
-        CreateMap<NextStepViewModel, NextStepState>();
+        CreateMap<StatusReportRiskIssueViewModel, StatusReportRiskIssueState>().ReverseMap();
+        CreateMap<StatusReportViewModel, AddStatusReportCommand>();
     }
 }

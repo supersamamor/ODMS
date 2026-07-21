@@ -18,14 +18,22 @@ public record StatusReportState : BaseEntity
 	public string? ReviewedById { get; init; }
 	public DateTime? ReviewedDate { get; init; }
 	public string? ReviewComments { get; init; }
-	
+	/// <summary>
+	/// This week's accomplishments. Persisted as a JSON string column via an EF
+	/// value converter (see ApplicationContext) - replaces the old Accomplishment table.
+	/// </summary>
+	public List<string> Accomplishments { get; init; } = [];
+	/// <summary>
+	/// Planned actions for the coming week. Persisted as a JSON string column via
+	/// an EF value converter - replaces the old NextStep table.
+	/// </summary>
+	public List<string> NextSteps { get; init; } = [];
+
 	public ProjectState? Project { get; init; }
 	public ReportingWeekState? ReportingWeek { get; init; }
-	
+
 	public IList<StatusReportHealthIndicatorState>? StatusReportHealthIndicatorList { get; set; }
 	public IList<StatusReportMilestoneState>? StatusReportMilestoneList { get; set; }
 	public IList<StatusReportRiskIssueState>? StatusReportRiskIssueList { get; set; }
-	public IList<AccomplishmentState>? AccomplishmentList { get; set; }
-	public IList<NextStepState>? NextStepList { get; set; }
-	
+
 }

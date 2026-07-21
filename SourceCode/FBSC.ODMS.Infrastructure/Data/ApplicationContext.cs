@@ -2,6 +2,9 @@ using FBSC.Common.Data;
 using FBSC.Common.Identity.Abstractions;
 using FBSC.ODMS.Core.ODMS;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 using FBSC.HTMLTemplate.Extensions;
 using FBSC.ApiHub.Extensions;
 
@@ -36,8 +39,6 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
     public DbSet<ReportingWeekState> ReportingWeek { get; set; } = default!;
     public DbSet<StatusReportMilestoneState> StatusReportMilestone { get; set; } = default!;
     public DbSet<StatusReportRiskIssueState> StatusReportRiskIssue { get; set; } = default!;
-    public DbSet<AccomplishmentState> Accomplishment { get; set; } = default!;
-    public DbSet<NextStepState> NextStep { get; set; } = default!;
     public DbSet<SequenceCounterState> SequenceCounter { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -208,8 +209,25 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<StatusReportRiskIssueState>().Property(e => e.Severity).HasMaxLength(20);
         modelBuilder.Entity<StatusReportRiskIssueState>().Property(e => e.Status).HasMaxLength(50);
         modelBuilder.Entity<StatusReportRiskIssueState>().Property(e => e.Notes).HasMaxLength(1000);
-        modelBuilder.Entity<AccomplishmentState>().Property(e => e.Description).HasMaxLength(255);
-        modelBuilder.Entity<NextStepState>().Property(e => e.Description).HasMaxLength(255);
+
+        // Accomplishments / NextSteps: List<string> persisted as a JSON string
+        // column (replaces the old Accomplishment/NextStep child tables). The
+        // ValueComparer gives EF correct change tracking over list contents.
+        var stringListConverter = new ValueConverter<List<string>, string>(
+            v => JsonSerializer.Serialize(v ?? new List<string>(), (JsonSerializerOptions?)null),
+            v => string.IsNullOrEmpty(v)
+                ? new List<string>()
+                : JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>());
+        var stringListComparer = new ValueComparer<List<string>>(
+            (a, b) => (a ?? new List<string>()).SequenceEqual(b ?? new List<string>()),
+            v => v == null ? 0 : v.Aggregate(0, (hash, item) => HashCode.Combine(hash, item == null ? 0 : item.GetHashCode())),
+            v => v == null ? new List<string>() : v.ToList());
+        modelBuilder.Entity<StatusReportState>().Property(e => e.Accomplishments)
+            .HasConversion(stringListConverter, stringListComparer)
+            .HasColumnType("nvarchar(max)");
+        modelBuilder.Entity<StatusReportState>().Property(e => e.NextSteps)
+            .HasConversion(stringListConverter, stringListComparer)
+            .HasColumnType("nvarchar(max)");
 
         modelBuilder.Entity<ProjectState>().HasMany(t => t.StatusReportList).WithOne(l => l.Project).HasForeignKey(t => t.ProjectId);
         modelBuilder.Entity<ReportingWeekState>().HasMany(t => t.StatusReportList).WithOne(l => l.ReportingWeek).HasForeignKey(t => t.ReportingWeekId);
@@ -220,8 +238,6 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options,
         modelBuilder.Entity<StatusReportState>().HasMany(t => t.StatusReportMilestoneList).WithOne(l => l.StatusReport).HasForeignKey(t => t.StatusReportId);
         modelBuilder.Entity<StatusReportState>().HasMany(t => t.StatusReportRiskIssueList).WithOne(l => l.StatusReport).HasForeignKey(t => t.StatusReportId);
 
-        modelBuilder.Entity<StatusReportState>().HasMany(t => t.AccomplishmentList).WithOne(l => l.StatusReport).HasForeignKey(t => t.StatusReportId);
-        modelBuilder.Entity<StatusReportState>().HasMany(t => t.NextStepList).WithOne(l => l.StatusReport).HasForeignKey(t => t.StatusReportId);
         modelBuilder.Entity<ReportingWeekState>().HasIndex(e => new { e.WeekNumber, e.Year }).IsUnique();
         modelBuilder.Entity<ReportingWeekState>().HasIndex(e => e.StartDate).IsUnique();
         modelBuilder.ConfigureHTMLTemplateEntities();
