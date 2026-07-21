@@ -1,6 +1,8 @@
 /* ==================== LOGIN PAGE (page-scoped) ====================
    Linked only from Areas/Identity/Pages/Account/Login.cshtml via @section Styles.
-   Do not link this file from any shared layout — see refactor plan §6/7. */
+   Split-screen design: dark navy hero panel (grid pattern + product name) on
+   the left, clean form on the right. Colors are static by design (matching
+   the dashboard's static chart palette), independent of the active theme. */
 
 .login-page-wrapper {
     position: relative;
@@ -8,45 +10,248 @@
     flex-wrap: wrap;
     align-items: stretch;
     min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
 }
 
-.login-page-banner {
-    flex: 1 1 50%;
+/* ---------- Left hero panel ---------- */
+
+.login-hero {
+    flex: 1 1 45%;
+    min-width: 0;
+    flex-direction: column;
+    padding: clamp(2.5rem, 5vw, 4.5rem);
+    background-color: #0d1a30;
+    background-image:
+        radial-gradient(ellipse at 60% 35%, rgba(37, 99, 235, 0.16), transparent 55%),
+        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: auto, 48px 48px, 48px 48px;
+}
+
+.login-hero-brand {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    padding: clamp(1.5rem, 4vw, 3rem);
+    gap: .75rem;
+    color: #2563eb; /* fills the logo mark's rounded square */
 }
 
-.login-banner-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    .login-hero-brand .app-logo-icon-svg {
+        width: 44px;
+        height: 44px;
+    }
+
+.login-hero-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
 }
+
+.login-hero-rule {
+    display: block;
+    width: 2.25rem;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.35);
+    margin: 2.75rem 0 2.25rem;
+}
+
+.login-hero-title {
+    margin: 0;
+    max-width: 12ch; /* wraps to "Delivery / Management / System" */
+    font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #ffffff;
+}
+
+.login-hero-subtitle {
+    margin: 1.75rem 0 0;
+    max-width: 36rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #93a7c9;
+}
+
+/* ---------- Right form panel ---------- */
 
 .login-page-form {
-    flex: 1 1 50%;
+    flex: 1 1 55%;
     min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #f4f6f8;
 }
 
 .login-box {
     width: 100%;
-    max-width: 460px;
-    padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 3rem);
+    max-width: 430px;
+    padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 2rem);
 }
 
-.login-logo {
-    color: var(--custom-primary);
+.login-title {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.login-subtitle {
+    margin: .4rem 0 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: var(--font-size-base);
+    color: #64748b;
+}
+
+.login-field {
+    margin-bottom: 1.25rem;
+}
+
+.login-label {
+    display: block;
+    margin-bottom: .4rem;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: #1e293b !important;
+}
+
+.login-label-row {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .4rem;
 }
 
-    .login-logo .app-logo-svg {
-        width: min(220px, 60%);
-        height: auto;
+    .login-label-row .login-label {
+        margin-bottom: 0;
     }
+
+.login-forgot {
+    font-size: var(--font-size-dense);
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+    .login-forgot:hover {
+        color: #1d4ed8;
+        text-decoration: underline;
+    }
+
+.login-box .login-input {
+    height: 2.9rem;
+    padding: 0 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background-color: #ffffff;
+    font-size: var(--font-size-base);
+    color: #0f172a;
+}
+
+    .login-box .login-input::placeholder {
+        color: #9aa7b8;
+    }
+
+    .login-box .login-input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 .2rem rgba(37, 99, 235, 0.12);
+    }
+
+.login-password {
+    position: relative;
+}
+
+    .login-password .login-input {
+        padding-right: 2.8rem;
+        width: 100%;
+    }
+
+    .login-password .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        cursor: pointer;
+    }
+
+.login-submit {
+    width: 100%;
+    height: 2.9rem;
+    margin-top: .5rem;
+    border: 0;
+    border-radius: 10px;
+    background-color: #2563eb;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .2s ease-in-out;
+}
+
+    .login-submit:hover,
+    .login-submit:focus {
+        background-color: #1d4ed8;
+    }
+
+.login-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    font-family: 'DM Mono', monospace;
+    font-size: var(--font-size-dense);
+    color: #94a3b8;
+}
+
+    .login-divider::before,
+    .login-divider::after {
+        content: '';
+        flex: 1 1 auto;
+        height: 1px;
+        background-color: #e2e8f0;
+    }
+
+.login-sso-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    width: 100%;
+    height: 2.9rem;
+    margin-bottom: .75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #334155;
+    font-family: inherit;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .2s ease-in-out, border-color .2s ease-in-out;
+}
+
+    .login-sso-btn:hover,
+    .login-sso-btn:focus {
+        background-color: #f8fafc;
+        border-color: #cbd5e1;
+    }
+
+.login-register {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.login-footnote {
+    margin-top: 2rem;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: var(--font-size-dense);
+    line-height: 1.7;
+    color: #94a3b8;
+}
 
 .img-dps {
     position: absolute;

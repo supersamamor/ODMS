@@ -4,8 +4,6 @@
     ViewData["Title"] = "Log in";
     Layout = "_Layout";
     var appName = Configuration.GetValue<string>("Application");
-    var userIcon = "/img/Login_Icons/Userx16.png";
-    var passwordIcon = "/img/Login_Icons/Passwordx16.png";
     // Check if there's a validation error and get the error message
     var errorMessage = "";
     if (ViewData.ModelState[""]?.Errors?.Count > 0)
@@ -22,117 +20,120 @@
     }
 }
 @section Styles {
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" />
     <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
 }
 <div class="login-page-wrapper">
-    <div class="login-page-banner d-none d-lg-flex">
-        <img src="~/img/Login_Background/delivery-illustration.svg"
-             asp-append-version="true"
-             alt="Illustration of an analytics dashboard and a report launching, representing enterprise software delivery"
-             class="login-banner-img" />
+
+    <div class="login-hero d-none d-lg-flex">
+        <div class="login-hero-brand">
+            <span class="login-hero-mark"><partial name="~/Pages/Shared/_LogoIcon.cshtml" /></span>
+            <span class="login-hero-name">OneTech</span>
+        </div>
+        <span class="login-hero-rule" aria-hidden="true"></span>
+        <h1 class="login-hero-title">Delivery Management System</h1>
+        <p class="login-hero-subtitle">A single source of truth for project health, compliance, and executive reporting.</p>
     </div>
+
     <div class="login-page-form">
         <div class="login-box">
-            <div class="text-center login-logo mb-3">
-                <partial name="~/Pages/Shared/_Logo.cshtml" />
-            </div>
-                    @if (string.Compare(Configuration["Authentication:EmailLoginEnabled"], "true", true) == 0)
-                    {
-                        <!-- Modal -->
-                        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered col-md-3">
-                                <div class="modal-content">
-                                    <div class="modal-header justify-content-center">
-                                        <span class="icon-circle bg-danger"><i class="fas fa-times"></i></span>
-                                    </div>
-                                    <div class="modal-body mt-0 pt-0">
-                                        <h5 class="text-danger">Login Failed!</h5>
-                                        <p class="p-0 m-0">Your credentials did not match our records.<br>Check your credentials and try again.</p>
-                                    </div>
-                                    <div class="modal-footer justify-content-center border-top-0 pt-0 mt-0">
-                                        <button type="button" class="btn btn-lg radius-100  btn-primary col" data-bs-dismiss="modal">Try again</button>
-                                    </div>
-                                </div>
+            <h2 class="login-title">Sign in</h2>
+            <p class="login-subtitle">Enter your credentials to access the dashboard</p>
+
+            @if (string.Compare(Configuration["Authentication:EmailLoginEnabled"], "true", true) == 0)
+            {
+                <!-- Modal -->
+                <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered col-md-3">
+                        <div class="modal-content">
+                            <div class="modal-header justify-content-center">
+                                <span class="icon-circle bg-danger"><i class="fas fa-times"></i></span>
+                            </div>
+                            <div class="modal-body mt-0 pt-0">
+                                <h5 class="text-danger">Login Failed!</h5>
+                                <p class="p-0 m-0">Your credentials did not match our records.<br>Check your credentials and try again.</p>
+                            </div>
+                            <div class="modal-footer justify-content-center border-top-0 pt-0 mt-0">
+                                <button type="button" class="btn btn-lg radius-100  btn-primary col" data-bs-dismiss="modal">Try again</button>
                             </div>
                         </div>
-                        <form id="account" method="post" class="user">
-                            <div class="mb-3 input-container">
-                                <label for="Email" class="form-label custom-label">Email Address</label>
-                                <div class="input-wrapper">
-                                    <img src="@userIcon" alt="User Icon" class="icon">
-                                    <input type="email" id="Email" name="Input.Email" class="form-control" placeholder="Enter email address">
-                                </div>
-                                <small><span asp-validation-for="Input!.Email" class="text-danger"></span></small>
-                            </div>
-                            <div class="mb-3">
-                                <label for="Password" class="form-label custom-label">Password</label>
-                                <div class="input-wrapper">
-                                    <img src="@passwordIcon" alt="Lock Icon" class="icon"> <!-- Add lock icon -->
-                                    <input type="password" id="Password" name="Input.Password" class="form-control" placeholder="Enter Password">
-                                    <span class="toggle-password"><i class="fas fa-eye-slash"></i></span>
-                                </div>
-                                <small><span asp-validation-for="Input!.Password" class="text-danger"></span></small>
-                            </div>
-                            @if (string.Compare(Configuration["Authentication:EmailLoginEnabled"], "true", true) == 0)
-                            {
-                                <div class="mb-3 login-link-container">
-                                    <div class="text-center custom-label">
-                                        <a class="login-link" asp-page="./ForgotPassword">Forgot Password?</a>
-                                    </div>
-                                </div>
-                                <div class="mb-3 login-link-container">
-                                    <div class="text-center custom-label">
-                                        <a class="login-link" asp-page="./Register">Create an Account!</a>
-                                    </div>
-                                </div>
-                            }
-
-                            <button type="submit" class="btnSubmit btn btn-primary d-block btn-user w-100">Login</button>
-                        </form>
-                    }
-                    @if (!string.IsNullOrEmpty(Configuration["Authentication:Microsoft:ClientId"]) ||
-                                        !string.IsNullOrEmpty(Configuration["Authentication:Google:ClientId"]))
-                    {
-                        <div class="social-login-section">
-                            @* Microsoft Login *@
-                            @if (!string.IsNullOrEmpty(Configuration["Authentication:Microsoft:ClientId"]))
-                            {
-                                <form id="microsoft-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                                    <input type="hidden" name="provider" value="Microsoft">
-                                    <button type="submit" class="btn btn-outline-primary d-block btn-user w-100 mb-2" alt="Sign in using Microsoft">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23" width="20" height="20" class="me-2">
-                                            <rect x="1" y="1" width="10" height="10" fill="#f25022" />
-                                            <rect x="12" y="1" width="10" height="10" fill="#7fba00" />
-                                            <rect x="1" y="12" width="10" height="10" fill="#00a4ef" />
-                                            <rect x="12" y="12" width="10" height="10" fill="#ffb900" />
-                                        </svg>
-                                        Sign in with Microsoft
-                                    </button>
-                                </form>
-                            }
-
-                            @* Google Login *@
-                            @if (!string.IsNullOrEmpty(Configuration["Authentication:Google:ClientId"]))
-                            {
-                                <form id="google-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                                    <input type="hidden" name="provider" value="Google">
-                                    <button type="submit" class="btn btn-outline-danger d-block btn-user w-100" alt="Sign in using Google">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20" class="me-2">
-                                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
-                                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
-                                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
-                                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
-                                            <path fill="none" d="M0 0h48v48H0z" />
-                                        </svg>
-                                        Sign in with Google
-                                    </button>
-                                </form>
-                            }
-                        </div>
-                    }
-
+                    </div>
                 </div>
+                <form id="account" method="post" class="user">
+                    <div class="login-field">
+                        <label for="Email" class="login-label">Email address</label>
+                        <input type="email" id="Email" name="Input.Email" class="form-control login-input" placeholder="you@filinvestgroup.com" autocomplete="username">
+                        <small><span asp-validation-for="Input!.Email" class="text-danger"></span></small>
+                    </div>
+                    <div class="login-field">
+                        <div class="login-label-row">
+                            <label for="Password" class="login-label">Password</label>
+                            <a class="login-forgot" asp-page="./ForgotPassword">Forgot password?</a>
+                        </div>
+                        <div class="login-password">
+                            <input type="password" id="Password" name="Input.Password" class="form-control login-input" placeholder="••••••••" autocomplete="current-password">
+                            <span class="toggle-password" role="button" aria-label="Show password"><i class="fas fa-eye-slash"></i></span>
+                        </div>
+                        <small><span asp-validation-for="Input!.Password" class="text-danger"></span></small>
+                    </div>
+
+                    <button type="submit" class="btnSubmit login-submit">Sign in</button>
+                </form>
+            }
+            @if (!string.IsNullOrEmpty(Configuration["Authentication:Microsoft:ClientId"]) ||
+                                !string.IsNullOrEmpty(Configuration["Authentication:Google:ClientId"]))
+            {
+                <div class="login-divider" aria-hidden="true"><span>OR</span></div>
+
+                @* Microsoft Login *@
+                @if (!string.IsNullOrEmpty(Configuration["Authentication:Microsoft:ClientId"]))
+                {
+                    <form id="microsoft-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <input type="hidden" name="provider" value="Microsoft">
+                        <button type="submit" class="login-sso-btn" alt="Sign in using Microsoft">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23" width="16" height="16">
+                                <rect x="1" y="1" width="10" height="10" fill="#f25022" />
+                                <rect x="12" y="1" width="10" height="10" fill="#7fba00" />
+                                <rect x="1" y="12" width="10" height="10" fill="#00a4ef" />
+                                <rect x="12" y="12" width="10" height="10" fill="#ffb900" />
+                            </svg>
+                            Continue with Microsoft
+                        </button>
+                    </form>
+                }
+
+                @* Google Login *@
+                @if (!string.IsNullOrEmpty(Configuration["Authentication:Google:ClientId"]))
+                {
+                    <form id="google-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <input type="hidden" name="provider" value="Google">
+                        <button type="submit" class="login-sso-btn" alt="Sign in using Google">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16" height="16">
+                                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                                <path fill="none" d="M0 0h48v48H0z" />
+                            </svg>
+                            Continue with Google
+                        </button>
+                    </form>
+                }
+            }
+
+            @if (string.Compare(Configuration["Authentication:EmailLoginEnabled"], "true", true) == 0)
+            {
+                <div class="login-register">
+                    <a class="login-forgot" asp-page="./Register">Create an Account!</a>
+                </div>
+            }
+
+            <div class="login-footnote">
+                Filinvest | One Technology<br />
+                Internal Use Only
+            </div>
         </div>
+    </div>
     <img src="~/img/dpo_dps_logo.png" alt="App Logo" class="img-dps" />
 </div>
 @section Scripts {
@@ -162,4 +163,3 @@
     </script>
 
 }
-
