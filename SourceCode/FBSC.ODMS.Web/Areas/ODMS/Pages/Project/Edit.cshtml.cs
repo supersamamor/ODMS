@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FBSC.ODMS.Web.Areas.ODMS.Pages.Project;
 
 [Authorize(Policy = Permission.Project.Edit)]
-public class EditModel : BasePageModel<EditModel>
+public class EditModel : ProjectFormPageModel<EditModel>
 {
     [BindProperty]
     public ProjectViewModel Project { get; set; } = new();
@@ -26,14 +26,21 @@ public class EditModel : BasePageModel<EditModel>
     }
 
     public async Task<IActionResult> OnPost()
-    {		
+    {
+        ValidateSOW(Project);
         if (!ModelState.IsValid)
         {
             return Page();
         }
-		
+        var sowResult = await SaveSOWAsync(Project);
+        if (sowResult == null)
+        {
+            return Page();
+        }
+        Project = sowResult;
+
         return await TryThenRedirectToPage(async () => await Mediatr.Send(Mapper.Map<EditProjectCommand>(Project)), "Details", true);
-    }	
+    }
 	public PartialViewResult OnPostChangeFormValue()
     {
         ModelState.Clear();

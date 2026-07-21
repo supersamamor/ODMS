@@ -27,8 +27,14 @@
                     <thead>
                         <tr>
                             <th>
+                                @Localizer["ID"]
+                            </th>
+                            <th>
 								@Localizer["Project"]
 							</th>
+                            <th>
+                                @Localizer["Delivery Tower"]
+                            </th>
 							<th>
 								@Localizer["BU"]
 							</th>
@@ -49,7 +55,7 @@
 							</th>
 							<th>
 								@Localizer["Budget"]
-							</th>	
+							</th>
                             <th>
                                 @Localizer["Actions"]
                             </th>
@@ -73,10 +79,8 @@
                 select: false,
                 serverSide: true,
                 responsive: true,
-                @* LastModifiedDate's column index - was 12, which is out of
-                   range for this 11-column table (0-10) and killed the whole
-                   DataTables init, taking the Add/Upload toolbar with it. *@
-                order: [[9, 'desc']],
+                @* LastModifiedDate's column index (13-column table, 0-12). *@
+                order: [[11, 'desc']],
                 dom: '@Html.Raw(FBSC.ODMS.Web.WebConstants.DataTableDOMLayOut)',
                 ajax:
                 {
@@ -91,15 +95,17 @@
                     BindTableRowCollapseEvent();
                 },
                 columns: [
+                    { data: "projectCode", name: "ProjectCode", responsivePriority: 1, title: '@Localizer["ID"]', searchable: true, className: "text-start" },
                     { data: "projectName", name: "ProjectName", responsivePriority: 1, title: '@Localizer["Project"]', searchable: true, className: "text-start" },
-				{ data: "businessUnitId", name: "BusinessUnitId", responsivePriority: 1, title: '@Localizer["BU"]', searchable: false, className: "fills-text-end" },
-                    { data: "projectManagerId", name: "ProjectManagerId", responsivePriority: 2, title: '@Localizer["Project Manager"]', searchable: false, className: "fills-text-end" },
+                    { data: "deliveryTower", name: "DeliveryTower", responsivePriority: 2, title: '@Localizer["Delivery Tower"]', searchable: true, className: "text-start" },
+				{ data: "businessUnitId", name: "BusinessUnitId", responsivePriority: 1, title: '@Localizer["BU"]', searchable: false, className: "text-start" },
+                    { data: "projectManagerId", name: "ProjectManagerId", responsivePriority: 2, title: '@Localizer["Project Manager"]', searchable: false, className: "text-start" },
                 { data: "priority", name: "Priority", responsivePriority: 1, title: '@Localizer["Priority"]', searchable: true, className: "text-start" },
-                    { data: "healthStatus", name: "HealthStatus", responsivePriority: 2, title: '@Localizer["Status"]', searchable: false, className: "text-start" },
-                { data: "startDateFormatted", name: "StartDate", responsivePriority: 2, title: '@Localizer["Start Date"]', searchable: false, className: "fills-text-center" },
-				{ data: "targetEndDateFormatted", name: "TargetEndDate", responsivePriority: 2, title: '@Localizer["End Date"]', searchable: false, className: "fills-text-center" },
-				{ data: "estimatedBudgetFormatted", name: "EstimatedBudget", responsivePriority: 2, title: '@Localizer["Budget"]', searchable: false, className: "fills-text-end" },
-									
+                    { data: "activeStatus", name: "ActiveStatus", responsivePriority: 2, title: '@Localizer["Status"]', searchable: false, className: "text-start" },
+                { data: "baselineStartDateFormatted", name: "BaselineStartDate", responsivePriority: 2, title: '@Localizer["Start Date"]', searchable: false, className: "fills-text-center" },
+				{ data: "baselineEndDateFormatted", name: "BaselineEndDate", responsivePriority: 2, title: '@Localizer["End Date"]', searchable: false, className: "fills-text-center" },
+				{ data: "approvedBudgetFormatted", name: "ApprovedBudget", responsivePriority: 2, title: '@Localizer["Budget"]', searchable: false, className: "fills-text-end" },
+
                     {
                         data: null,
                         searchable: false,

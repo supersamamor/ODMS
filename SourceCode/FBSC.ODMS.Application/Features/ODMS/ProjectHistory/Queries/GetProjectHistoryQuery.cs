@@ -21,13 +21,17 @@ public class GetProjectHistoryQueryHandler(ApplicationContext context) : BaseQue
 			{
 				Id = e.Id,
 				LastModifiedDate = e.LastModifiedDate,
+				ProjectCode = e.ProjectCode,
 				ProjectName = e.ProjectName,
+				DeliveryTower = e.DeliveryTower,
+				DemandType = e.DemandType,
 				BusinessUnitId = e.BusinessUnit == null ? "" : e.BusinessUnit!.Name,
+				ProjectManagerId = e.Employee == null ? "" : e.Employee!.Name,
 				Priority = e.Priority,
+				ActiveStatus = e.ActiveStatus,
                 BaselineStartDate = e.BaselineStartDate,
                 BaselineEndDate = e.BaselineEndDate,
                 ApprovedBudget = e.ApprovedBudget,
-				ProjectManagerId = e.Employee == null ? "" : e.Employee!.Id,
 			})
 			.ToPagedResponse(request.SearchColumns, request.SearchValue,
 				request.SortColumn, request.SortOrder,

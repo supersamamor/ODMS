@@ -41,6 +41,161 @@
     color: #64748b;
 }
 
+/* ==================== SOW upload dropzone (Project Add/Edit) ==================== */
+.sow-hint {
+    margin: -0.4rem 0 .75rem;
+    font-family: var(--font-secondary);
+    font-size: var(--font-size-dense);
+    color: var(--text-muted);
+}
+
+.sow-dropzone {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding: 2.25rem 1rem;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: var(--border-radius-base);
+    background-color: #fdfdfe;
+    text-align: center;
+    transition: border-color var(--transition-base), background-color var(--transition-base);
+}
+
+    .sow-dropzone:hover,
+    .sow-dropzone.dragover {
+        border-color: #2563eb;
+        background-color: #f6f9ff;
+    }
+
+    /* The real file input covers the whole zone invisibly, so both click and
+       native drag-and-drop land on it. */
+    .sow-dropzone-input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+.sow-dropzone-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: #eef2f9;
+    color: #64748b;
+}
+
+.sow-dropzone-text {
+    font-size: var(--font-size-base);
+    color: #475569;
+}
+
+.sow-dropzone-link {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.sow-dropzone-types {
+    font-family: var(--font-secondary);
+    font-size: var(--font-size-dense);
+    letter-spacing: .05em;
+    color: #94a3b8;
+}
+
+.sow-dropzone-filename {
+    font-family: var(--font-secondary);
+    font-size: var(--font-size-dense);
+    color: #0f6b47;
+    word-break: break-all;
+}
+
+.sow-dropzone.sow-disabled {
+    opacity: .5;
+    pointer-events: none;
+}
+
+/* ==================== Team Assignment member grid (Project Add/Edit) ==================== */
+.team-grid {
+    margin-top: .5rem;
+}
+
+.team-grid-header {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 4fr) 2.5rem;
+    gap: .75rem;
+    padding: .35rem 0;
+    font-family: var(--font-secondary);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #64748b;
+}
+
+.team-grid-row {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 4fr) 2.5rem;
+    gap: .75rem;
+    align-items: start;
+    padding: .3rem 0;
+}
+
+.team-grid-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: .35rem;
+}
+
+.team-remove-btn {
+    border: 0;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color var(--transition-base);
+}
+
+    .team-remove-btn:hover {
+        color: #b91c1c;
+    }
+
+.team-add-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: .75rem;
+    color: #2563eb;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    .team-add-link:hover {
+        color: #1d4ed8;
+        text-decoration: underline;
+    }
+
+@media (max-width: 767.98px) {
+    .team-grid-header {
+        display: none;
+    }
+
+    .team-grid-row {
+        grid-template-columns: 1fr;
+        border-bottom: 1px solid #eef1f6;
+        padding: .75rem 0;
+    }
+}
+
 /* ==================== CRUD edit-form field grouping ====================
    Used by Areas/ODMS/Pages/**/_Edit{Module}Details.cshtml partials to group
    related fields under a labeled section instead of one field per full-width row. */

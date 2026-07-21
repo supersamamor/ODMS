@@ -27,8 +27,8 @@ public class IndexModel : BasePageModel<IndexModel>
     }
     public async Task<IActionResult> OnGetSelect2EmployeeData([FromQuery] Select2Request request)
     {
-        var result = await Mediatr.Send(request.ToQuery<GetEmployeeQuery>(nameof(EmployeeState.Id)));
-        return new JsonResult(result.ToSelect2Response(e => new Select2Result { Id = e.Id, Text = e.Id }));
+        var result = await Mediatr.Send(request.ToQuery<GetEmployeeQuery>(nameof(EmployeeState.Name)));
+        return new JsonResult(result.ToSelect2Response(e => new Select2Result { Id = e.Id, Text = e.Name }));
     }
     public async Task<IActionResult> OnGetSelect2BusinessUnitData([FromQuery] Select2Request request)
     {

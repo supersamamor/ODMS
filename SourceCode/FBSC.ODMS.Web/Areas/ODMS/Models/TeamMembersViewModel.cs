@@ -1,18 +1,17 @@
-using FBSC.Common.Web.Utility.Extensions;
 using FBSC.ODMS.Web.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using FBSC.Common.Web.Utility.Annotations;
 
 namespace FBSC.ODMS.Web.Areas.ODMS.Models;
 
 public record TeamMembersViewModel : BaseViewModel
 {
-    [Display(Name = "Full Name of the Member")]
+    [Display(Name = "Name")]
     [Required]
-    [StringLength(255, ErrorMessage = "{0} length can't be more than {1}.")]
-    public string MemberName { get; init; } = "";
-    [Display(Name = "Role of the Member in Project")]
+    public string EmployeeId { get; init; } = "";
+    [Display(Name = "Level")]
+    [StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
+    public string? MemberLevel { get; init; }
+    [Display(Name = "Role")]
     [Required]
     [StringLength(100, ErrorMessage = "{0} length can't be more than {1}.")]
     public string Role { get; init; } = "";
@@ -20,6 +19,6 @@ public record TeamMembersViewModel : BaseViewModel
     public string? ProjectName { get; init; } = "";
     public DateTime LastModifiedDate { get; set; }
     public ProjectViewModel? Project { get; init; }
-
+    public EmployeeViewModel? Employee { get; init; }
 
 }

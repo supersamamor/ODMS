@@ -24,7 +24,7 @@
         <button type="button" id="btnConfirmationModal" class="page-header-action-btn">@Localizer["Create Project"]</button>
     </div>
 </div>
-<form id="project-form" method="post">
+<form id="project-form" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 	<input type="hidden" asp-for="@Model.RemoveSubDetailId" />
     <input type="hidden" asp-for="@Model.AsyncAction" />
@@ -79,6 +79,9 @@
 				return this;
 			};
 			$("#ProjectManagerId").employeeSelect();
+			$("#DeputyProjectManagerId").employeeSelect();
+			$("#TechnologyBusinessPartnerId").employeeSelect();
+			$(".TeamMemberEmployeeSelect").employeeSelect();
 
 			$.fn.businessunitSelect = function() {
 				this.filter("select").each(function() {
@@ -92,7 +95,22 @@
 			};
 			$("#BusinessUnitId").businessunitSelect();
 
-		}	
+			// SOW dropzone: show the chosen file, and let "No SOW yet"
+			// disable the zone (server enforces the same rule).
+			$('#SOWForm').on('change', function () {
+				var name = this.files && this.files.length ? this.files[0].name : '';
+				$('#sowSelectedFile').text(name);
+			});
+			function toggleSowZone() {
+				var noSow = $('#NoSOW').is(':checked');
+				$('#sowDropzone').toggleClass('sow-disabled', noSow);
+			}
+			$('#NoSOW').on('change', toggleSowZone);
+			toggleSowZone();
+			$('#sowDropzone').on('dragover dragenter', function () { $(this).addClass('dragover'); })
+				.on('dragleave drop', function () { $(this).removeClass('dragover'); });
+
+		}
 		InitializeForm();
     });
 </script>

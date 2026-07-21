@@ -13,6 +13,7 @@ namespace FBSC.ODMS.Web
 		public const string ReportQueryAIGenerationInstruction = "Please provide a detailed description of the report, and if possible, include all the fields you would like to see. This will greatly enhance the AI's ability to accurately fulfill your request.";
 		public const string DataUpload = "DataUpload";
 		public const string DataSource = "DataSource";
+		public const string Project = "Project";
 
     }
 }

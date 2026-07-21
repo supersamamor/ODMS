@@ -1,11 +1,35 @@
 @using Models
-@using Microsoft.AspNetCore.Mvc.Rendering
 @model ProjectViewModel
 
 <div class="form-section">
     <h6 class="form-section-title">@Localizer["Project Information"]</h6>
     <div class="row g-3">
-        <div class="col-12">
+        <div class="col-12 col-md-6">
+            <div class="mb-3">
+                <label asp-for="@Model.DeliveryTower" class="form-label fieldrequired"><strong>@Localizer["Delivery Tower"] :</strong></label>
+                <select asp-for="@Model.DeliveryTower" class="form-control" asp-items="@(dropdownService.DeliveryTowerList())">
+                    <option value="">@Localizer["Select tower"]</option>
+                </select>
+                <span asp-validation-for="@Model.DeliveryTower" class="text-danger d-block mt-1"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="mb-3">
+                <label asp-for="@Model.DemandType" class="form-label fieldrequired"><strong>@Localizer["Demand Type"] :</strong></label>
+                <select asp-for="@Model.DemandType" class="form-control" asp-items="@(dropdownService.DemandTypeList())">
+                    <option value="">@Localizer["Select demand type"]</option>
+                </select>
+                <span asp-validation-for="@Model.DemandType" class="text-danger d-block mt-1"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="mb-3">
+                <label asp-for="@Model.ProjectCode" class="form-label fieldrequired"><strong>@Localizer["Project ID"] :</strong></label>
+                <input asp-for="@Model.ProjectCode" class="form-control" maxlength="12" placeholder="@Localizer["e.g. DPI-011"]" />
+                <span asp-validation-for="@Model.ProjectCode" class="text-danger d-block mt-1"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
             <div class="mb-3">
                 <label asp-for="@Model.ProjectName" class="form-label fieldrequired"><strong>@Localizer["Project Name"] :</strong></label>
                 <input asp-for="@Model.ProjectName" class="form-control" maxlength="255" placeholder="@Localizer["e.g. Digital Payments Integration"]" />
@@ -21,8 +45,15 @@
         </div>
         <div class="col-12 col-md-6">
             <div class="mb-3">
+                <label asp-for="@Model.TechnologyBusinessPartnerId" class="form-label"><strong>@Localizer["Technology Business Partner"] :</strong></label>
+                <select asp-for="@Model.TechnologyBusinessPartnerId" class="form-control" asp-items="@(dropdownService.GetEmployeeList(Model.TechnologyBusinessPartnerId))"><option value="">@Localizer["Select TBP"]</option></select>
+                <span asp-validation-for="@Model.TechnologyBusinessPartnerId" class="text-danger d-block mt-1"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="mb-3">
                 <label asp-for="@Model.Priority" class="form-label fieldrequired"><strong>@Localizer["Priority"] :</strong></label>
-                <select asp-for="@Model.Priority" class="form-control" asp-items="@(new[] { "High", "Medium", "Low" }.Select(l => new SelectListItem { Value = l, Text = l }))">
+                <select asp-for="@Model.Priority" class="form-control" asp-items="@(dropdownService.ProjectPriorityList())">
                     <option value="">@Localizer["Select priority"]</option>
                 </select>
                 <span asp-validation-for="@Model.Priority" class="text-danger d-block mt-1"></span>
@@ -30,23 +61,32 @@
         </div>
         <div class="col-12 col-md-6">
             <div class="mb-3">
-                <label asp-for="@Model.StartDate" class="form-label fieldrequired"><strong>@Localizer["Start Date"] :</strong></label>
-                <input type="date" asp-for="@Model.StartDate" class="form-control" />
-                <span asp-validation-for="@Model.StartDate" class="text-danger d-block mt-1"></span>
+                <label asp-for="@Model.ApprovedBudget" class="form-label"><strong>@Localizer["Approved Budget"] :</strong></label>
+                <input asp-for="@Model.ApprovedBudget" class="form-control" placeholder="@Localizer["e.g. ₱4,200,000"]" />
+                <span asp-validation-for="@Model.ApprovedBudget" class="text-danger d-block mt-1"></span>
             </div>
         </div>
         <div class="col-12 col-md-6">
             <div class="mb-3">
-                <label asp-for="@Model.TargetEndDate" class="form-label fieldrequired"><strong>@Localizer["Target End Date"] :</strong></label>
-                <input type="date" asp-for="@Model.TargetEndDate" class="form-control" />
-                <span asp-validation-for="@Model.TargetEndDate" class="text-danger d-block mt-1"></span>
+                <label asp-for="@Model.BaselineStartDate" class="form-label fieldrequired"><strong>@Localizer["Start Date"] :</strong></label>
+                <input type="date" asp-for="@Model.BaselineStartDate" class="form-control" />
+                <span asp-validation-for="@Model.BaselineStartDate" class="text-danger d-block mt-1"></span>
             </div>
         </div>
         <div class="col-12 col-md-6">
             <div class="mb-3">
-                <label asp-for="@Model.EstimatedBudget" class="form-label"><strong>@Localizer["Estimated Budget"] :</strong></label>
-                <input asp-for="@Model.EstimatedBudget" class="form-control" placeholder="@Localizer["e.g. ₱4,200,000"]" />
-                <span asp-validation-for="@Model.EstimatedBudget" class="text-danger d-block mt-1"></span>
+                <label asp-for="@Model.BaselineEndDate" class="form-label fieldrequired"><strong>@Localizer["Target End Date"] :</strong></label>
+                <input type="date" asp-for="@Model.BaselineEndDate" class="form-control" />
+                <span asp-validation-for="@Model.BaselineEndDate" class="text-danger d-block mt-1"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="mb-3">
+                <label asp-for="@Model.ActiveStatus" class="form-label"><strong>@Localizer["Status"] :</strong></label>
+                <select asp-for="@Model.ActiveStatus" class="form-control" asp-items="@(dropdownService.ProjectActiveStatusList())">
+                    <option value="">@Localizer["Select status"]</option>
+                </select>
+                <span asp-validation-for="@Model.ActiveStatus" class="text-danger d-block mt-1"></span>
             </div>
         </div>
         <div class="col-12">
@@ -54,65 +94,6 @@
                 <label asp-for="@Model.ProjectDescription" class="form-label"><strong>@Localizer["Project Description"] :</strong></label>
                 <textarea asp-for="@Model.ProjectDescription" class="form-control" rows="3" maxlength="1000" placeholder="@Localizer["Brief description of the project scope and goals..."]"></textarea>
                 <span asp-validation-for="@Model.ProjectDescription" class="text-danger d-block mt-1"></span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="form-section">
-    <h6 class="form-section-title">@Localizer["Project Manager Assignment"]</h6>
-    <div class="row g-3">
-        <div class="col-12 col-md-6 col-xl-4">
-            <div class="mb-3">
-                <label asp-for="@Model.ProjectManagerId" class="form-label fieldrequired"><strong>@Localizer["Assign Project Manager"] :</strong></label>
-                <select asp-for="@Model.ProjectManagerId" class="form-control" asp-items="@(dropdownService.GetEmployeeList(Model.ProjectManagerId))"><option value="">@Localizer["Select PM"]</option></select>
-                <span asp-validation-for="@Model.ProjectManagerId" class="text-danger d-block mt-1"></span>
-            </div>
-        </div>
-    </div>
-</div>
-
-@* Status-tracking fields are not part of the reference design's create form,
-   but this partial is shared with Edit - dropping the inputs entirely would
-   post nulls on save and silently wipe existing values. All optional. *@
-<div class="form-section">
-    <h6 class="form-section-title">@Localizer["Status Tracking"]</h6>
-    <div class="row g-3">
-        <div class="col-12 col-md-4">
-            <div class="mb-3">
-                <label asp-for="@Model.HealthStatus" class="form-label"><strong>@Localizer["Health (RAG)"] :</strong></label>
-                <select asp-for="@Model.HealthStatus" class="form-control" asp-items="@(new[] { "Red", "Amber", "Green" }.Select(l => new SelectListItem { Value = l, Text = l }))">
-                    <option value="">@Localizer["Select health status"]</option>
-                </select>
-                <span asp-validation-for="@Model.HealthStatus" class="text-danger d-block mt-1"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-4">
-            <div class="mb-3">
-                <label asp-for="@Model.Phase" class="form-label"><strong>@Localizer["Current Phase"] :</strong></label>
-                <input asp-for="@Model.Phase" class="form-control" maxlength="100" placeholder="@Localizer["e.g. Development"]" />
-                <span asp-validation-for="@Model.Phase" class="text-danger d-block mt-1"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-4">
-            <div class="mb-3">
-                <label asp-for="@Model.ScheduleStatus" class="form-label"><strong>@Localizer["Schedule Status"] :</strong></label>
-                <input asp-for="@Model.ScheduleStatus" class="form-control" maxlength="50" placeholder="@Localizer["e.g. On Track"]" />
-                <span asp-validation-for="@Model.ScheduleStatus" class="text-danger d-block mt-1"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="mb-3">
-                <label asp-for="@Model.LastReviewDate" class="form-label"><strong>@Localizer["Last Review Date"] :</strong></label>
-                <input type="date" asp-for="@Model.LastReviewDate" class="form-control" />
-                <span asp-validation-for="@Model.LastReviewDate" class="text-danger d-block mt-1"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="mb-3">
-                <label asp-for="@Model.LastUpdatedDate" class="form-label"><strong>@Localizer["Last Updated Date"] :</strong></label>
-                <input type="date" asp-for="@Model.LastUpdatedDate" class="form-control" />
-                <span asp-validation-for="@Model.LastUpdatedDate" class="text-danger d-block mt-1"></span>
             </div>
         </div>
     </div>

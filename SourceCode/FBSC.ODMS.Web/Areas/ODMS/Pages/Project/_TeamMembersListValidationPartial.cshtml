@@ -4,11 +4,11 @@
     $(document).ready(function () { 
 		$.InitializeTeamMembersFieldValidations = function(count)
         {
-			let reqs = [];			
+			let reqs = [];
 			for (let idx = 0; idx < count; idx++) {
-				reqs.push({name: "TeamMembersList[" + idx + "].MemberName", el: "Input", minlength:0, maxlength:255, isrequired: true, description: "Full Name of the Member"});
-				reqs.push({name: "TeamMembersList[" + idx + "].Role", el: "Input", minlength:0, maxlength:100, isrequired: true, description: "Role of the Member in Project"});
-				
+				reqs.push({name: "TeamMembersList[" + idx + "].EmployeeId", el: "Select", minlength:0, maxlength:0, isrequired: true, description: "Name"});
+				reqs.push({name: "TeamMembersList[" + idx + "].Role", el: "Input", minlength:0, maxlength:100, isrequired: true, description: "Role"});
+
 			}
 			let validator = $("#project-form").validate();
 			for (let j in reqs)

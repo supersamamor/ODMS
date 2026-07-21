@@ -45,6 +45,8 @@ public class AddProjectCommandValidator : AbstractValidator<AddProjectCommand>
 
         RuleFor(x => x.Id).MustAsync(async (id, cancellation) => await _context.NotExists<ProjectState>(x => x.Id == id, cancellationToken: cancellation))
                           .WithMessage("Project with id {PropertyValue} already exists");
-        
+        RuleFor(x => x.ProjectCode).MustAsync(async (code, cancellation) => await _context.NotExists<ProjectState>(x => x.ProjectCode == code, cancellationToken: cancellation))
+                          .WithMessage("Project ID {PropertyValue} is already in use");
+
     }
 }

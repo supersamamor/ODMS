@@ -232,9 +232,29 @@ namespace FBSC.ODMS.Web.Service
         public SelectList GetEmployeeList(string? id)
         {
             return _context.GetSingle<EmployeeState>(e => e.Id == id, new()).Result.Match(
-                Some: e => new SelectList(new List<SelectListItem> { new() { Value = e.Id, Text = e.Id } }, "Value", "Text", e.Id),
+                Some: e => new SelectList(new List<SelectListItem> { new() { Value = e.Id, Text = e.Name } }, "Value", "Text", e.Id),
                 None: () => new SelectList(new List<SelectListItem>(), "Value", "Text")
             );
+        }
+        public IEnumerable<SelectListItem> DeliveryTowerList()
+        {
+            return Core.Constants.DeliveryTowers.List.Select(l => new SelectListItem { Value = l, Text = l });
+        }
+        public IEnumerable<SelectListItem> DemandTypeList()
+        {
+            return Core.Constants.DemandTypes.List.Select(l => new SelectListItem { Value = l, Text = l });
+        }
+        public IEnumerable<SelectListItem> ProjectPriorityList()
+        {
+            return Core.Constants.ProjectPriorities.List.Select(l => new SelectListItem { Value = l, Text = l });
+        }
+        public IEnumerable<SelectListItem> ProjectActiveStatusList()
+        {
+            return Core.Constants.ProjectActiveStatuses.List.Select(l => new SelectListItem { Value = l, Text = l });
+        }
+        public IEnumerable<SelectListItem> MemberLevelList()
+        {
+            return Core.Constants.MemberLevels.List.Select(l => new SelectListItem { Value = l, Text = l });
         }
         public SelectList GetBusinessUnitList(string? id)
         {

@@ -1,43 +1,67 @@
 @using Models
 @model ProjectViewModel
-<input type="hidden" id="TeamMembersCount" value="@Model?.TeamMembersList?.Count" />
+<input type="hidden" id="TeamMembersCount" value="@(Model?.TeamMembersList?.Count ?? 0)" />
 <div class="card">
-    <h5 class="card-header d-flex align-items-center justify-content-between">
-        <span class="card-header-custom">@Localizer["Team Members"]</span>
-        @* No text-light here (unlike the old icon button) - on the white
-           card headers of the dark-sidebar themes it rendered white-on-white. *@
-        <a id="btnAddTeamMembers" class="btn btnMaterial btn-flat primary semicircle cancel btnAddRemoveSubDetailList" title="@Localizer["Add Member"]"><i class="fas fa-plus"></i>&nbsp;@Localizer["Add Member"]</a>
-        <button class="cancel d-none" type="button" id="btnRemoveTeamMembers" value="RemoveTeamMembers"></button>
-    </h5>
     <div class="card-body">
-        <div class="sub-collection-list">
+        <h6 class="form-section-title">@Localizer["Team Assignment"]</h6>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="@Model!.ProjectManagerId" class="form-label fieldrequired"><strong>@Localizer["Project Manager"] :</strong></label>
+                    <select asp-for="@Model!.ProjectManagerId" class="form-control" asp-items="@(dropdownService.GetEmployeeList(Model!.ProjectManagerId))"><option value="">@Localizer["Select PM"]</option></select>
+                    <span asp-validation-for="@Model!.ProjectManagerId" class="text-danger d-block mt-1"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="@Model!.DeputyProjectManagerId" class="form-label"><strong>@Localizer["Deputy Project Manager"] :</strong></label>
+                    <select asp-for="@Model!.DeputyProjectManagerId" class="form-control" asp-items="@(dropdownService.GetEmployeeList(Model!.DeputyProjectManagerId))"><option value="">@Localizer["Select Deputy PM"]</option></select>
+                    <span asp-validation-for="@Model!.DeputyProjectManagerId" class="text-danger d-block mt-1"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-grid">
+            <div class="team-grid-header">
+                <span>@Localizer["Name"]</span>
+                <span>@Localizer["Level"]</span>
+                <span>@Localizer["Role"]</span>
+                <span></span>
+            </div>
             @if (Model?.TeamMembersList != null)
             {
                 int counter = 0;
                 foreach (var item in Model.TeamMembersList)
                 {
-                    <div class="sub-collection-row">
+                    <div class="team-grid-row">
                         <input type="hidden" name="TeamMembersList[@counter].Id" value="@item.Id" />
                         <input type="hidden" name="TeamMembersList[@counter].ProjectId" value="@item.ProjectId" />
-                        <div class="sub-collection-fields">
-                            <div class="sub-collection-field">
-                                <label name="Label.TeamMembersList[@counter].MemberName">@Localizer["Full Name"]</label>
-                                <input asp-for="@item.MemberName" name="TeamMembersList[@counter].MemberName" class="form-control" maxlength="255" placeholder="@Localizer["Full name"]" />
-                                <span data-valmsg-for="TeamMembersList[@counter].MemberName" asp-validation-for="@item.MemberName" class="text-danger"></span>
-                            </div>
-                            <div class="sub-collection-field">
-                                <label name="Label.TeamMembersList[@counter].Role">@Localizer["Role"]</label>
-                                <input asp-for="@item.Role" name="TeamMembersList[@counter].Role" class="form-control" maxlength="100" placeholder="@Localizer["e.g. Developer"]" />
-                                <span data-valmsg-for="TeamMembersList[@counter].Role" asp-validation-for="@item.Role" class="text-danger"></span>
-                            </div>
+                        <div class="team-grid-cell">
+                            <select asp-for="@item.EmployeeId" name="TeamMembersList[@counter].EmployeeId" class="form-control TeamMemberEmployeeSelect" asp-items="@(dropdownService.GetEmployeeList(item.EmployeeId))">
+                                <option value="">@Localizer["Select member"]</option>
+                            </select>
+                            <span data-valmsg-for="TeamMembersList[@counter].EmployeeId" asp-validation-for="@item.EmployeeId" class="text-danger"></span>
                         </div>
-                        <div class="sub-collection-actions">
-                            <a class="btn btnFills btn-outline-danger btnDeleteIcon cancel RemoveTeamMembersButton btnAddRemoveSubDetailList" aria-label="@Localizer["Remove TeamMembers"]" title="@Localizer["Remove TeamMembers"]" removeId="@(item.Id)"></a>
+                        <div class="team-grid-cell">
+                            <select asp-for="@item.MemberLevel" name="TeamMembersList[@counter].MemberLevel" class="form-control" asp-items="@(dropdownService.MemberLevelList())">
+                                <option value="">@Localizer["Select level"]</option>
+                            </select>
+                            <span data-valmsg-for="TeamMembersList[@counter].MemberLevel" asp-validation-for="@item.MemberLevel" class="text-danger"></span>
+                        </div>
+                        <div class="team-grid-cell">
+                            <input asp-for="@item.Role" name="TeamMembersList[@counter].Role" class="form-control" maxlength="100" placeholder="@Localizer["e.g. Frontend Developer"]" />
+                            <span data-valmsg-for="TeamMembersList[@counter].Role" asp-validation-for="@item.Role" class="text-danger"></span>
+                        </div>
+                        <div class="team-grid-cell team-grid-remove">
+                            <button type="button" class="team-remove-btn cancel RemoveTeamMembersButton" aria-label="@Localizer["Remove member"]" title="@Localizer["Remove member"]" removeId="@(item.Id)">&mdash;</button>
                         </div>
                     </div>
                     counter++;
                 }
             }
         </div>
+
+        <a id="btnAddTeamMembers" class="team-add-link cancel btnAddRemoveSubDetailList"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;@Localizer["Add Member"]</a>
+        <button class="cancel d-none" type="button" id="btnRemoveTeamMembers" value="RemoveTeamMembers"></button>
     </div>
 </div>

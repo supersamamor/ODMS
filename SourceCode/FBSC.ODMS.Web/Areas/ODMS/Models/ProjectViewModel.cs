@@ -1,61 +1,69 @@
-using FBSC.Common.Web.Utility.Extensions;
 using FBSC.ODMS.Web.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using FBSC.Common.Web.Utility.Annotations;
 
 namespace FBSC.ODMS.Web.Areas.ODMS.Models;
 
 public record ProjectViewModel : BaseViewModel
-{	
-	[Display(Name = "Name of the Project")]
+{
+	[Display(Name = "Project ID")]
+	[Required]
+	[StringLength(12, ErrorMessage = "{0} length can't be more than {1}.")]
+	public string ProjectCode { get; init; } = "";
+	[Display(Name = "Project Name")]
 	[Required]
 	[StringLength(255, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string ProjectName { get; init; } = "";
-	[Display(Name = "Assigned Business Unit")]
+	[Display(Name = "Delivery Tower")]
 	[Required]
-    public string BusinessUnitId { get; init; } = "";
-    public string?  ReferenceFieldBusinessUnitId { get; set; }
-	[Display(Name = "Project Priority")]
+	[StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
+	public string DeliveryTower { get; init; } = "";
+	[Display(Name = "Demand Type")]
+	[Required]
+	[StringLength(100, ErrorMessage = "{0} length can't be more than {1}.")]
+	public string DemandType { get; init; } = "";
+	[Display(Name = "Business Unit")]
+	[Required]
+	public string BusinessUnitId { get; init; } = "";
+	public string? ReferenceFieldBusinessUnitId { get; set; }
+	[Display(Name = "Technology Business Partner")]
+	public string? TechnologyBusinessPartnerId { get; init; }
+	[Display(Name = "Priority")]
 	[Required]
 	[StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string Priority { get; init; } = "";
-	[Display(Name = "Project Start Date")]
+	[Display(Name = "Start Date")]
 	[Required]
-	public DateTime StartDate { get; init; } = DateTime.Now.Date;
-	[Display(Name = "Target Completion Date")]
+	public DateTime BaselineStartDate { get; init; } = DateTime.Now.Date;
+	[Display(Name = "Target End Date")]
 	[Required]
-	public DateTime TargetEndDate { get; init; } = DateTime.Now.Date;
-	[Display(Name = "Estimated Budget in Currency")]
-	
+	public DateTime BaselineEndDate { get; init; } = DateTime.Now.Date;
+	[Display(Name = "Approved Budget")]
 	[DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
-	public decimal? EstimatedBudget { get; init; } = 0;
-	[Display(Name = "Detailed Description of Project")]
+	public decimal? ApprovedBudget { get; init; }
+	[Display(Name = "Project Description")]
 	[StringLength(1000, ErrorMessage = "{0} length can't be more than {1}.")]
 	public string? ProjectDescription { get; init; }
-	[Display(Name = "Assigned Project Manager")]
+	[Display(Name = "Project Manager")]
 	[Required]
 	public string ProjectManagerId { get; init; } = "";
-	public string?  ReferenceFieldProjectManagerId { get; set; }
-	[Display(Name = "RAG Status (Red, Amber, Green)")]
-	[StringLength(20, ErrorMessage = "{0} length can't be more than {1}.")]
-	public string? HealthStatus { get; init; }
-	[Display(Name = "Current Phase (e.g. Development)")]
-	[StringLength(100, ErrorMessage = "{0} length can't be more than {1}.")]
-	public string? Phase { get; init; }
-	[Display(Name = "Schedule Status (e.g. Delayed)")]
+	public string? ReferenceFieldProjectManagerId { get; set; }
+	[Display(Name = "Deputy Project Manager")]
+	public string? DeputyProjectManagerId { get; init; }
+	[Display(Name = "Status")]
 	[StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
-	public string? ScheduleStatus { get; init; }
-	[Display(Name = "Date of Last Review")]
-	public DateTime? LastReviewDate { get; init; } = DateTime.Now.Date;
-	[Display(Name = "Date of Last Update")]
-	public DateTime? LastUpdatedDate { get; init; } = DateTime.Now.Date;
-	
+	public string? ActiveStatus { get; init; } = Core.Constants.ProjectActiveStatuses.Active;
+	[Display(Name = "Statement of Work")]
+	public string? SOWFileName { get; init; }
+	[Display(Name = "Statement of Work")]
+	public IFormFile? SOWForm { get; init; }
+	[Display(Name = "No SOW yet")]
+	public bool NoSOW { get; init; }
+
 	public DateTime LastModifiedDate { get; set; }
 	public BusinessUnitViewModel? BusinessUnit { get; init; }
 	public EmployeeViewModel? Employee { get; init; }
-		
+
 	public IList<TeamMembersViewModel>? TeamMembersList { get; set; }
 	public IList<ProjectHistoryViewModel>? ProjectHistoryList { get; set; }
-	
+
 }
