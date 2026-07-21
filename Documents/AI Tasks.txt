@@ -1,9 +1,96 @@
-1. Uploaded file should be downloadable in the UI when clicked (for Project Module)
-2. In ODMS/ApproverSetup/Add, should allow to create new setup for the same tablename as long as deliverytower is different (unique index will be tablename, delivery tower combination)
-3. Inject approval (depending on workflow)
-4. should allow multiple files upload in Project module (SOW) 
-5. In project module , team members subcollection, only the last item's dropdown is populated with employee names, other dropdowns has no content.
-6. In the dropdown of Project Module -> team members, add a default selection (unknown) which will be null on db, but will display as unknown
+Phase 1: Database Foundation & Seeding
+Act as a Senior Software Engineer. I need to implement the database foundation, schema migrations, and role seeding for our enterprise C# application. The solution must handle millions of records efficiently.
+
+Please generate the necessary migrations, entity configurations, and data seeding for the following:
+
+1. Schema Updates & Renaming
+
+Rename Column: Rename DeliveryTower to DeliveryCategory in the Project table. Update all database constraints and model mappings.
+
+Drop Tables: Remove the ProjectHistory and TeamMemberHistory tables entirely.
+
+Employee Rank: Add a Rank field to the Employee table mapped to the existing Rank enum/constant.
+
+Business Unit Mapping: Create a mapping table linking TechnologyBusinessPartner with BusinessUnit. Add a TechnologyBusinessPartnerList subcollection to the Business Unit configuration.
+
+ODMS Approver Setup Index: Update the unique index in the Approver Setup table to a composite unique index on (TableName, DeliveryCategory) so multiple setups can exist for the same table under different delivery categories.
 
 
-7. In dropdown of employee, the content will be filtered depending on role (upcoming feature, no requirements yet)
+2. Roles & Permissions Seeding
+
+Role Constants: First, add the new roles (Project Manager, Executive Leadership, Delivery/Portfolio Lead, PMO Admin) to the existing Roles constant/enum class in the codebase.
+
+New Permission: Create a new permission named Project Status Report (supporting Add, Edit, and View).
+
+Data Seeding: Seed/update the following roles with their respective permissions:
+
+Project Manager: Project (Add, Edit, View), Project Status Report (Add, Edit, View)
+
+Executive Leadership: Project (View), Project Status Report (View)
+
+Delivery/Portfolio Lead: Project (Add, Edit, View), Project Status Report (Edit, View), Approval Page (Approve)
+
+PMO Admin: Project (Add, Edit, View), Project Status Report (View)
+-----------------------------
+Phase 2: Bug Fixes & UI Tweaks
+Act as a Senior Software Engineer. I need to implement UI component enhancements and fix frontend rendering bugs in the Project module.
+
+Please update the frontend components, view models, and UI bindings for the following:
+
+1. Team Members Dropdown Fixes
+
+Fix the bug in the Team Members subcollection grid where only the last row's dropdown populates with employee names. Ensure the data source binds correctly to every row.
+
+Add a default selection labeled (Unknown) to the employee dropdown in the Project -> Team Members module. This should display as (Unknown) in the UI but map to a null value in the database.
+
+2. Dynamic List Component (Accomplishments & Next Steps)
+
+For the JSON-backed Accomplishments and Next Steps fields in the Status Report, build a dynamic UI list component.
+
+Include a [+] button to add a new item and a [-] button to remove an item, serializing/deserializing cleanly to the underlying List<string> property.
+------------------------------
+Phase 3: File Management
+Act as a Senior Software Engineer. I need to update the file upload architecture for the Project module to handle multiple files and proper UI rendering.
+
+Please implement the backend and frontend changes for the following:
+
+1. Multiple File Upload (SOW)
+
+Modify the SOW upload feature in the Project module to accept and process multiple files simultaneously instead of a single file.
+
+Update the database schema and storage logic (e.g., using a file reference table or JSON array storage) to track multiple attachments per project.
+
+2. Downloadable UI Links
+
+Ensure that all uploaded files in the Project Module are rendered as clickable, secure, downloadable links in the UI.
+--------------------------------
+Phase 4: Workflows, Routing, & Extensibility
+Act as a Senior Software Engineer. I need to implement the new "My Projects" page, integrate the dynamic approval workflows, and prepare the codebase for future feature extensions.
+
+Please generate the necessary pages, routing, and workflow logic for the following:
+
+1. "My Projects" Page & Permissions
+
+Create a new page called "My Projects" under the "Project" Level 1 menu.
+
+Set its InitialPage to mirror Project\Index for now.
+
+2. Workflow & Routing Integration
+
+Inject the dynamic approval workflow into the pipeline, ensuring routing logic evaluates the updated DeliveryCategory property on the project.
+
+Role-Based Filtering Stub: Refactor the backend API endpoint serving the Employee dropdowns to accept an optional Role filter parameter. Leave the filter logic extensible so upcoming feature implementations can pass role constraints cleanly.
+
+
+
+
+
+
+
+
+
+
+Metrics: Implement the Metrics schema and backend models based on the provided reference file.
+2. Status Report
+
+JSON Storage: Add fields for "Accomplishments" and "Next Steps" to the Status Report table. Store these as JSON strings using EF Core Value Conversions to map them to a List<string> in the C# domain entity.
