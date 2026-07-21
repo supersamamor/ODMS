@@ -1,8 +1,9 @@
 /* ==================== LOGIN PAGE (page-scoped) ====================
    Linked only from Areas/Identity/Pages/Account/Login.cshtml via @section Styles.
-   Split-screen design: dark navy hero panel (grid pattern + product name) on
-   the left, clean form on the right. Colors are static by design (matching
-   the dashboard's static chart palette), independent of the active theme. */
+   Matches the OneTech reference export: navy hero (#0f1f3d) with a 40px SVG
+   grid + two radial glow blobs on the left, light form panel (#f4f5f7) on the
+   right. Accent is the OneTech blue #1a56db; subtitles use Crimson Pro serif.
+   Colors are static by design, independent of the active theme. */
 
 .login-page-wrapper {
     position: relative;
@@ -16,60 +17,100 @@
 /* ---------- Left hero panel ---------- */
 
 .login-hero {
+    position: relative;
+    overflow: hidden;
     flex: 1 1 45%;
     min-width: 0;
     flex-direction: column;
-    padding: clamp(2.5rem, 5vw, 4.5rem);
-    background-color: #0d1a30;
-    background-image:
-        radial-gradient(ellipse at 60% 35%, rgba(37, 99, 235, 0.16), transparent 55%),
-        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-    background-size: auto, 48px 48px, 48px 48px;
+    justify-content: space-between;
+    padding: 3rem;
+    background-color: #0f1f3d;
+}
+
+.login-hero-grid {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.04;
+}
+
+.login-hero-blob {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.login-hero-blob-1 {
+    bottom: -8rem;
+    left: -8rem;
+    width: 24rem;
+    height: 24rem;
+    background: radial-gradient(circle, #1a56db, transparent 70%);
+}
+
+.login-hero-blob-2 {
+    top: 6rem;
+    right: -6rem;
+    width: 16rem;
+    height: 16rem;
+    background: radial-gradient(circle, #0ea5e9, transparent 70%);
+}
+
+.login-hero-content {
+    position: relative;
+    z-index: 10;
 }
 
 .login-hero-brand {
     display: flex;
     align-items: center;
     gap: .75rem;
-    color: #2563eb; /* fills the logo mark's rounded square */
+    margin-bottom: .75rem;
 }
 
-    .login-hero-brand .app-logo-icon-svg {
-        width: 44px;
-        height: 44px;
-    }
+.login-hero-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: #1a56db;
+}
 
 .login-hero-name {
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     color: #ffffff;
 }
 
 .login-hero-rule {
     display: block;
-    width: 2.25rem;
-    height: 2px;
-    background-color: rgba(255, 255, 255, 0.35);
-    margin: 2.75rem 0 2.25rem;
+    width: 2rem;
+    height: 1px;
+    background-color: #1a56db;
+    margin: 1.5rem 0 2rem;
 }
 
 .login-hero-title {
     margin: 0;
-    max-width: 12ch; /* wraps to "Delivery / Management / System" */
-    font-size: clamp(2.4rem, 4.5vw, 3.4rem);
-    font-weight: 700;
-    line-height: 1.15;
+    font-size: 3rem;
+    font-weight: 600;
+    line-height: 1.25;
     color: #ffffff;
 }
 
 .login-hero-subtitle {
-    margin: 1.75rem 0 0;
-    max-width: 36rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #93a7c9;
+    margin: 1rem 0 0;
+    max-width: 30rem;
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    line-height: 1.625;
+    color: #7a95c2;
 }
 
 /* ---------- Right form panel ---------- */
@@ -78,48 +119,72 @@
     flex: 1 1 55%;
     min-width: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f4f6f8;
+    padding: 3rem 1.5rem;
+    background-color: #f4f5f7;
+}
+
+.login-mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: 2rem;
+}
+
+.login-mobile-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: #0f1f3d;
+}
+
+.login-mobile-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
 }
 
 .login-box {
     width: 100%;
-    max-width: 430px;
-    padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 2rem);
+    max-width: 24rem;
 }
 
 .login-title {
     margin: 0;
-    font-size: 1.6rem;
-    font-weight: 700;
+    font-size: 1.5rem;
+    font-weight: 600;
     color: #0f172a;
 }
 
 .login-subtitle {
-    margin: .4rem 0 2rem;
-    font-family: 'DM Mono', monospace;
-    font-size: var(--font-size-base);
-    color: #64748b;
+    margin: .25rem 0 2rem;
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    color: #6b7280;
 }
 
 .login-field {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
 }
 
 .login-label {
     display: block;
-    margin-bottom: .4rem;
-    font-size: var(--font-size-base);
-    font-weight: 600;
-    color: #1e293b !important;
+    margin-bottom: .375rem;
+    font-size: .75rem;
+    font-weight: 500;
+    color: #0f172a !important;
 }
 
 .login-label-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: .4rem;
+    margin-bottom: .375rem;
 }
 
     .login-label-row .login-label {
@@ -127,35 +192,36 @@
     }
 
 .login-forgot {
-    font-size: var(--font-size-dense);
-    font-weight: 600;
-    color: #2563eb;
+    font-size: 11px;
+    font-weight: 500;
+    color: #1a56db;
     text-decoration: none;
 }
 
     .login-forgot:hover {
-        color: #1d4ed8;
+        color: #1a56db;
         text-decoration: underline;
     }
 
 .login-box .login-input {
-    height: 2.9rem;
-    padding: 0 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
+    height: auto;
+    padding: .625rem .875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
     background-color: #ffffff;
-    font-size: var(--font-size-base);
+    font-size: .875rem;
     color: #0f172a;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
     .login-box .login-input::placeholder {
-        color: #9aa7b8;
+        color: rgba(107, 114, 128, 0.6);
     }
 
     .login-box .login-input:focus {
         outline: none;
-        border-color: #2563eb;
-        box-shadow: 0 0 0 .2rem rgba(37, 99, 235, 0.12);
+        border-color: #1a56db;
+        box-shadow: 0 0 0 2px rgba(26, 86, 219, 0.3);
     }
 
 .login-password {
@@ -163,47 +229,58 @@
 }
 
     .login-password .login-input {
-        padding-right: 2.8rem;
+        padding-right: 2.5rem;
         width: 100%;
     }
 
     .login-password .toggle-password {
         position: absolute;
         top: 50%;
-        right: 1rem;
+        right: .75rem;
         transform: translateY(-50%);
-        color: #94a3b8;
+        color: #6b7280;
         cursor: pointer;
+        transition: color .15s ease-in-out;
     }
 
+        .login-password .toggle-password:hover {
+            color: #374151;
+        }
+
 .login-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
     width: 100%;
-    height: 2.9rem;
-    margin-top: .5rem;
+    margin-top: .25rem;
+    padding: .625rem;
     border: 0;
-    border-radius: 10px;
-    background-color: #2563eb;
+    border-radius: 8px;
+    background-color: #1a56db;
     color: #ffffff;
     font-family: inherit;
-    font-size: var(--font-size-base);
-    font-weight: 600;
+    font-size: .875rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color .2s ease-in-out;
+    transition: opacity .2s ease-in-out;
 }
 
     .login-submit:hover,
     .login-submit:focus {
-        background-color: #1d4ed8;
+        opacity: .9;
     }
 
 .login-divider {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin: 1.5rem 0;
+    gap: .75rem;
+    margin: 1.25rem 0;
     font-family: 'DM Mono', monospace;
-    font-size: var(--font-size-dense);
-    color: #94a3b8;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #6b7280;
 }
 
     .login-divider::before,
@@ -211,32 +288,31 @@
         content: '';
         flex: 1 1 auto;
         height: 1px;
-        background-color: #e2e8f0;
+        background-color: #e5e7eb;
     }
 
 .login-sso-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: .55rem;
+    gap: .625rem;
     width: 100%;
-    height: 2.9rem;
     margin-bottom: .75rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
+    padding: .625rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
     background-color: #ffffff;
-    color: #334155;
+    color: #374151;
     font-family: inherit;
-    font-size: var(--font-size-base);
-    font-weight: 600;
+    font-size: .875rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color .2s ease-in-out, border-color .2s ease-in-out;
+    transition: background-color .2s ease-in-out;
 }
 
     .login-sso-btn:hover,
     .login-sso-btn:focus {
-        background-color: #f8fafc;
-        border-color: #cbd5e1;
+        background-color: #f3f4f6;
     }
 
 .login-register {
@@ -248,9 +324,9 @@
     margin-top: 2rem;
     text-align: center;
     font-family: 'DM Mono', monospace;
-    font-size: var(--font-size-dense);
+    font-size: 11px;
     line-height: 1.7;
-    color: #94a3b8;
+    color: #6b7280;
 }
 
 .img-dps {
