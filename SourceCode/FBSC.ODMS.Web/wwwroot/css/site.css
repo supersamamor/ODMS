@@ -751,6 +751,10 @@ body.sidebar-toggled .sidebar-user-toggle::after {
     padding-top: 20px;
     padding-left: 40px;
     padding-right: 20px;
+    /* Fills the leftover height of the min-height:100vh flex column
+       (#content-wrapper), pinning the footer to the bottom of the viewport
+       on short pages; taller content pushes it down naturally. */
+    flex: 1 1 auto;
 }
 
 /* Breadcrumbs */
