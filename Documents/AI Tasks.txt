@@ -2,3 +2,4 @@
 2. ProjectCode in project table is auto generated and readonly (BusinessUnit.Code + Incremental No . eg. FLI0000001) and make it unique
 3. Code in Risk Issue is also auto generated and readonly (Risk/Issue Type  + Incremental No . eg. R-000001 for risk and I-000001 for issue)  and make it unique
 4. Add uploader for Project and its subcollection (or modify the template and existing project workflow if there is any)
+5. Modify Approval workflow to be able to define approver per Project.DeliveryTower and enable approval workflow to the ProjectModule
