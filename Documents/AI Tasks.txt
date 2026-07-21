@@ -39,3 +39,8 @@ Performance: The uploader must be designed for large-scale data imports. Utilize
 Modify the existing Approval Workflow architecture to support dynamic routing based on Project.DeliveryTower.
 
 Capability: Enable the approval workflow specifically for the Project module, ensuring that approvers can be defined and resolved dynamically per Delivery Tower. Provide a scalable pattern (like a Strategy or Chain of Responsibility pattern) if the existing workflow engine needs refactoring to support this.
+
+
+
+Mime type error on Project.SOWFile upload
+Dragging the file on file upload in Project does not work
