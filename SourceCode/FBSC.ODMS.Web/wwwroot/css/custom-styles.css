@@ -36,6 +36,11 @@
     color: #4c2889;
 }
 
+.badge-soft-muted {
+    background-color: #eef1f6;
+    color: #64748b;
+}
+
 /* ==================== CRUD edit-form field grouping ====================
    Used by Areas/ODMS/Pages/**/_Edit{Module}Details.cshtml partials to group
    related fields under a labeled section instead of one field per full-width row. */

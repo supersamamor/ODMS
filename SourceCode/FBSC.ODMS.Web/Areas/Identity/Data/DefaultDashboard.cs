@@ -437,6 +437,83 @@ public static class DefaultDashboard
             await context.SaveChangesAsync();
         }
 
+        // Executive-attention table (Red & Amber projects). Custom Html - the
+        // built-in Table chart type renders via DataTables and can't compose
+        // two-line cells or status badges. All presentational values (badge
+        // classes/labels) are precomputed in the static query; swap the VALUES
+        // block for a real query over Project once live data exists.
+        var executiveAttention = await context.Report.FirstOrDefaultAsync(e => e.ReportName == "Projects Requiring Executive Attention");
+        if (executiveAttention == null)
+        {
+            var executiveAttentionReportId = Guid.NewGuid().ToString();
+            context.Report.Add(new ReportState()
+            {
+                Id = executiveAttentionReportId,
+                ReportName = "Projects Requiring Executive Attention",
+                QueryType = Core.Constants.QueryType.TSql,
+                ReportOrChartType = Core.Constants.ReportChartType.CustomHtml,
+                IsDistinct = false,
+                QueryString = @"SELECT [Id], [Project], [Description], [BU], [PM], [HealthLabel], [HealthClass], [BudgetLabel], [BudgetClass], [ScheduleLabel], [ScheduleClass], [LastReview]
+                    FROM (VALUES
+                        ('CPE-001', 'Customer Portal Enhancement', 'Critical blockers on API integration. Vendor SLA breached.', 'FLI', 'Emil', 'Red', 'badge-soft-danger', 'Overbudget', 'badge-soft-danger', 'Delayed', 'badge-soft-muted', 'Jul 14, 2026'),
+                        ('ESU-003', 'ERP System Upgrade', 'Resource constraints delaying test phase. Risk to go-live.', 'FDCU', 'Gilbert', 'Amber', 'badge-soft-warning', 'On Track', 'badge-soft-success', 'Delayed', 'badge-soft-muted', 'Jul 13, 2026'),
+                        ('DWM-005', 'Data Warehouse Modernisation', '3rd-party data pipeline blocked. Escalated to vendor.', 'FAI', 'Von', 'Amber', 'badge-soft-warning', 'At Risk', 'badge-soft-warning', 'On Track', 'badge-soft-success', 'Jul 12, 2026'),
+                        ('MAD-007', 'Mobile App Development', 'Design sign-off pending. Dev team on hold.', 'CHI', 'Patrick', 'Red', 'badge-soft-danger', 'Overbudget', 'badge-soft-danger', 'Delayed', 'badge-soft-muted', 'Jul 11, 2026'),
+                        ('HSSP-008', 'HR Self-Service Portal', 'Payroll module integration delayed. Vendor escalation ongoing.', 'SPI', 'Rey', 'Amber', 'badge-soft-warning', 'At Risk', 'badge-soft-warning', 'On Track', 'badge-soft-success', 'Jul 10, 2026')
+                    ) v([Id], [Project], [Description], [BU], [PM], [HealthLabel], [HealthClass], [BudgetLabel], [BudgetClass], [ScheduleLabel], [ScheduleClass], [LastReview]);",
+                DisplayOnDashboard = true,
+                DisplayOnReportModule = false,
+                HtmlTemplate = """
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="background-color: #f8f9fb; border-bottom: 1px solid #e9ecf2;">
+                                <th style="padding: 10px 12px; font-family: var(--font-secondary); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #64748b; white-space: nowrap;">ID</th>
+                                <th style="padding: 10px 12px; font-family: var(--font-secondary); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #64748b;">Project</th>
+                                <th style="padding: 10px 12px; font-family: var(--font-secondary); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #64748b; white-space: nowrap;">BU</th>
+                                <th style="padding: 10px 12px; font-family: var(--font-secondary); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #64748b; white-space: nowrap;">PM</th>
+                                <th style="padding: 10px 12px; font-family: var(--font-secondary); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #64748b; white-space: nowrap;">Health</th>
+                                <th style="padding: 10px 12px; font-family: var(--font-secondary); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #64748b; white-space: nowrap;">Budget</th>
+                                <th style="padding: 10px 12px; font-family: var(--font-secondary); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #64748b; white-space: nowrap;">Schedule</th>
+                                <th style="padding: 10px 12px; font-family: var(--font-secondary); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #64748b; white-space: nowrap;">Last Review</th>
+                                <th style="padding: 10px 12px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--{#foreach Table}-->
+                            <tr style="border-bottom: 1px solid #eef1f6;">
+                                <td style="padding: 14px 12px; font-family: var(--font-secondary); font-size: var(--font-size-dense); color: #64748b; white-space: nowrap;">{Id}</td>
+                                <td style="padding: 14px 12px; min-width: 220px;">
+                                    <div style="font-weight: 600; color: #0f172a; font-size: var(--font-size-base);">{Project}</div>
+                                    <div style="color: #64748b; font-size: var(--font-size-dense); margin-top: 2px; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{Description}</div>
+                                </td>
+                                <td style="padding: 14px 12px; color: #64748b; font-size: var(--font-size-base); white-space: nowrap;">{BU}</td>
+                                <td style="padding: 14px 12px; color: #0f172a; font-size: var(--font-size-base); white-space: nowrap;">{PM}</td>
+                                <td style="padding: 14px 12px; white-space: nowrap;"><span class="badge-soft {HealthClass}">&#9679;&nbsp;{HealthLabel}</span></td>
+                                <td style="padding: 14px 12px; white-space: nowrap;"><span class="badge-soft {BudgetClass}">{BudgetLabel}</span></td>
+                                <td style="padding: 14px 12px; white-space: nowrap;"><span class="badge-soft {ScheduleClass}">{ScheduleLabel}</span></td>
+                                <td style="padding: 14px 12px; font-family: var(--font-secondary); font-size: var(--font-size-dense); color: #64748b; white-space: nowrap;">{LastReview}</td>
+                                <td style="padding: 14px 12px; text-align: right;"><i class="fas fa-chevron-right" style="color: #94a3b8;"></i></td>
+                            </tr>
+                            <!--{/foreach}-->
+                        </tbody>
+                    </table>
+                </div>
+                """,
+                Sequence = 7,
+                SpanWidth = 100,
+                ReportRoleAssignmentList = [
+                    new ReportRoleAssignmentState()
+                    {
+                        ReportId = executiveAttentionReportId,
+                        Id = Guid.NewGuid().ToString(),
+                        RoleName = Core.Constants.Roles.Admin
+                    }
+                ]
+            });
+            await context.SaveChangesAsync();
+        }
+
         // KPI stat-card row (Total / Green / Amber / Red projects). Custom Html
         // with a static single-row query; swap for real counts over Project
         // grouped by HealthStatus once live data exists.
