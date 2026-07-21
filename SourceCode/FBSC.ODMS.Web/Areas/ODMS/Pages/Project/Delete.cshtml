@@ -6,17 +6,28 @@
     ViewData["Level1"] = "Projects";
 
 }
-<partial name="_PageHeaderPartial"/>
+@* Form-page header. Fields on this page are read-only, so the back link
+   navigates directly; #btnDelete keeps its id for the confirmation binding. *@
+<div class="page-header-bar">
+    <nav class="page-header-backnav" aria-label="@Localizer["Back navigation"]">
+        <a asp-page="Index" class="page-header-back">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            @Localizer["Project Register"]
+        </a>
+        <span class="page-header-crumb-sep" aria-hidden="true">/</span>
+        <span class="page-header-crumb-current">@Localizer["Delete Project"]</span>
+    </nav>
+    <div class="page-header-form-actions">
+        <a asp-page="Index" class="btn-header-cancel">@Localizer["Cancel"]</a>
+        <button type="button" id="btnDelete" class="page-header-action-btn danger">@Localizer["Delete Project"]</button>
+    </div>
+</div>
 <form id="project-form" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
     <input type="hidden" asp-for="@Model.AsyncAction" />
     <div id="PartialLoaderContainer">
         <partial name="_InputFieldsPartial" model="Model.Project" />
-    </div>
-    <div id="toolbar-container" class="btn-group" role="group">
-        <a asp-page="Index" class="btn btnFills btn-outline-secondary btnCancelIcon" aria-label="@Localizer["Cancel"]" title="@Localizer["Cancel"]"></a>
-        <button type="button" id="btnDelete" class="btn btnFills btn-outline-danger btnDeleteIcon" aria-label="@Localizer["Delete"]" title="@Localizer["Delete"]"></button>
     </div>
 </form>
 

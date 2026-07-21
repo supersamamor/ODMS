@@ -5,18 +5,32 @@
 	ViewData["ActiveMainPage"] = "Projects";
 	ViewData["Level1"] = "Projects";
 }
-<partial name="_PageHeaderPartial"  />
+@* Form-page header: back navigation on the left, Cancel/Create on the right.
+   The two action elements keep the ids the confirmation-modal bindings in
+   the Scripts section target (#btnCancelConfirmationModal /
+   #btnConfirmationModal), so the save/cancel flow is unchanged - the
+   buttons just live up here instead of a bottom toolbar. *@
+<div class="page-header-bar">
+    <nav class="page-header-backnav" aria-label="@Localizer["Back navigation"]">
+        <a href="#" id="btnBackNav" class="page-header-back">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            @Localizer["Project Register"]
+        </a>
+        <span class="page-header-crumb-sep" aria-hidden="true">/</span>
+        <span class="page-header-crumb-current">@Localizer["New Project"]</span>
+    </nav>
+    <div class="page-header-form-actions">
+        <a asp-page="Index" id="btnCancelConfirmationModal" class="btn-header-cancel">@Localizer["Cancel"]</a>
+        <button type="button" id="btnConfirmationModal" class="page-header-action-btn">@Localizer["Create Project"]</button>
+    </div>
+</div>
 <form id="project-form" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 	<input type="hidden" asp-for="@Model.RemoveSubDetailId" />
     <input type="hidden" asp-for="@Model.AsyncAction" />
 	<div id="PartialLoaderContainer">
         <partial name="_InputFieldsPartial" model="Model.Project" />
-    </div> 	
-	<div id="toolbar-container" class="btn-group" role="group">     
-		<a asp-page="Index" id="btnCancelConfirmationModal" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
-		<button type="button" id="btnConfirmationModal" class="btn btnFills btn-outline-success btnSaveIcon" aria-label="@Localizer["Save changes"]" title="@Localizer["Save changes"]"></button>
-	</div>   	
+    </div>
 </form>
 
 @section Scripts {
@@ -27,6 +41,12 @@
     $(document).ready(function () {
 		$.bindSaveConfirmationModal('Save', '#btnConfirmationModal','#project-form');
 		$.bindCancelConfirmationModal('Cancel', '#btnCancelConfirmationModal','#project-form', 'Do you want to cancel the changes?');
+		// Back-nav routes through the same cancel confirmation, so unsaved
+		// changes are never silently discarded.
+		$('#btnBackNav').on('click', function (e) {
+			e.preventDefault();
+			$('#btnCancelConfirmationModal').trigger('click');
+		});
 		function InitializeForm()
 		{			
 

@@ -6,32 +6,42 @@
     ViewData["Level1"] = "Projects";
 
 }
-<partial name="_PageHeaderPartial" />
+@* Read-only page: back link navigates directly; the old bottom toolbar's
+   actions live in the header, Edit as the primary. *@
+<div class="page-header-bar">
+    <nav class="page-header-backnav" aria-label="@Localizer["Back navigation"]">
+        <a asp-page="Index" class="page-header-back">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            @Localizer["Project Register"]
+        </a>
+        <span class="page-header-crumb-sep" aria-hidden="true">/</span>
+        <span class="page-header-crumb-current">@Localizer["View Project"]</span>
+    </nav>
+    <div class="page-header-form-actions">
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Create)).Succeeded)
+        {
+            <a asp-page="Add" id="btnAddRecord" class="btn-header-cancel">@Localizer["New"]</a>
+        }
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.History)).Succeeded)
+        {
+            <a asp-page="History" asp-route-id="@Model.Project.Id" class="btn-header-cancel">@Localizer["History"]</a>
+        }
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Delete)).Succeeded)
+        {
+            <a asp-page="Delete" asp-route-id="@Model.Project.Id" class="btn-header-cancel danger">@Localizer["Delete"]</a>
+        }
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Edit)).Succeeded)
+        {
+            <a asp-page="Edit" asp-route-id="@Model.Project.Id" class="page-header-action-btn">@Localizer["Edit"]</a>
+        }
+    </div>
+</div>
 <div id="project-container">
     <input type="hidden" asp-for="@Model.RemoveSubDetailId" />
     <input type="hidden" asp-for="@Model.AsyncAction" />
     <div id="PartialLoaderContainer">
         <partial name="_InputFieldsPartial" model="Model.Project" />
     </div>
-</div>
-<div id="toolbar-container" class="btn-group" role="group">
-    <a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
-    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Create)).Succeeded)
-    {
-        <a asp-page="Add" id="btnAddRecord" class="btn btnFills btn-outline-success btnAddIcon" aria-label="@Localizer["Add"]" title="@Localizer["Add"]"></a>
-    }
-    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Edit)).Succeeded)
-    {
-        <a asp-page="Edit" asp-route-id="@Model.Project.Id" class="btn btnFills btn-outline-primary btnEditIcon" aria-label="@Localizer["Edit"]" title="@Localizer["Edit"]"></a>
-    }
-    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Delete)).Succeeded)
-    {
-        <a asp-page="Delete" asp-route-id="@Model.Project.Id" class="btn btnFills btn-outline-danger btnDeleteIcon" aria-label="@Localizer["Delete"]" title="@Localizer["Delete"]"></a>
-    }
-	@if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.History)).Succeeded)
-	{
-        <a asp-page="History" asp-route-id="@Model.Project.Id" class="btn btnFills btn-outline-primary btnHistoryIcon" aria-label="@Localizer["History"]" title="@Localizer["History"]"></a>
-	}
 </div>
 
 @section Scripts {

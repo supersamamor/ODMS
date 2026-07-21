@@ -1649,6 +1649,59 @@ form.user .btn-user {
     font-weight: 600;
 }
 
+/* Form-page header variant: back navigation left, Cancel/primary right */
+.page-header-backnav {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: var(--font-size-base);
+}
+
+.page-header-back {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--transition-base);
+}
+
+    .page-header-back:hover {
+        color: var(--custom-primary);
+    }
+
+    .page-header-back .fa-chevron-left {
+        font-size: .7rem;
+    }
+
+.page-header-form-actions {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.btn-header-cancel {
+    display: inline-flex;
+    align-items: center;
+    padding: .5rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #334155 !important;
+    font-size: var(--font-size-dense);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+    .btn-header-cancel:hover,
+    .btn-header-cancel:focus-visible {
+        background-color: #f8fafc;
+        border-color: #cbd5e1;
+    }
+
 /* Primary action button in the page header (e.g. "+ New Project") */
 .page-header-action-btn {
     display: inline-flex;
@@ -1669,6 +1722,28 @@ form.user .btn-user {
     .page-header-action-btn:focus-visible {
         background-color: #1d4ed8;
         color: #ffffff;
+    }
+
+    /* Destructive primary (e.g. "Delete Project") */
+    .page-header-action-btn.danger {
+        background-color: #ef4444;
+    }
+
+        .page-header-action-btn.danger:hover,
+        .page-header-action-btn.danger:focus-visible {
+            background-color: #dc2626;
+        }
+
+/* Destructive outline (e.g. the "Delete" link on read-only pages) */
+.btn-header-cancel.danger {
+    color: #b91c1c !important;
+    border-color: #f0d2cf;
+}
+
+    .btn-header-cancel.danger:hover,
+    .btn-header-cancel.danger:focus-visible {
+        background-color: #fbeae8;
+        border-color: #f0d2cf;
     }
 
 .dashboard-header-controls {

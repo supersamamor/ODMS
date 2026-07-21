@@ -5,7 +5,27 @@
     ViewData["ActiveMainPage"] = "Projects";
     ViewData["Level1"] = "Projects";
 }
-<partial name="_PageHeaderPartial"  />
+@* Read-only page: back link navigates directly; toolbar actions moved up. *@
+<div class="page-header-bar">
+    <nav class="page-header-backnav" aria-label="@Localizer["Back navigation"]">
+        <a asp-page="Index" class="page-header-back">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            @Localizer["Project Register"]
+        </a>
+        <span class="page-header-crumb-sep" aria-hidden="true">/</span>
+        <span class="page-header-crumb-current">@Localizer["Audit Trail"]</span>
+    </nav>
+    <div class="page-header-form-actions">
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Create)).Succeeded)
+        {
+            <a asp-page="Add" id="btnAddRecord" class="btn-header-cancel">@Localizer["New"]</a>
+        }
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Edit)).Succeeded)
+        {
+            <a asp-page="Edit" asp-route-id="@Model.Project.Id" class="page-header-action-btn">@Localizer["Edit"]</a>
+        }
+    </div>
+</div>
 <link rel="stylesheet" href="~/css/timeline.css" asp-append-version="true" />
 <div id="project-container">
     <div class="card">
@@ -39,17 +59,6 @@
             </ul>
         </div>
     </div>
-</div>
-<div id="toolbar-container" class="btn-group" role="group">
-    <a asp-page="Index" class="btn btnFills btn-outline-secondary btnBackIcon" aria-label="@Localizer["Back"]" title="@Localizer["Back"]"></a>
-    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Create)).Succeeded)
-    {
-        <a asp-page="Add" id="btnAddRecord" class="btn btnFills btn-outline-success btnAddIcon" aria-label="@Localizer["Add"]" title="@Localizer["Add"]"></a>
-    }
-    @if ((await AuthorizationService.AuthorizeAsync(User, Permission.Project.Edit)).Succeeded)
-    {
-        <a asp-page="Edit" asp-route-id="@Model.Project.Id" class="btn btnFills btn-outline-primary btnEditIcon" aria-label="@Localizer["Edit"]" title="@Localizer["Edit"]"></a>
-    }
 </div>
 @{
     var historyModalId = "changes-history-modal";
