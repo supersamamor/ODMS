@@ -324,6 +324,12 @@ namespace FBSC.ODMS.Application.Helpers
                 {
                     Table = dt,
                     report.ReportName,
+                    // Exposed so Custom Html/PDF templates can link to the
+                    // configured drill-down report, e.g.
+                    // <a href="/ODMS/Report?Id={DrillDownReportId}">View Report</a>.
+                    // Empty when no drill-down is configured - template authors
+                    // should only add the link when the report has one set.
+                    DrillDownReportId = report.DrillDownReportId ?? "",
                     ReportGenerated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                 };
                 return new LabelResultAndStyle
