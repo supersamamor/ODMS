@@ -486,7 +486,7 @@ select:disabled {
     padding: .25rem;
     margin: -.25rem;
     border-radius: var(--border-radius-base);
-    background: transparent;
+    background: #0d6efd;
     color: var(--custom-primary);
     cursor: pointer;
     transition: background-color var(--transition-base);
