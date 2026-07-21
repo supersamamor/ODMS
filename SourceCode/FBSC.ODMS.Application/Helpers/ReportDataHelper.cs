@@ -518,12 +518,14 @@ namespace FBSC.ODMS.Application.Helpers
                 };
             }
 
-            // SINGLE DATASET RESULT
+            // SINGLE DATASET RESULT. Radial charts still need their legend -
+            // it's the only place the category labels appear (a bar chart shows
+            // them on the axis instead).
             return new LabelResultAndStyle
             {
                 Results = JsonConvert.SerializeObject(new[] { singleData }, Formatting.Indented),
                 ColumnHeaders = JsonConvert.SerializeObject(columnLabels, Formatting.Indented),
-                DisplayLegend = false
+                DisplayLegend = report.ReportOrChartType is ReportChartType.Pie or ReportChartType.Doughnut or ReportChartType.PolarArea
             };
         }
 

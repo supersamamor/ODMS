@@ -395,5 +395,126 @@ public static class DefaultDashboard
             });
             await context.SaveChangesAsync();
         }
+
+        // Doughnut of project counts per BU with a right-side value legend.
+        // Static dummy data; column order matters - the static chart palette
+        // assigns blue/sky/emerald/orange/violet/slate in row order, matching
+        // the reference design's BU colors. Swap the VALUES block for a real
+        // GROUP BY over Project/BusinessUnit once live data exists.
+        var projectsByBu = await context.Report.FirstOrDefaultAsync(e => e.ReportName == "Projects by BU");
+        if (projectsByBu == null)
+        {
+            var projectsByBuReportId = Guid.NewGuid().ToString();
+            context.Report.Add(new ReportState()
+            {
+                Id = projectsByBuReportId,
+                ReportName = "Projects by BU",
+                QueryType = Core.Constants.QueryType.TSql,
+                ReportOrChartType = Core.Constants.ReportChartType.Doughnut,
+                IsDistinct = false,
+                QueryString = @"SELECT [Label], [Projects]
+                    FROM (VALUES
+                        ('Filinvest Land, Inc.', 28),
+                        ('Filinvest Alabang, Inc.', 22),
+                        ('FDC Utilities, Inc.', 18),
+                        ('Countrywide Water Services, Inc.', 15),
+                        ('Chroma Hospitality, Inc.', 12),
+                        ('SharePro, Inc.', 33)
+                    ) v([Label], [Projects]);",
+                DisplayOnDashboard = true,
+                DisplayOnReportModule = false,
+                Sequence = 4,
+                SpanWidth = 50,
+                ReportRoleAssignmentList = [
+                    new ReportRoleAssignmentState()
+                    {
+                        ReportId = projectsByBuReportId,
+                        Id = Guid.NewGuid().ToString(),
+                        RoleName = Core.Constants.Roles.Admin
+                    }
+                ]
+            });
+            await context.SaveChangesAsync();
+        }
+
+        // KPI stat-card row (Total / Green / Amber / Red projects). Custom Html
+        // with a static single-row query; swap for real counts over Project
+        // grouped by HealthStatus once live data exists.
+        var portfolioSummary = await context.Report.FirstOrDefaultAsync(e => e.ReportName == "Project Portfolio Summary");
+        if (portfolioSummary == null)
+        {
+            var portfolioSummaryReportId = Guid.NewGuid().ToString();
+            context.Report.Add(new ReportState()
+            {
+                Id = portfolioSummaryReportId,
+                ReportName = "Project Portfolio Summary",
+                QueryType = Core.Constants.QueryType.TSql,
+                ReportOrChartType = Core.Constants.ReportChartType.CustomHtml,
+                IsDistinct = false,
+                QueryString = @"SELECT 104 AS [TotalProjects], 65 AS [GreenProjects], 25 AS [AmberProjects], 14 AS [RedProjects];",
+                DisplayOnDashboard = true,
+                DisplayOnReportModule = false,
+                HtmlTemplate = """
+                <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+                    <!--{#foreach Table}-->
+
+                    <!-- Total Projects -->
+                    <div style="flex: 1 1 200px; min-width: 180px; background-color: #ffffff; border: 1px solid #e9ecf2; border-radius: 12px; padding: 18px 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                            <span style="font-size: var(--font-size-base); font-weight: 600; color: #1e293b;">Total Projects</span>
+                            <span style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background-color: #e8edfc; color: #2563eb;"><i class="fas fa-folder"></i></span>
+                        </div>
+                        <div style="font-size: 1.6rem; font-weight: 700; color: #0f172a; margin-top: 14px;">{TotalProjects}</div>
+                        <div style="font-size: var(--font-size-dense); font-family: var(--font-secondary); color: #64748b; margin-top: 2px;">Across all BUs</div>
+                    </div>
+
+                    <!-- Green Projects -->
+                    <div style="flex: 1 1 200px; min-width: 180px; background-color: #ffffff; border: 1px solid #e9ecf2; border-radius: 12px; padding: 18px 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                            <span style="font-size: var(--font-size-base); font-weight: 600; color: #1e293b;">Green Projects</span>
+                            <span style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background-color: #e2f6ee; color: #10b981;"><i class="fas fa-check-circle"></i></span>
+                        </div>
+                        <div style="font-size: 1.6rem; font-weight: 700; color: #0f172a; margin-top: 14px;">{GreenProjects}</div>
+                        <div style="font-size: var(--font-size-dense); font-family: var(--font-secondary); color: #64748b; margin-top: 2px;">On track</div>
+                    </div>
+
+                    <!-- Amber Projects -->
+                    <div style="flex: 1 1 200px; min-width: 180px; background-color: #ffffff; border: 1px solid #e9ecf2; border-radius: 12px; padding: 18px 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                            <span style="font-size: var(--font-size-base); font-weight: 600; color: #1e293b;">Amber Projects</span>
+                            <span style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background-color: #fdf3d9; color: #f59e0b;"><i class="fas fa-clock"></i></span>
+                        </div>
+                        <div style="font-size: 1.6rem; font-weight: 700; color: #0f172a; margin-top: 14px;">{AmberProjects}</div>
+                        <div style="font-size: var(--font-size-dense); font-family: var(--font-secondary); color: #64748b; margin-top: 2px;">Require monitoring</div>
+                    </div>
+
+                    <!-- Red Projects -->
+                    <div style="flex: 1 1 200px; min-width: 180px; background-color: #ffffff; border: 1px solid #e9ecf2; border-radius: 12px; padding: 18px 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                            <span style="font-size: var(--font-size-base); font-weight: 600; color: #1e293b;">Red Projects</span>
+                            <span style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background-color: #fbeae8; color: #ef4444;"><i class="fas fa-exclamation-triangle"></i></span>
+                        </div>
+                        <div style="font-size: 1.6rem; font-weight: 700; color: #0f172a; margin-top: 14px;">{RedProjects}</div>
+                        <div style="font-size: var(--font-size-dense); font-family: var(--font-secondary); color: #64748b; margin-top: 2px;">Needs immediate action</div>
+                    </div>
+
+                    <!--{/foreach}-->
+                </div>
+                """,
+                // -1 sorts ahead of every existing widget (lowest Sequence today
+                // is 0) so the KPI row leads the dashboard without renumbering.
+                Sequence = -1,
+                SpanWidth = 100,
+                ReportRoleAssignmentList = [
+                    new ReportRoleAssignmentState()
+                    {
+                        ReportId = portfolioSummaryReportId,
+                        Id = Guid.NewGuid().ToString(),
+                        RoleName = Core.Constants.Roles.Admin
+                    }
+                ]
+            });
+            await context.SaveChangesAsync();
+        }
     }
 }

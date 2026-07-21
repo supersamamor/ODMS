@@ -377,6 +377,13 @@
                     var factoryKey = isStacked ? 'stackedBar' : chartRenderType;
                     var typeOptions = ($.ChartTypeOptionsFactory[factoryKey] || function () { return {}; })(indexAxis);
 
+                    // displayLegend arrives as a boolean from ajax refreshes but as
+                    // the string 'true'/'false' from the initial page's hidden
+                    // inputs - and the string 'false' is truthy, which used to
+                    // force legends on. Normalize once.
+                    var showLegend = displayLegend === true || displayLegend === 'true';
+                    var isRadial = PER_POINT_CHART_TYPES.indexOf(chartRenderType) !== -1;
+
                     var chartOptions = {
                         // Fill the widget body instead of rendering at the canvas's
                         // intrinsic 300x150 default; maintainAspectRatio:false lets
@@ -388,8 +395,34 @@
                         ...typeOptions,
                         plugins: {
                             legend: {
-                                display: displayLegend,
-                                position: 'bottom',
+                                display: showLegend,
+                                // Radial charts read like the reference design with a
+                                // side legend; series charts keep theirs at the bottom.
+                                position: isRadial ? 'right' : 'bottom',
+                                labels: isRadial ? {
+                                    usePointStyle: true,
+                                    pointStyle: 'circle',
+                                    boxWidth: 8,
+                                    boxHeight: 8,
+                                    color: '#334155',
+                                    // Default labels + the slice's value appended,
+                                    // e.g. "Filinvest Land, Inc.  28".
+                                    generateLabels: function (chart) {
+                                        var typeOverrides = Chart.overrides[chart.config.type];
+                                        var base = (typeOverrides && typeOverrides.plugins && typeOverrides.plugins.legend
+                                            && typeOverrides.plugins.legend.labels && typeOverrides.plugins.legend.labels.generateLabels)
+                                            || Chart.defaults.plugins.legend.labels.generateLabels;
+                                        var items = base(chart);
+                                        var ds = chart.data.datasets[0];
+                                        items.forEach(function (item) {
+                                            var value = (ds && ds.data) ? ds.data[item.index] : null;
+                                            if (value !== undefined && value !== null) {
+                                                item.text = item.text + '  ' + value;
+                                            }
+                                        });
+                                        return items;
+                                    }
+                                } : {}
                             },
                             tooltip: {
                                 callbacks: {
@@ -407,7 +440,10 @@
                         },
                         elements: {
                             arc: {
-                                borderWidth: 0
+                                // Thin white gaps between radial segments, per the
+                                // reference design.
+                                borderWidth: isRadial ? 2 : 0,
+                                borderColor: '#ffffff'
                             }
                         }
                     };
