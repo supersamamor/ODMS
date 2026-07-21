@@ -1,5 +1,41 @@
-1. Add Code field on BusinessUnit table and make it readonly on Edit and make it unique
-2. ProjectCode in project table is auto generated and readonly (BusinessUnit.Code + Incremental No . eg. FLI0000001) and make it unique
-3. Code in Risk Issue is also auto generated and readonly (Risk/Issue Type  + Incremental No . eg. R-000001 for risk and I-000001 for issue)  and make it unique
-4. Add uploader for Project and its subcollection (or modify the template and existing project workflow if there is any)
-5. Modify Approval workflow to be able to define approver per Project.DeliveryTower and enable approval workflow to the ProjectModule
+Act as a Senior Software Engineer. I need to implement a set of new features and schema updates. The solution must be enterprise-grade, written in modern C#, and heavily optimized to handle millions of records and high concurrency without deadlocks.
+
+Please generate the necessary migrations, backend logic, and UI constraints for the following requirements:
+
+1. Business Unit Configuration
+
+Add a Code field to the BusinessUnit table.
+
+Constraints: Must have a unique index in the database.
+
+UI/Validation: The field should be required on creation but strictly read-only on Edit.
+
+2. Project Entity Updates
+
+Add an auto-generated ProjectCode to the Project table.
+
+Format: {BusinessUnit.Code}{Incremental Number} (e.g., FLI0000001). The incremental sequence must strictly start at 1, padded to 7 digits.
+
+Constraints: Must be strictly read-only and have a unique index.
+
+Concurrency: Implement a thread-safe, highly concurrent sequence generation mechanism (e.g., using database sequences or a dedicated counter table with row-level locking) to prevent gaps or duplicate keys under heavy load.
+
+3. Risk and Issue Tracking
+
+Add an auto-generated Code field to the Risk/Issue table.
+
+Format: {Type Prefix}-{Incremental Number}. Use R- for Risks and I- for Issues. The incremental sequence must start at 1, padded to 6 digits (e.g., R-000001, I-000001).
+
+Constraints: Must be strictly read-only and uniquely indexed. Ensure the generation logic handles concurrent inserts efficiently.
+
+4. Bulk Uploader Feature
+
+Implement or modify the existing workflow to support a bulk data uploader for the Project entity and its subcollections.
+
+Performance: The uploader must be designed for large-scale data imports. Utilize bulk insert operations (e.g., SqlBulkCopy or EF Core bulk extensions) rather than row-by-row processing. Include validation for the auto-generated fields during the upload process.
+
+5. Dynamic Approval Workflow
+
+Modify the existing Approval Workflow architecture to support dynamic routing based on Project.DeliveryTower.
+
+Capability: Enable the approval workflow specifically for the Project module, ensuring that approvers can be defined and resolved dynamically per Delivery Tower. Provide a scalable pattern (like a Strategy or Chain of Responsibility pattern) if the existing workflow engine needs refactoring to support this.
