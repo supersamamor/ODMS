@@ -56,7 +56,15 @@ public class AddApproverSetupCommandValidator : AbstractValidator<AddApproverSet
 
         RuleFor(x => x.Id).MustAsync(async (id, cancellation) => await _context.NotExists<ApproverSetupState>(x => x.Id == id, cancellationToken: cancellation))
                           .WithMessage("ApproverSetup with id {PropertyValue} already exists");
-        RuleFor(x => x.TableName).MustAsync(async (tableName, cancellation) => await _context.NotExists<ApproverSetupState>(x => x.TableName == tableName, cancellationToken: cancellation)).WithMessage("ApproverSetup with tableName {PropertyValue} already exists");
+        // Uniqueness is on the composite (TableName, DeliveryCategory) key: the same
+        // table may have separate setups per Delivery Category, so both must match
+        // an existing row before it counts as a duplicate.
+        RuleFor(x => x.TableName)
+            .MustAsync(async (command, tableName, cancellation) =>
+                await _context.NotExists<ApproverSetupState>(
+                    x => x.TableName == command.TableName && x.DeliveryCategory == command.DeliveryCategory,
+                    cancellationToken: cancellation))
+            .WithMessage("An Approver Setup for table '{PropertyValue}' and the selected Delivery Category already exists.");
 
     }
 }

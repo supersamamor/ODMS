@@ -9,6 +9,7 @@ public record TeamMembersViewModel : BaseViewModel
     [Display(Name = "Name")]
     public string? EmployeeId { get; init; }
     [Display(Name = "Level")]
+    [Required]
     [StringLength(50, ErrorMessage = "{0} length can't be more than {1}.")]
     public string? MemberLevel { get; init; }
     [Display(Name = "Role")]

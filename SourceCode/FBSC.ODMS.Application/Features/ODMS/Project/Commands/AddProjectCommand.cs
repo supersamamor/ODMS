@@ -65,5 +65,11 @@ public class AddProjectCommandValidator : AbstractValidator<AddProjectCommand>
                           .WithMessage("Project with id {PropertyValue} already exists");
         // ProjectCode is auto-generated in the handler, so no user-facing rule here.
 
+        // Every team member must carry a Level and a Role (Employee may be Unknown/null).
+        RuleForEach(x => x.TeamMembersList).ChildRules(member =>
+        {
+            member.RuleFor(m => m.MemberLevel).NotEmpty().WithMessage("Team member Level is required.");
+            member.RuleFor(m => m.Role).NotEmpty().WithMessage("Team member Role is required.");
+        });
     }
 }

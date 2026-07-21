@@ -5,6 +5,8 @@
     <h5 class="card-header"><span class="card-header-custom">@Localizer["Business Unit"]</span><br></h5>
     <div class="card-body">
         <input type="hidden" asp-for="@Model.Id" name="Id" />
-        <partial name="_EditBusinessUnitDetails" model="Model" />        
+        <partial name="_EditBusinessUnitDetails" model="Model" />
     </div>
 </div>
+
+<br /><partial name="_TechnologyBusinessPartnerList" model="Model" />

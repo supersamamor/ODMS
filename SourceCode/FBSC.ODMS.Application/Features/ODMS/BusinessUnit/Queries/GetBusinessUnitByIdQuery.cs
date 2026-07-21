@@ -11,5 +11,10 @@ public record GetBusinessUnitByIdQuery(string Id) : BaseQueryById(Id), IRequest<
 
 public class GetBusinessUnitByIdQueryHandler(ApplicationContext context) : BaseQueryByIdHandler<ApplicationContext, BusinessUnitState, GetBusinessUnitByIdQuery>(context), IRequestHandler<GetBusinessUnitByIdQuery, Option<BusinessUnitState>>
 {
-		
+	public override async Task<Option<BusinessUnitState>> Handle(GetBusinessUnitByIdQuery request, CancellationToken cancellationToken = default)
+	{
+		return await Context.BusinessUnit
+			.Include(l => l.TechnologyBusinessPartnerList)
+			.Where(e => e.Id == request.Id).AsNoTracking().FirstOrDefaultAsync(cancellationToken);
+	}
 }

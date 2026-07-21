@@ -9,6 +9,35 @@
         var input = document.getElementById('SOWForms');
         if (!zone || !input) { return; }
 
+        var $form = $(input).closest('form');
+
+        // Client-side SOW requirement, mirroring the server rule in
+        // ProjectFormPageModel.ValidateSOW: a file is required unless "No SOW yet"
+        // is checked or the project already has attachments. Registered as a
+        // jquery-validate rule so the shared save flow ($(form).valid()) blocks
+        // submission and the message lands in the asp-validation-for span.
+        function wireSowValidation() {
+            if (!window.jQuery || !$.validator) { return; }
+            if (!$.validator.methods.sowrequired) {
+                $.validator.addMethod('sowrequired', function (value, element) {
+                    var hasNew = element.files && element.files.length > 0;
+                    var noSowEl = document.getElementById('NoSOW');
+                    var noSowChecked = noSowEl && noSowEl.checked;
+                    var hasExisting = document.querySelectorAll('#sowAttachmentList .sow-attachment-row').length > 0;
+                    return hasNew || noSowChecked || hasExisting;
+                });
+            }
+            if ($form.length && $form.data('validator')) {
+                $(input).rules('add', {
+                    sowrequired: true,
+                    messages: { sowrequired: "At least one Statement of Work file is required unless 'No SOW yet' is checked." }
+                });
+            }
+        }
+        function revalidateSow() {
+            if ($form.length && $form.data('validator')) { $(input).valid(); }
+        }
+
         function showSelectedFile() {
             var names = [];
             if (input.files && input.files.length) {
@@ -17,7 +46,8 @@
             document.getElementById('sowSelectedFile').textContent = names.join(', ');
         }
 
-        input.addEventListener('change', showSelectedFile);
+        input.addEventListener('change', function () { showSelectedFile(); revalidateSow(); });
+        wireSowValidation();
 
         ['dragenter', 'dragover'].forEach(function (evt) {
             zone.addEventListener(evt, function (e) {
@@ -42,6 +72,7 @@
                 // Bind the dropped files onto the input so they submit with the form.
                 input.files = dt.files;
                 showSelectedFile();
+                revalidateSow();
             }
         });
 
@@ -49,7 +80,7 @@
         function toggleZone() {
             zone.classList.toggle('sow-disabled', noSow.checked);
         }
-        noSow.addEventListener('change', toggleZone);
+        noSow.addEventListener('change', function () { toggleZone(); revalidateSow(); });
         toggleZone();
     };
 </script>

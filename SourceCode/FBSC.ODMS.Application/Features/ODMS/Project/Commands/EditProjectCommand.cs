@@ -58,5 +58,11 @@ public class EditProjectCommandValidator : AbstractValidator<EditProjectCommand>
                           .WithMessage("Project with id {PropertyValue} does not exists");
         // ProjectCode is auto-generated and preserved on edit - no uniqueness rule needed.
 
+        // Every team member must carry a Level and a Role (Employee may be Unknown/null).
+        RuleForEach(x => x.TeamMembersList).ChildRules(member =>
+        {
+            member.RuleFor(m => m.MemberLevel).NotEmpty().WithMessage("Team member Level is required.");
+            member.RuleFor(m => m.Role).NotEmpty().WithMessage("Team member Role is required.");
+        });
     }
 }

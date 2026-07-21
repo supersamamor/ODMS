@@ -74,7 +74,15 @@ public class EditApproverSetupCommandValidator : AbstractValidator<EditApproverS
         _context = context;
         RuleFor(x => x.Id).MustAsync(async (id, cancellation) => await _context.Exists<ApproverSetupState>(x => x.Id == id, cancellationToken: cancellation))
                           .WithMessage("ApproverSetup with id {PropertyValue} does not exists");
-        RuleFor(x => new { x.TableName, x.Entity }).MustAsync(async (request, tableObject, cancellation) => await _context.NotExists<ApproverSetupState>(x => x.TableName == tableObject.TableName && x.Entity == tableObject.Entity && x.Id != request.Id, cancellationToken: cancellation)).WithMessage("ApproverSetup with tableName {PropertyValue} already exists");
+        // Duplicate check on the composite (TableName, DeliveryCategory) key,
+        // excluding the record being edited. A table can have distinct setups per
+        // Delivery Category, so only the same pair on a different row is a conflict.
+        RuleFor(x => new { x.TableName, x.DeliveryCategory })
+            .MustAsync(async (request, key, cancellation) =>
+                await _context.NotExists<ApproverSetupState>(
+                    x => x.TableName == key.TableName && x.DeliveryCategory == key.DeliveryCategory && x.Id != request.Id,
+                    cancellationToken: cancellation))
+            .WithMessage("An Approver Setup for this table and Delivery Category already exists.");
     }
 }
 

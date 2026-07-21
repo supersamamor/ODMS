@@ -1,0 +1,29 @@
+@using Models
+@model BusinessUnitViewModel
+<script asp-add-nonce>
+    $(document).ready(function () {
+        $.InitializeTbpFieldValidations = function (count) {
+            let reqs = [];
+            for (let idx = 0; idx < count; idx++) {
+                reqs.push({ name: "TechnologyBusinessPartnerList[" + idx + "].EmployeeId", el: "Select", minlength: 0, maxlength: 0, isrequired: true, description: "Technology Business Partner" });
+            }
+            let validator = $("#businessUnit-form").validate();
+            for (let j in reqs) {
+                let e = reqs[j];
+                let el = $(`*[name="${e.name}"]`);
+                el.rules("add", {
+                    required: {
+                        depends: function (element) { return e.isrequired; }
+                    },
+                    messages: {
+                        required: (e.description === '') ? 'this field is required' : `'${e.description}' is required`,
+                    },
+                });
+                if (e.isrequired == true) {
+                    el.attr('data-val-required', (e.description === '') ? 'this field is required' : `'${e.description}' is required`);
+                    el.attr('data-val', true);
+                }
+            }
+        }
+    });
+</script>

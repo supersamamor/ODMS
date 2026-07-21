@@ -18,7 +18,8 @@ public record BusinessUnitViewModel : BaseViewModel
 	public string Name { get; init; } = "";
 
 	public DateTime LastModifiedDate { get; set; }
-		
+
 	public IList<ProjectViewModel>? ProjectList { get; set; }
-	
+	public IList<BusinessUnitTechnologyBusinessPartnerViewModel>? TechnologyBusinessPartnerList { get; set; }
+
 }

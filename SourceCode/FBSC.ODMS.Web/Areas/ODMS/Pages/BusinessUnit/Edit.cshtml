@@ -30,6 +30,7 @@
 
 @section Scripts {
 <partial name="_ValidationScriptsPartial" />
+<partial name="_TechnologyBusinessPartnerListValidationPartial" model="@Model.BusinessUnit" />
 
 <script asp-add-nonce>
     $(document).ready(function () {
@@ -43,8 +44,31 @@
                 this.blur();
                 window.focus();
             });
-            
 
+			$.InitializeTbpFieldValidations($('#TbpCount').val());
+
+			$.fn.tbpEmployeeSelect = function() {
+				this.filter("select").each(function() {
+					$(this).ajaxSelect({
+						ajax: {
+							url: '@Url.Page("/Dropdown/Index", new { area = "ODMS", handler = "Select2EmployeeData" })',
+						}
+					});
+				});
+				return this;
+			};
+			$(".TbpEmployeeSelect").tbpEmployeeSelect();
+
+			$('#btnAddTbp').on('click', function () {
+				$('#AsyncAction').val('AddTbp');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#businessUnit-form', InitializeForm, true);
+			});
+
+			$('.RemoveTbpButton').on('click', function () {
+				$('#RemoveSubDetailId').val($(this).attr('removeid'));
+				$('#AsyncAction').val('RemoveTbp');
+				$.triggerPageForm('ChangeFormValue','#PartialLoaderContainer', '#businessUnit-form', InitializeForm, true);
+			});
         }
         InitializeForm();
     });

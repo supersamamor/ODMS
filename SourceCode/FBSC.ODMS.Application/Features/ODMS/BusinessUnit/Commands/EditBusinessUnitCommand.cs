@@ -31,7 +31,17 @@ public async Task<Validation<Error, BusinessUnitState>> Handle(EditBusinessUnitC
 			request = request with { Code = storedCode };
 		}
 		return await Validators.ValidateTAsync(request, cancellationToken).BindT(
-			async req => await Edit(req, cancellationToken));
+			async req => await EditBusinessUnit(req, cancellationToken));
+	}
+
+	public async Task<Validation<Error, BusinessUnitState>> EditBusinessUnit(EditBusinessUnitCommand request, CancellationToken cancellationToken)
+	{
+		var entity = await Context.BusinessUnit.Where(l => l.Id == request.Id).SingleAsync(cancellationToken);
+		Mapper.Map(request, entity);
+		await UpdateEntitySubCollectionAsync<BusinessUnitState, BusinessUnitTechnologyBusinessPartnerState>(request.Id, nameof(BusinessUnitTechnologyBusinessPartnerState.BusinessUnitId), nameof(request.TechnologyBusinessPartnerList), entity, cancellationToken);
+		Context.Update(entity);
+		_ = await Context.SaveChangesAsync(cancellationToken);
+		return Success<Error, BusinessUnitState>(entity);
 	}
 }
 
@@ -45,6 +55,14 @@ public class EditBusinessUnitCommandValidator : AbstractValidator<EditBusinessUn
 		RuleFor(x => x.Id).MustAsync(async (id, cancellation) => await _context.Exists<BusinessUnitState>(x => x.Id == id, cancellationToken: cancellation))
                           .WithMessage("BusinessUnit with id {PropertyValue} does not exists");
         RuleFor(x => x.Name).MustAsync(async (request, name, cancellation) => await _context.NotExists<BusinessUnitState>(x => x.Name == name && x.Id != request.Id, cancellationToken: cancellation)).WithMessage("BusinessUnit with name {PropertyValue} already exists");
-	
+
+        // Each assigned Technology Business Partner must reference an employee, and
+        // no duplicates within the unit (matches the DB unique index).
+        RuleForEach(x => x.TechnologyBusinessPartnerList).ChildRules(tbp =>
+            tbp.RuleFor(t => t.EmployeeId).NotEmpty().WithMessage("Technology Business Partner is required."));
+        RuleFor(x => x.TechnologyBusinessPartnerList)
+            .Must(list => list == null || list.Where(t => !string.IsNullOrEmpty(t.EmployeeId)).GroupBy(t => t.EmployeeId).All(g => g.Count() == 1))
+            .WithMessage("The same Technology Business Partner cannot be assigned more than once.");
+
     }
 }

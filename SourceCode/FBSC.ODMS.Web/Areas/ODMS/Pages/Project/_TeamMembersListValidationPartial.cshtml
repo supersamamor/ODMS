@@ -8,6 +8,7 @@
 			for (let idx = 0; idx < count; idx++) {
 				// EmployeeId is optional: the "(Unknown)" default maps to a null value.
 				reqs.push({name: "TeamMembersList[" + idx + "].EmployeeId", el: "Select", minlength:0, maxlength:0, isrequired: false, description: "Name"});
+				reqs.push({name: "TeamMembersList[" + idx + "].MemberLevel", el: "Select", minlength:0, maxlength:0, isrequired: true, description: "Level"});
 				reqs.push({name: "TeamMembersList[" + idx + "].Role", el: "Input", minlength:0, maxlength:100, isrequired: true, description: "Role"});
 
 			}

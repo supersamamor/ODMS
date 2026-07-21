@@ -44,6 +44,7 @@ public class ODMSProfile : Profile
         CreateMap<BusinessUnitViewModel, AddBusinessUnitCommand>();
         CreateMap<BusinessUnitViewModel, EditBusinessUnitCommand>();
         CreateMap<BusinessUnitState, BusinessUnitViewModel>().ReverseMap();
+        CreateMap<BusinessUnitTechnologyBusinessPartnerState, BusinessUnitTechnologyBusinessPartnerViewModel>().ReverseMap();
         CreateMap<ProjectViewModel, AddProjectCommand>();
         CreateMap<ProjectViewModel, EditProjectCommand>();
         CreateMap<ProjectState, ProjectViewModel>().ForPath(e => e.ReferenceFieldProjectManagerId, o => o.MapFrom(s => s.Employee!.Id)).ForPath(e => e.ReferenceFieldBusinessUnitId, o => o.MapFrom(s => s.BusinessUnit!.Name));

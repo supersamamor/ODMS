@@ -1,0 +1,42 @@
+@using Models
+@model BusinessUnitViewModel
+<input type="hidden" id="TbpCount" value="@(Model?.TechnologyBusinessPartnerList?.Count ?? 0)" />
+<div class="card">
+    <div class="card-body">
+        <h6 class="form-section-title">@Localizer["Technology Business Partners"]</h6>
+        <p class="sow-hint">@Localizer["Assign one or more Technology Business Partners to this Business Unit."]</p>
+
+        <div class="tbp-grid">
+            <div class="tbp-grid-header">
+                <span>@Localizer["Technology Business Partner"]</span>
+                <span></span>
+            </div>
+            @if (Model?.TechnologyBusinessPartnerList != null)
+            {
+                int counter = 0;
+                foreach (var item in Model.TechnologyBusinessPartnerList)
+                {
+                    @* Index-scoped id so Select2 initializes every row (see the
+                       team-member grid for why a shared id collapses the dropdowns). *@
+                    <div class="tbp-grid-row">
+                        <input type="hidden" name="TechnologyBusinessPartnerList[@counter].Id" value="@item.Id" />
+                        <input type="hidden" name="TechnologyBusinessPartnerList[@counter].BusinessUnitId" value="@item.BusinessUnitId" />
+                        <div class="tbp-grid-cell">
+                            <select id="TechnologyBusinessPartnerList_@(counter)__EmployeeId" name="TechnologyBusinessPartnerList[@counter].EmployeeId" class="form-control TbpEmployeeSelect" asp-items="@(dropdownService.GetEmployeeList(item.EmployeeId))">
+                                <option value="">@Localizer["Select partner"]</option>
+                            </select>
+                            <span data-valmsg-for="TechnologyBusinessPartnerList[@counter].EmployeeId" class="text-danger"></span>
+                        </div>
+                        <div class="tbp-grid-cell tbp-grid-remove">
+                            <button type="button" class="team-remove-btn cancel RemoveTbpButton" aria-label="@Localizer["Remove partner"]" title="@Localizer["Remove partner"]" removeId="@item.Id">&mdash;</button>
+                        </div>
+                    </div>
+                    counter++;
+                }
+            }
+        </div>
+
+        <a id="btnAddTbp" class="team-add-link cancel"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;@Localizer["Add Partner"]</a>
+        <button class="cancel d-none" type="button" id="btnRemoveTbp" value="RemoveTbp"></button>
+    </div>
+</div>

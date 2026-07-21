@@ -34,8 +34,31 @@ public class AddModel : BasePageModel<AddModel>
 	public PartialViewResult OnPostChangeFormValue()
     {
         ModelState.Clear();
-		
+		if (AsyncAction == "AddTbp")
+		{
+			return AddTbp();
+		}
+		if (AsyncAction == "RemoveTbp")
+		{
+			return RemoveTbp();
+		}
+
         return Partial("_InputFieldsPartial", BusinessUnit);
     }
-	
+
+	private PartialViewResult AddTbp()
+	{
+		ModelState.Clear();
+		BusinessUnit.TechnologyBusinessPartnerList ??= [];
+		BusinessUnit.TechnologyBusinessPartnerList.Add(new BusinessUnitTechnologyBusinessPartnerViewModel { BusinessUnitId = BusinessUnit.Id });
+		return Partial("_InputFieldsPartial", BusinessUnit);
+	}
+
+	private PartialViewResult RemoveTbp()
+	{
+		ModelState.Clear();
+		BusinessUnit.TechnologyBusinessPartnerList = [..(BusinessUnit.TechnologyBusinessPartnerList ?? []).Where(l => l.Id != RemoveSubDetailId)];
+		return Partial("_InputFieldsPartial", BusinessUnit);
+	}
+
 }
