@@ -13,4 +13,5 @@ Role-Based Filtering Stub: Refactor the backend API endpoint serving the Employe
 
 Scan for delete cascade, check if needs to disable
 -----
-still not validating uploaded file properly.
+not validating uploaded file properly in /ODMS/Project/Add and Edit. there is still no error message if SOW file is required
+in ODMS/StatusReport/Add, connect the milestone dropdown to Milestone Masterfile. use  FBSC.ODMS.Web.Areas.ODMS.Pages.Dropdown get data and the existing select2 library (Foreign Key is not necessary, just milestone name)
