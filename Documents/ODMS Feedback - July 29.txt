@@ -1,0 +1,36 @@
+executive summary - required
+forecast finish - required
+check SPI formula
+milestone only has 1 date
+rename target date to Target date
+risk owner, open text
+pm default to my dashboard
+capture feedback from the users, tpye of feedback, limit to enhacenment or general feedback, chat bubble
+description 
+type / feedback / enhancement / general feedback, ADD STATUS
+poc for ai driven rating
+bu code to display n charts
+hide export on dashboard
+weekly status report filter by card
+hid report week, show pm
+risk should be all open / no closed
+risk should redirect to status report of the project
+hide view report / risk
+milestone will redirect to the status report
+
+red if milestone is overdiue
+amber if 2 days late
+
+
+
+
+
+
+
+
+
+
+
+
+
+
