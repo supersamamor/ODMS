@@ -1,17 +1,15 @@
-executive summary - required
-forecast finish - required
-check SPI formula
-milestone only has 1 date
-rename target date to Target date
-risk owner, open text
-pm default to my dashboard
+
+
+
 capture feedback from the users, tpye of feedback, limit to enhacenment or general feedback, chat bubble
 description 
 type / feedback / enhancement / general feedback, ADD STATUS
+
+
 poc for ai driven rating
-bu code to display n charts
 hide export on dashboard
-weekly status report filter by card
+
+
 hid report week, show pm
 risk should be all open / no closed
 risk should redirect to status report of the project
@@ -22,6 +20,7 @@ red if milestone is overdiue
 amber if 2 days late
 
 
+in 
 
 
 
@@ -32,5 +31,12 @@ amber if 2 days late
 
 
 
-
-
+1. from the seed of Top Risks report in dashboard, remove the "View Report" link for now
+2. from the status report /ODMS/MyDashboard/Add, Make Executive Summary a required field
+3. from the /ODMS/MyDashboard/Add status report, check the computation of SPI, according to the client, the value is decimal, similar with CPI
+4. all milestones (project milestone and status report milestone) has one date only, remove target start and rename target end to "Target Date"
+5. from the /ODMS/MyDashboard/Add status report, risk owner should be free text field only, adjust also the dashboard report seeds related to that
+6. when user is PM, the default page is MyDashboard, /ODMS/MyDashboard. you can use the role constant.
+7. from all the seeded report in dashboard, instead of using BU Name, use BU Code to shorten it and fit to screen
+8. in Weekly Reporting Compliance report /ODMS/Compliance, the dropdown filters ss not aligned with the  status in the Card. for example, when i filter the 'not submitted' from the dropdown, the value in the 'not submitted' card is not the same with the number records filtered from the table
+ 
