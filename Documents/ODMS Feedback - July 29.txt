@@ -6,31 +6,6 @@ description
 type / feedback / enhancement / general feedback, ADD STATUS
 
 
-poc for ai driven rating
-hide export on dashboard
-
-
-hid report week, show pm
-risk should be all open / no closed
-risk should redirect to status report of the project
-hide view report / risk
-milestone will redirect to the status report
-
-red if milestone is overdiue
-amber if 2 days late
-
-
-in 
-
-
-
-
-
-
-
-
-
-
 1. from the seed of Top Risks report in dashboard, remove the "View Report" link for now
 2. from the status report /ODMS/MyDashboard/Add, Make Executive Summary a required field
 3. from the /ODMS/MyDashboard/Add status report, check the computation of SPI, according to the client, the value is decimal, similar with CPI
@@ -39,4 +14,19 @@ in
 6. when user is PM, the default page is MyDashboard, /ODMS/MyDashboard. you can use the role constant.
 7. from all the seeded report in dashboard, instead of using BU Name, use BU Code to shorten it and fit to screen
 8. in Weekly Reporting Compliance report /ODMS/Compliance, the dropdown filters ss not aligned with the  status in the Card. for example, when i filter the 'not submitted' from the dropdown, the value in the 'not submitted' card is not the same with the number records filtered from the table
- 
+
+10. prioritize the visibility of PM over workweek, workweek should be leastpriority because it was already shown in the report header
+11. from the seed of Top Risks report in dashboard, closed ticket should not be displayed
+12. from the seed of Top Risks report in dashboard, the risk , wheck clicked should redirect to the specific status report page./ODMS/MyDashboard/WeeklyStatusReport?from=StatusReport&projectId=b83542b0-0cdf-440b-8fc3-51becda2bef7
+13. from the seed of Upcoming Milestones report in dashboard, the milestones, when clicked should redirect to the specific status report page./ODMS/MyDashboard/WeeklyStatusReport?from=StatusReport&projectId=b83542b0-0cdf-440b-8fc3-51becda2bef7
+14. from the seed of Upcoming Milestones report and Top Risks in dashboard, make the report description a tooltip to explain the report.
+And adjust the descriptions from the report, like what is the report and how it was derived. etc. like the color coding or rules
+15. using the existing rotativa printing facility, can we convert the Export button to create a pdf with the actual content of the dashboard? /ODMS/Dashboard
+16. from the project registry /ODMS/Project/Add, the dropdown from Project Manager and  Deputy Project Manager  should come from aspnetusers with role of pm then join to employee table via email
+17. from the project registry /ODMS/Project/Add, the dropdown from Portfolio Lead should come from aspnetusers with role of Delivery/Portfolio Lead then join to employee table via email
+
+
+
+9. from the status report metrics, can we add a label to explain the color coding of the values and computation, can it be a tooltip to maitain the UI clean and not crowded?
+18. based on changes, should there be a change on batch upload?
+19. incorporate project resolver per project item and per status report
