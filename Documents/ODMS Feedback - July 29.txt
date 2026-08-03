@@ -1,11 +1,5 @@
 
-
-
-capture feedback from the users, tpye of feedback, limit to enhacenment or general feedback, chat bubble
-description 
-type / feedback / enhancement / general feedback, ADD STATUS
-
-
+DONE
 1. from the seed of Top Risks report in dashboard, remove the "View Report" link for now
 2. from the status report /ODMS/MyDashboard/Add, Make Executive Summary a required field
 3. from the /ODMS/MyDashboard/Add status report, check the computation of SPI, according to the client, the value is decimal, similar with CPI
@@ -14,7 +8,6 @@ type / feedback / enhancement / general feedback, ADD STATUS
 6. when user is PM, the default page is MyDashboard, /ODMS/MyDashboard. you can use the role constant.
 7. from all the seeded report in dashboard, instead of using BU Name, use BU Code to shorten it and fit to screen
 8. in Weekly Reporting Compliance report /ODMS/Compliance, the dropdown filters ss not aligned with the  status in the Card. for example, when i filter the 'not submitted' from the dropdown, the value in the 'not submitted' card is not the same with the number records filtered from the table
-
 10. prioritize the visibility of PM over workweek, workweek should be leastpriority because it was already shown in the report header
 11. from the seed of Top Risks report in dashboard, closed ticket should not be displayed
 12. from the seed of Top Risks report in dashboard, the risk , wheck clicked should redirect to the specific status report page./ODMS/MyDashboard/WeeklyStatusReport?from=StatusReport&projectId=b83542b0-0cdf-440b-8fc3-51becda2bef7
@@ -24,9 +17,63 @@ And adjust the descriptions from the report, like what is the report and how it 
 15. using the existing rotativa printing facility, can we convert the Export button to create a pdf with the actual content of the dashboard? /ODMS/Dashboard
 16. from the project registry /ODMS/Project/Add, the dropdown from Project Manager and  Deputy Project Manager  should come from aspnetusers with role of pm then join to employee table via email
 17. from the project registry /ODMS/Project/Add, the dropdown from Portfolio Lead should come from aspnetusers with role of Delivery/Portfolio Lead then join to employee table via email
-
-
-
 9. from the status report metrics, can we add a label to explain the color coding of the values and computation, can it be a tooltip to maitain the UI clean and not crowded?
 18. based on changes, should there be a change on batch upload?
-19. incorporate project resolver per project item and per status report
+---------------------------------
+
+1. incorporate project resolver per project item and per status report, the redirect the "acccess restricted" if not passed with resolver.
+
+
+
+drop ko dito enhancement request, pm can share status report of a project via email
+
+all pms should use this capability in updating their stakeholders every week
+common drill down filter to all health report on dashboard (similar with Projects Requiring Executive Attention
+add label on 
+bug in responsive
+
+ui fix on status report list, button hidden
+can we fit in one row the health and executive/accomplishments?, when i open the page - can i see overall health, health by area and the exec summary/accomplishments
+filter polishing in dashbpard
+deputy pm handling
+1. Handling: Multi-user access on one project
+- A user should not be able to make report if one user has an ongoing edit
+ 
+2. Weekly reporting page: Implement ‘Save as Draft’ button   
+
+3. Put a tick button for 'Remember me'
+- session should last up to a week (?)
+
+
+
+
+On Projects Requiring Executive Attention report seed, make this adjustments
+- 1. On Project Name, is it possible to implement an elipsis if words is more than 3? for examplate (This is a ...). and on hover, there is a tooltip, displaying the full project name
+- 2. Remove the chevron button to save space. the whole row will become the hyperlink to redirect to detail
+- 3. Prioritize "Red" health on the sorting, remove the fields budget and schedule
+
+
+- 1. From the seeded email template, can we fix the RAG. the circle and word "Amber" becomes 2 separate line because amber is long and it moves down.
+- 2. From the reports "Health by BU" and "Health by Category", include the count from the label.
+- 3. On the upcoming milestones report seed, show all overdue milestones, the date is always "black" font, but the number of days should be colorcoded (red if overdue,black if not) overdue means 1 day delayed. 
+- 4. on the global workweek filters, Remove older week . (only previous week will be shown and older weeks with value). and remove  the week number.. only dates will be shown
+- 5. On the seed of the report "Weekly Reporting Compliance", submitted means "approved", pending means submmitted but not approved. not submiited remains the same.
+and the compliant only is the "Approved" status report
+- 6. Weekly Status Report Email Job's schedule should be 12am of tuesday, change it from the quartz.xml setup from scheduler project
+
+
+- 7. On Projects Requiring Executive Attention report seed, make this adjustments
+a. Remove project description
+b. It is still not sorted to Red is first, amber is second, green is last if there is any.
+
+- 8. FIxes on drilldown report
+
+- 9. On Projects Requiring Executive Attention report seed, make this adjustments, Make this pattern to converve space - Project / PM is combined. BU / Sponsor is combined
+- 10. move extra spacee
+- 11. show all fields On Projects Requiring Executive Attention report seed, make this adjustments 
+12. fix the overlapping fixed buttons at the lower left
+
+
+
+August 3,
+Auto compute of schedule RAG , if milestones is missed, it will be red.
